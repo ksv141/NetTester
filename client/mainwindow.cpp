@@ -78,7 +78,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     portsWindow = new PortsWindow(pgl, this);
     statsWindow = new PortStatsWindow(pgl, this);
-    portsDock = new QDockWidget(tr("Ports and Streams"), this);
+    portsDock = new QDockWidget(tr("Порты и потоки"), this);
     portsDock->setObjectName("portsDock");
     portsDock->setFeatures(
                 portsDock->features() & ~QDockWidget::DockWidgetClosable);

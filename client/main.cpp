@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include <QFile>
 #include <QSettings>
 #include <QtGlobal>
+#include <QTextCodec>
 
 #include <google/protobuf/stubs/common.h>
 
@@ -47,10 +48,13 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
     int exitCode;
 
-    app.setApplicationName("Ostinato");
-    app.setOrganizationName("Ostinato");
+    app.setApplicationName("NetTester");
+    app.setOrganizationName("Academy");
     app.setProperty("version", version);
     app.setProperty("revision", revision);
+
+    QTextCodec::setCodecForTr(QTextCodec::codecForName ("utf8"));
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName ("utf8"));
 
     appParams.parseCommandLine(argc, argv);
 
