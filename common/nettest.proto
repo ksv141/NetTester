@@ -5,13 +5,8 @@ package OstProto;
 // NetTest Protocol
 message NetTest {
 
-    optional bool is_override_checksum    = 1;
-
-    optional uint32    ab = 2; 
-    optional uint32    payload_length = 3;
-    optional uint32    checksum = 4;
-    optional uint32    x = 5 [default = 1234];
-    optional uint32    y = 6;
+    optional uint64    timestamp = 1;
+    optional uint64    seqnumber = 2;
 }
 
 extend Protocol {
