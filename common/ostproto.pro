@@ -38,7 +38,8 @@ PROTOS += \
     textproto.proto \
     userscript.proto \
     hexdump.proto \
-    sample.proto
+    sample.proto \
+    nettest.proto
 
 HEADERS = \
     abstractprotocol.h    \
@@ -48,6 +49,7 @@ HEADERS = \
     protocollistiterator.h \
     streambase.h \
     updater.h \
+    nettest.h
 
 HEADERS += \
     mac.h \
@@ -87,6 +89,7 @@ SOURCES = \
     protocollistiterator.cpp \
     streambase.cpp \
     updater.cpp \
+    nettest.cpp
 
 SOURCES += \
     mac.cpp \

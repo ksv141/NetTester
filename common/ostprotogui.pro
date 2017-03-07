@@ -7,6 +7,7 @@ LIBS += \
 
 FORMS = \
     pcapfileimport.ui \
+    nettest.ui
 
 FORMS += \
     mac.ui \
@@ -48,7 +49,8 @@ HEADERS = \
     pdmlreader.h \
     sessionfileformat.h \
     streamfileformat.h \
-    spinboxdelegate.h
+    spinboxdelegate.h \
+    nettestconfig.h
 
 HEADERS += \
     abstractprotocolconfig.h \
@@ -94,7 +96,8 @@ SOURCES += \
     pdmlreader.cpp \
     sessionfileformat.cpp \
     streamfileformat.cpp \
-    spinboxdelegate.cpp
+    spinboxdelegate.cpp \
+    nettestconfig.cpp
 
 SOURCES += \
     protocolwidgetfactory.cpp \
