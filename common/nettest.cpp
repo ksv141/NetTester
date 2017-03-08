@@ -1,117 +1,51 @@
-/*
-Copyright (C) 2010, 2014 Srivats P.
+#include "nettest.h"
 
-This file is part of "Ostinato"
-
-This is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>
-*/
-
-#include "sample.h"
-
-SampleProtocol::SampleProtocol(StreamBase *stream, AbstractProtocol *parent)
+NetTestProtocol::NetTestProtocol(StreamBase *stream, AbstractProtocol *parent)
     : AbstractProtocol(stream, parent)
 {
 }
 
-SampleProtocol::~SampleProtocol()
+NetTestProtocol::~NetTestProtocol()
 {
 }
 
-AbstractProtocol* SampleProtocol::createInstance(StreamBase *stream,
+AbstractProtocol* NetTestProtocol::createInstance(StreamBase *stream,
     AbstractProtocol *parent)
 {
-    return new SampleProtocol(stream, parent);
+    return new NetTestProtocol(stream, parent);
 }
 
-quint32 SampleProtocol::protocolNumber() const
+quint32 NetTestProtocol::protocolNumber() const
 {
-    return OstProto::Protocol::kSampleFieldNumber;
+    return OstProto::Protocol::kNetTestFieldNumber;
 }
 
-void SampleProtocol::protoDataCopyInto(OstProto::Protocol &protocol) const
+void NetTestProtocol::protoDataCopyInto(OstProto::Protocol &protocol) const
 {
-    protocol.MutableExtension(OstProto::sample)->CopyFrom(data);
+    protocol.MutableExtension(OstProto::nettest)->CopyFrom(data);
     protocol.mutable_protocol_id()->set_id(protocolNumber());
 }
 
-void SampleProtocol::protoDataCopyFrom(const OstProto::Protocol &protocol)
+void NetTestProtocol::protoDataCopyFrom(const OstProto::Protocol &protocol)
 {
     if (protocol.protocol_id().id() == protocolNumber() &&
-            protocol.HasExtension(OstProto::sample))
-        data.MergeFrom(protocol.GetExtension(OstProto::sample));
+            protocol.HasExtension(OstProto::nettest))
+        data.MergeFrom(protocol.GetExtension(OstProto::nettest));
 }
 
-QString SampleProtocol::name() const
+QString NetTestProtocol::name() const
 {
-    return QString("Sample Protocol");
+    return QString("NetTest Protocol");
 }
 
-QString SampleProtocol::shortName() const
+QString NetTestProtocol::shortName() const
 {
-    return QString("SAMPLE");
+    return QString("NETTEST");
 }
 
-/*!
-  TODO Return the ProtocolIdType for your protocol \n
-
-  If your protocol doesn't have a protocolId field, you don't need to 
-  reimplement this method - the base class implementation will do the 
-  right thing
-*/
-AbstractProtocol::ProtocolIdType SampleProtocol::protocolIdType() const
+int NetTestProtocol::fieldCount() const
 {
-    return ProtocolIdIp;
-}
-
-/*!
-  TODO Return the protocolId for your protoocol based on the 'type' requested \n
-
-  If not all types are valid for your protocol, handle the valid type(s) 
-  and for the remaining fallback to the base class implementation; if your 
-  protocol doesn't have a protocolId at all, you don't need to reimplement
-  this method - the base class will do the right thing
-*/
-quint32 SampleProtocol::protocolId(ProtocolIdType type) const
-{
-    switch(type)
-    {
-        case ProtocolIdLlc: return 0xFFFFFF;
-        case ProtocolIdEth: return 0xFFFF;
-        case ProtocolIdIp: return 0xFF;
-        default:break;
-    }
-
-    return AbstractProtocol::protocolId(type);
-}
-
-int SampleProtocol::fieldCount() const
-{
-    return sample_fieldCount;
-}
-
-/*!
-  TODO Return the number of frame fields for your protocol. A frame field
-  is a field which has the FrameField flag set \n
-
-  If your protocol has different sets of fields based on a OpCode/Type field
-  (e.g. icmp), you MUST re-implement this function; however, if your protocol
-  has a fixed set of frame fields always, you don't need to reimplement this 
-  method - the base class implementation will do the right thing
-*/
-int SampleProtocol::frameFieldCount() const
-{
-    return AbstractProtocol::frameFieldCount();
+    return nettest_fieldCount;
 }
 
 /*!
@@ -119,7 +53,7 @@ int SampleProtocol::frameFieldCount() const
 
   See AbstractProtocol::FieldFlags for more info
 */
-AbstractProtocol::FieldFlags SampleProtocol::fieldFlags(int index) const
+AbstractProtocol::FieldFlags NetTestProtocol::fieldFlags(int index) const
 {
     AbstractProtocol::FieldFlags flags;
 
@@ -127,22 +61,8 @@ AbstractProtocol::FieldFlags SampleProtocol::fieldFlags(int index) const
 
     switch (index)
     {
-        case sample_a:
-        case sample_b:
-        case sample_payloadLength:
-            break;
-
-        case sample_checksum:
-            flags |= CksumField;
-            break;
-
-        case sample_x:
-        case sample_y:
-            break;
-
-        case sample_is_override_checksum:
-            flags &= ~FrameField;
-            flags |= MetaField;
+        case nettest_timestamp:
+        case nettest_seqnumber:
             break;
 
         default:
@@ -159,194 +79,57 @@ TODO: Edit this function to return the data for each field
 
 See AbstractProtocol::fieldData() for more info
 */
-QVariant SampleProtocol::fieldData(int index, FieldAttrib attrib,
+QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
         int streamIndex) const
 {
     switch (index)
     {
-        case sample_a:
+        // TODO nettest_timestamp
+        case nettest_timestamp:
         {
-            int a = data.ab() >> 13;
+            quint64 timestamp = data.timestamp();
 
             switch(attrib)
             {
                 case FieldName:            
-                    return QString("A");
+                    return QString("TIMESTAMP");
                 case FieldValue:
-                    return a;
+                    return timestamp;
                 case FieldTextValue:
-                    return QString("%1").arg(a);
+                    return QString("%1").arg(timestamp);
                 case FieldFrameValue:
-                    return QByteArray(1, (char) a);
+                    return QByteArray(8, (char*) timestamp);
                 case FieldBitSize:
-                    return 3;
+                    return 64;
                 default:
                     break;
             }
             break;
 
         }
-        case sample_b:
+        // TODO nettest_seqnumber
+        case nettest_seqnumber:
         {
-            int b = data.ab() & 0x1FFF;
+            quint64 seqnumber = data.seqnumber();
 
             switch(attrib)
             {
                 case FieldName:            
-                    return QString("B");
+                    return QString("SEQNUMBER");
                 case FieldValue:
-                    return b;
+                    return seqnumber;
                 case FieldTextValue:
-                    return QString("%1").arg(b, 4, BASE_HEX, QChar('0'));
+                    return QString("%1").arg(seqnumber);
                 case FieldFrameValue:
-                {
-                    QByteArray fv;
-                    fv.resize(2);
-                    qToBigEndian((quint16) b, (uchar*) fv.data()); 
-                    return fv;
-                }
+                    return QByteArray(8, (char*) seqnumber);
                 case FieldBitSize:
-                    return 13;
+                    return 64;
                 default:
                     break;
             }
             break;
         }
 
-        case sample_payloadLength:
-        {
-            switch(attrib)
-            {
-                case FieldName:            
-                    return QString("Payload Length");
-                case FieldValue:
-                    return protocolFramePayloadSize(streamIndex);
-                case FieldFrameValue:
-                {
-                    QByteArray fv;
-                    int totlen;
-                    totlen = protocolFramePayloadSize(streamIndex);
-                    fv.resize(2);
-                    qToBigEndian((quint16) totlen, (uchar*) fv.data());
-                    return fv;
-                }
-                case FieldTextValue:
-                    return QString("%1").arg(
-                        protocolFramePayloadSize(streamIndex));
-                case FieldBitSize:
-                    return 16;
-                default:
-                    break;
-            }
-            break;
-        }
-        case sample_checksum:
-        {
-            quint16 cksum;
-
-            switch(attrib)
-            {
-                case FieldValue:
-                case FieldFrameValue:
-                case FieldTextValue:
-                    if (data.is_override_checksum())
-                        cksum = data.checksum();
-                    else
-                        cksum = protocolFrameCksum(streamIndex, CksumIp);
-                    break;
-                default:
-                    cksum = 0; // avoid the 'maybe used unitialized' warning
-                    break;
-            }
-
-            switch(attrib)
-            {
-                case FieldName:            
-                    return QString("Checksum");
-                case FieldValue:
-                    return cksum;
-                case FieldFrameValue:
-                {
-                    QByteArray fv;
-
-                    fv.resize(2);
-                    qToBigEndian(cksum, (uchar*) fv.data());
-                    return fv;
-                }
-                case FieldTextValue:
-                    return  QString("0x%1").arg(
-                        cksum, 4, BASE_HEX, QChar('0'));;
-                case FieldBitSize:
-                    return 16;
-                default:
-                    break;
-            }
-            break;
-        }
-        case sample_x:
-        {
-            switch(attrib)
-            {
-                case FieldName:            
-                    return QString("X");
-                case FieldValue:
-                    return data.x();
-                case FieldTextValue:
-                    // Use the following line for display in decimal
-                    return QString("%1").arg(data.x());
-                    // Use the following line for display in hexa-decimal
-                    //return QString("%1").arg(data.x(), 8, BASE_HEX, QChar('0'));
-                case FieldFrameValue:
-                {
-                    QByteArray fv;
-                    fv.resize(4);
-                    qToBigEndian((quint32) data.x(), (uchar*) fv.data());
-                    return fv;
-                }
-                default:
-                    break;
-            }
-            break;
-        }
-        case sample_y:
-        {
-            switch(attrib)
-            {
-                case FieldName:            
-                    return QString("Y");
-                case FieldValue:
-                    return data.y();
-                case FieldTextValue:
-                    // Use the following line for display in decimal
-                    //return QString("%1").arg(data.y());
-                    // Use the following line for display in hexa-decimal
-                    return QString("%1").arg(data.y(), 4, BASE_HEX, QChar('0'));
-                case FieldFrameValue:
-                {
-                    QByteArray fv;
-                    fv.resize(2);
-                    qToBigEndian((quint16) data.y(), (uchar*) fv.data());
-                    return fv;
-                }
-                default:
-                    break;
-            }
-            break;
-        }
-
-
-        // Meta fields
-        case sample_is_override_checksum:
-        {
-            switch(attrib)
-            {
-                case FieldValue:
-                    return data.is_override_checksum();
-                default:
-                    break;
-            }
-            break;
-        }
         default:
             qFatal("%s: unimplemented case %d in switch", __PRETTY_FUNCTION__,
                 index);
@@ -361,7 +144,7 @@ TODO: Edit this function to set the data for each field
 
 See AbstractProtocol::setFieldData() for more info
 */
-bool SampleProtocol::setFieldData(int index, const QVariant &value, 
+bool NetTestProtocol::setFieldData(int index, const QVariant &value,
         FieldAttrib attrib)
 {
     bool isOk = false;
@@ -371,53 +154,20 @@ bool SampleProtocol::setFieldData(int index, const QVariant &value,
 
     switch (index)
     {
-        case sample_a:
+        // TODO nettest_timestamp
+        case nettest_timestamp:
         {
             uint a = value.toUInt(&isOk);
             if (isOk)
                 data.set_ab((data.ab() & 0x1FFF) | ((a & 0x07) << 13));
             break;
         }
-        case sample_b:
+        // TODO nettest_seqnumber
+        case nettest_seqnumber:
         {
             uint b = value.toUInt(&isOk);
             if (isOk)
                 data.set_ab((data.ab() & 0xe000) | (b & 0x1FFF));
-            break;
-        }
-        case sample_payloadLength:
-        {
-            uint len = value.toUInt(&isOk);
-            if (isOk)
-                data.set_payload_length(len);
-            break;
-        }
-        case sample_checksum:
-        {
-            uint csum = value.toUInt(&isOk);
-            if (isOk)
-                data.set_checksum(csum);
-            break;
-        }
-        case sample_x:
-        {
-            uint x = value.toUInt(&isOk);
-            if (isOk)
-                data.set_x(x);
-            break;
-        }
-        case sample_y:
-        {
-            uint y = value.toUInt(&isOk);
-            if (isOk)
-                data.set_y(y);
-            break;
-        }
-        case sample_is_override_checksum:
-        {
-            bool ovr = value.toBool();
-            data.set_is_override_checksum(ovr);
-            isOk = true;
             break;
         }
         default:
@@ -436,7 +186,7 @@ _exit:
   If your protocol has a fixed size - you don't need to reimplement this; the
   base class implementation is good enough
 */
-int SampleProtocol::protocolFrameSize(int streamIndex) const
+int NetTestProtocol::protocolFrameSize(int streamIndex) const
 {
     return AbstractProtocol::protocolFrameSize(streamIndex);
 }

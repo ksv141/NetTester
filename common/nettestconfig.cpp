@@ -17,22 +17,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "sampleconfig.h"
-#include "sample.h"
+#include "nettestconfig.h"
+#include "nettest.h"
 
-SampleConfigForm::SampleConfigForm(QWidget *parent)
+NetTestConfigForm::NetTestConfigForm(QWidget *parent)
     : AbstractProtocolConfigForm(parent)
 {
     setupUi(this);
 }
 
-SampleConfigForm::~SampleConfigForm()
+NetTestConfigForm::~NetTestConfigForm()
 {
 }
 
-SampleConfigForm* SampleConfigForm::createInstance()
+NetTestConfigForm* NetTestConfigForm::createInstance()
 {
-    return new SampleConfigForm;
+    return new NetTestConfigForm;
 }
 
 /*!
@@ -40,44 +40,18 @@ TODO: Edit this function to load each field's data into the config Widget
 
 See AbstractProtocolConfigForm::loadWidget() for more info
 */
-void SampleConfigForm::loadWidget(AbstractProtocol *proto)
+void NetTestConfigForm::loadWidget(AbstractProtocol *proto)
 {
-    sampleA->setText(
+    // TODO nettestTimeStamp
+    nettestTimeStamp->setText(
         proto->fieldData(
-            SampleProtocol::sample_a,
+            NetTestProtocol::nettest_timestamp,
             AbstractProtocol::FieldValue
         ).toString());
-    sampleB->setText(
+    // TODO nettestSeqNumber
+    nettestSeqNumber->setText(
         proto->fieldData(
-            SampleProtocol::sample_b,
-            AbstractProtocol::FieldValue
-        ).toString());
-
-    samplePayloadLength->setText(
-        proto->fieldData(
-            SampleProtocol::sample_payloadLength,
-            AbstractProtocol::FieldValue
-        ).toString());
-
-    isChecksumOverride->setChecked(
-        proto->fieldData(
-            SampleProtocol::sample_is_override_checksum,
-            AbstractProtocol::FieldValue
-        ).toBool());
-    sampleChecksum->setText(uintToHexStr(
-        proto->fieldData(
-            SampleProtocol::sample_checksum,
-            AbstractProtocol::FieldValue
-        ).toUInt(), 2));
-
-    sampleX->setText(
-        proto->fieldData(
-            SampleProtocol::sample_x,
-            AbstractProtocol::FieldValue
-        ).toString());
-    sampleY->setText(
-        proto->fieldData(
-            SampleProtocol::sample_y,
+            NetTestProtocol::nettest_seqnumber,
             AbstractProtocol::FieldValue
         ).toString());
 }
@@ -87,31 +61,15 @@ TODO: Edit this function to store each field's data from the config Widget
 
 See AbstractProtocolConfigForm::storeWidget() for more info
 */
-void SampleConfigForm::storeWidget(AbstractProtocol *proto)
+void NetTestConfigForm::storeWidget(AbstractProtocol *proto)
 {
+    // TODO nettestTimeStamp
     proto->setFieldData(
-        SampleProtocol::sample_a,
-        sampleA->text());
+        NetTestProtocol::nettest_timestamp,
+        nettestTimeStamp->text());
+    // TODO nettestSeqNumber
     proto->setFieldData(
-        SampleProtocol::sample_b,
-        sampleB->text());
-
-    proto->setFieldData(
-        SampleProtocol::sample_payloadLength,
-        samplePayloadLength->text());
-    proto->setFieldData(
-        SampleProtocol::sample_is_override_checksum, 
-       
-        isChecksumOverride->isChecked());
-    proto->setFieldData(
-        SampleProtocol::sample_checksum,
-        hexStrToUInt(sampleChecksum->text()));
-
-    proto->setFieldData(
-        SampleProtocol::sample_x,
-        sampleX->text());
-    proto->setFieldData(
-        SampleProtocol::sample_y,
-        sampleY->text());
+        NetTestProtocol::nettest_seqnumber,
+        nettestSeqNumber->text());
 }
 

@@ -17,22 +17,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef _SAMPLE_CONFIG_H
-#define _SAMPLE_CONFIG_H
+#ifndef _NETTEST_CONFIG_H
+#define _NETTEST_CONFIG_H
 
 #include "abstractprotocolconfig.h"
-#include "ui_sample.h"
+#include "ui_nettest.h"
 
-class SampleConfigForm : 
+class NetTestConfigForm :
     public AbstractProtocolConfigForm, 
-    private Ui::Sample
+    private Ui::NetTest
 {
     Q_OBJECT
 public:
-    SampleConfigForm(QWidget *parent = 0);
-    virtual ~SampleConfigForm();
+    NetTestConfigForm(QWidget *parent = 0);
+    virtual ~NetTestConfigForm();
 
-    static SampleConfigForm* createInstance();
+    static NetTestConfigForm* createInstance();
 
     virtual void loadWidget(AbstractProtocol *proto);
     virtual void storeWidget(AbstractProtocol *proto);
