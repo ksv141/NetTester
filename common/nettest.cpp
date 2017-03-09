@@ -98,7 +98,7 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
                 case FieldTextValue:
                     return QString("%1").arg(timestamp);
                 case FieldFrameValue:
-                    return QByteArray(8, (char*) timestamp);
+                    return QVariant(timestamp);
                 case FieldBitSize:
                     return 64;
                 default:
@@ -121,7 +121,7 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
                 case FieldTextValue:
                     return QString("%1").arg(seqnumber);
                 case FieldFrameValue:
-                    return QByteArray(8, (char*) seqnumber);
+                    return QVariant(seqnumber);
                 case FieldBitSize:
                     return 64;
                 default:
@@ -157,17 +157,17 @@ bool NetTestProtocol::setFieldData(int index, const QVariant &value,
         // TODO nettest_timestamp
         case nettest_timestamp:
         {
-            uint a = value.toUInt(&isOk);
+            quint64 a = value.toULongLong(&isOk);
             if (isOk)
-                data.set_ab((data.ab() & 0x1FFF) | ((a & 0x07) << 13));
+                data.set_timestamp(a);
             break;
         }
         // TODO nettest_seqnumber
         case nettest_seqnumber:
         {
-            uint b = value.toUInt(&isOk);
+            quint64 a = value.toULongLong(&isOk);
             if (isOk)
-                data.set_ab((data.ab() & 0xe000) | (b & 0x1FFF));
+                data.set_seqnumber(a);
             break;
         }
         default:
@@ -198,7 +198,7 @@ int NetTestProtocol::protocolFrameSize(int streamIndex) const
   Otherwise you don't need to reimplement this method - the base class always
   returns false
 */
-bool SampleProtocol::isProtocolFrameSizeVariable() const
+bool NetTestProtocol::isProtocolFrameSizeVariable() const
 {
     return false;
 }
@@ -209,7 +209,7 @@ bool SampleProtocol::isProtocolFrameSizeVariable() const
 
   See AbstractProtocol::protocolFrameVariableCount() for more info
 */
-int SampleProtocol::protocolFrameVariableCount() const
+int NetTestProtocol::protocolFrameVariableCount() const
 {
     return AbstractProtocol::protocolFrameVariableCount();
 }

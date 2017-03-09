@@ -60,6 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include "payload.h"
 #include "sample.h"
 #include "userscript.h"
+#include "nettest.h"
 
 ProtocolManager *OstProtocolManager;
 
@@ -135,6 +136,10 @@ ProtocolManager::ProtocolManager()
             (void*) SampleProtocol::createInstance);
     registerProtocol(OstProto::Protocol::kUserScriptFieldNumber,
             (void*) UserScriptProtocol::createInstance);
+
+    // NetTest Protocol
+    registerProtocol(OstProto::Protocol::kNetTestFieldNumber,
+            (void*) NetTestProtocol::createInstance);
 
     populateNeighbourProtocols();
 }

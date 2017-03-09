@@ -7,7 +7,6 @@ LIBS += \
 
 FORMS = \
     pcapfileimport.ui \
-    nettest.ui
 
 FORMS += \
     mac.ui \
@@ -28,7 +27,8 @@ FORMS += \
     hexdump.ui \
     payload.ui \
     sample.ui \
-    userscript.ui
+    userscript.ui \
+    nettest.ui
 
 PROTOS = \
     fileformat.proto 
@@ -49,8 +49,7 @@ HEADERS = \
     pdmlreader.h \
     sessionfileformat.h \
     streamfileformat.h \
-    spinboxdelegate.h \
-    nettestconfig.h
+    spinboxdelegate.h
 
 HEADERS += \
     abstractprotocolconfig.h \
@@ -81,7 +80,8 @@ HEADERS += \
     hexdumpconfig.h \
     payloadconfig.h \
     sampleconfig.h \
-    userscriptconfig.h
+    userscriptconfig.h \
+    nettestconfig.h
 
 SOURCES += \
     ostprotolib.cpp \
@@ -96,8 +96,7 @@ SOURCES += \
     pdmlreader.cpp \
     sessionfileformat.cpp \
     streamfileformat.cpp \
-    spinboxdelegate.cpp \
-    nettestconfig.cpp
+    spinboxdelegate.cpp
 
 SOURCES += \
     protocolwidgetfactory.cpp \
@@ -121,7 +120,8 @@ SOURCES += \
     hexdumpconfig.cpp \
     payloadconfig.cpp \
     sampleconfig.cpp \
-    userscriptconfig.cpp
+    userscriptconfig.cpp \
+    nettestconfig.cpp
 
 SOURCES += \
     vlanpdml.cpp \
@@ -139,7 +139,8 @@ SOURCES += \
     tcppdml.cpp \
     udppdml.cpp \
     textprotopdml.cpp \
-    samplepdml.cpp
+    samplepdml.cpp \
+    nettestpdml.cpp
 
 QMAKE_DISTCLEAN += object_script.*
 

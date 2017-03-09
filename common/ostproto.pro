@@ -48,8 +48,7 @@ HEADERS = \
     protocollist.h \
     protocollistiterator.h \
     streambase.h \
-    updater.h \
-    nettest.h
+    updater.h
 
 HEADERS += \
     mac.h \
@@ -79,7 +78,8 @@ HEADERS += \
     hexdump.h \
     payload.h \
     sample.h \
-    userscript.h 
+    userscript.h \
+    nettest.h
 
 SOURCES = \
     abstractprotocol.cpp \
@@ -88,8 +88,7 @@ SOURCES = \
     protocollist.cpp \
     protocollistiterator.cpp \
     streambase.cpp \
-    updater.cpp \
-    nettest.cpp
+    updater.cpp
 
 SOURCES += \
     mac.cpp \
@@ -113,7 +112,8 @@ SOURCES += \
     hexdump.cpp \
     payload.cpp \
     sample.cpp \
-    userscript.cpp
+    userscript.cpp \
+    nettest.cpp
 
 QMAKE_DISTCLEAN += object_script.*
 

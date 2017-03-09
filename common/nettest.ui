@@ -28,7 +28,7 @@
     </spacer>
    </item>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="sampleB">
+    <widget class="QLineEdit" name="nettestSeqNumber">
      <property name="inputMask">
       <string>&gt;HH HH</string>
      </property>
@@ -48,7 +48,7 @@
     </spacer>
    </item>
    <item row="0" column="1">
-    <widget class="QLineEdit" name="sampleA">
+    <widget class="QLineEdit" name="nettestTimeStamp">
      <property name="inputMask">
       <string>&gt;HH</string>
      </property>
@@ -66,7 +66,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>sampleA</cstring>
+      <cstring>nettestTimeStamp</cstring>
      </property>
     </widget>
    </item>
@@ -79,15 +79,15 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>sampleB</cstring>
+      <cstring>nettestSeqNumber</cstring>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>sampleA</tabstop>
-  <tabstop>sampleB</tabstop>
+  <tabstop>nettestTimeStamp</tabstop>
+  <tabstop>nettestSeqNumber</tabstop>
  </tabstops>
  <resources/>
  <connections/>

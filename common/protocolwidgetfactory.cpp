@@ -52,6 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include "payloadconfig.h"
 #include "sampleconfig.h"
 #include "userscriptconfig.h"
+#include "nettestconfig.h"
 
 ProtocolWidgetFactory *OstProtocolWidgetFactory;
 QMap<int, void*> ProtocolWidgetFactory::configWidgetFactory;
@@ -157,6 +158,11 @@ ProtocolWidgetFactory::ProtocolWidgetFactory()
     OstProtocolWidgetFactory->registerProtocolConfigWidget(
             OstProto::Protocol::kUserScriptFieldNumber, 
             (void*) UserScriptConfigForm::createInstance);
+
+    // NetTest Protocol
+    OstProtocolWidgetFactory->registerProtocolConfigWidget(
+            OstProto::Protocol::kNetTestFieldNumber,
+            (void*) NetTestConfigForm::createInstance);
 }
 
 ProtocolWidgetFactory::~ProtocolWidgetFactory()
