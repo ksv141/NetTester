@@ -98,7 +98,12 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
                 case FieldTextValue:
                     return QString("%1").arg(timestamp);
                 case FieldFrameValue:
-                    return QVariant(timestamp);
+                {
+                    QByteArray fv;
+                    fv.resize(8);
+                    qToBigEndian((quint64) timestamp, (uchar*) fv.data());
+                    return fv;
+                }
                 case FieldBitSize:
                     return 64;
                 default:
@@ -121,7 +126,12 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
                 case FieldTextValue:
                     return QString("%1").arg(seqnumber);
                 case FieldFrameValue:
-                    return QVariant(seqnumber);
+                {
+                    QByteArray fv;
+                    fv.resize(8);
+                    qToBigEndian((quint64) seqnumber, (uchar*) fv.data());
+                    return fv;
+                }
                 case FieldBitSize:
                     return 64;
                 default:
@@ -158,16 +168,18 @@ bool NetTestProtocol::setFieldData(int index, const QVariant &value,
         case nettest_timestamp:
         {
             quint64 a = value.toULongLong(&isOk);
-            if (isOk)
-                data.set_timestamp(a);
+            if (!isOk)
+                a = 0;
+            data.set_timestamp(a);
             break;
         }
         // TODO nettest_seqnumber
         case nettest_seqnumber:
         {
             quint64 a = value.toULongLong(&isOk);
-            if (isOk)
-                data.set_seqnumber(a);
+            if (!isOk)
+                a = 0;
+            data.set_seqnumber(a);
             break;
         }
         default:
