@@ -23,6 +23,9 @@ public:
         nettest_seqnumber,
 
         // Meta Fields
+        nettest_timestampMode,
+        nettest_seqnumberMode,
+
         nettest_fieldCount
     };
 

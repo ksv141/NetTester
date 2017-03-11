@@ -35,7 +35,7 @@ void NetTestProtocol::protoDataCopyFrom(const OstProto::Protocol &protocol)
 
 QString NetTestProtocol::name() const
 {
-    return QString("NetTest Protocol");
+    return QString("Протокол NetTest");
 }
 
 QString NetTestProtocol::shortName() const
@@ -63,6 +63,12 @@ AbstractProtocol::FieldFlags NetTestProtocol::fieldFlags(int index) const
     {
         case nettest_timestamp:
         case nettest_seqnumber:
+            break;
+
+        case nettest_timestampMode: // Мета-поля протокола, для них сбрасываем флаг фреймового поля и устанавливаем флаг мета-поля
+        case nettest_seqnumberMode:
+            flags &= ~FrameField;
+            flags |= MetaField;
             break;
 
         default:
@@ -140,6 +146,22 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
             break;
         }
 
+        case nettest_timestampMode:
+            switch(attrib)
+            {
+                case FieldValue: return data.timestamp_mode();
+                default: break;
+            }
+            break;
+
+        case nettest_seqnumberMode:
+            switch(attrib)
+            {
+                case FieldValue: return data.seqnumber_mode();
+                default: break;
+            }
+            break;
+
         default:
             qFatal("%s: unimplemented case %d in switch", __PRETTY_FUNCTION__,
                 index);
@@ -164,7 +186,6 @@ bool NetTestProtocol::setFieldData(int index, const QVariant &value,
 
     switch (index)
     {
-        // TODO nettest_timestamp
         case nettest_timestamp:
         {
             quint64 a = value.toULongLong(&isOk);
@@ -173,7 +194,6 @@ bool NetTestProtocol::setFieldData(int index, const QVariant &value,
             data.set_timestamp(a);
             break;
         }
-        // TODO nettest_seqnumber
         case nettest_seqnumber:
         {
             quint64 a = value.toULongLong(&isOk);
@@ -182,6 +202,27 @@ bool NetTestProtocol::setFieldData(int index, const QVariant &value,
             data.set_seqnumber(a);
             break;
         }
+
+        // Meta-Fields
+        case nettest_timestampMode:
+        {
+            uint mode = value.toUInt(&isOk);
+            if (isOk && data.TimeStampMode_IsValid(mode))
+                data.set_timestamp_mode((OstProto::NetTest::TimeStampMode) mode);
+            else
+                isOk = false;
+            break;
+        }
+        case nettest_seqnumberMode:
+        {
+            uint mode = value.toUInt(&isOk);
+            if (isOk && data.SeqNumberMode_IsValid(mode))
+                data.set_seqnumber_mode((OstProto::NetTest::SeqNumberMode) mode);
+            else
+                isOk = false;
+            break;
+        }
+
         default:
             qFatal("%s: unimplemented case %d in switch", __PRETTY_FUNCTION__,
                 index);

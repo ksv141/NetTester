@@ -5,8 +5,20 @@ package OstProto;
 // NetTest Protocol
 message NetTest {
 
-    optional uint64    timestamp = 1;
-    optional uint64    seqnumber = 2;
+    enum TimeStampMode {
+        e_ts_fixed = 0;
+        e_ts_systimer = 1;
+    }
+
+    enum SeqNumberMode {
+        e_sn_fixed = 0;
+        e_sn_inc = 1;
+    }
+
+    optional TimeStampMode timestamp_mode = 1 [default = e_ts_systimer];
+    optional uint64    timestamp = 2;
+    optional SeqNumberMode seqnumber_mode = 3 [default = e_sn_inc];
+    optional uint64    seqnumber = 4;
 }
 
 extend Protocol {

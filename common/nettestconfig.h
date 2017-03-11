@@ -38,6 +38,8 @@ public:
     virtual void storeWidget(AbstractProtocol *proto);
 
 private slots:
+    void on_cmbSeqNumberMode_currentIndexChanged(int index);
+    void on_cmbTimeStampMode_currentIndexChanged(int index);
 };
 
 #endif

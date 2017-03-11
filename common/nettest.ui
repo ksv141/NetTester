@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>263</width>
+    <width>398</width>
     <height>116</height>
    </rect>
   </property>
@@ -27,39 +27,26 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="1">
+   <item row="0" column="1">
     <widget class="QLineEdit" name="nettestSeqNumber">
      <property name="inputMask">
       <string/>
      </property>
      <property name="text">
-      <string>456</string>
+      <string>123</string>
      </property>
      <property name="readOnly">
       <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="1" column="3">
-    <spacer>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="1">
+   <item row="1" column="1">
     <widget class="QLineEdit" name="nettestTimeStamp">
      <property name="inputMask">
       <string/>
      </property>
      <property name="text">
-      <string>123</string>
+      <string>456</string>
      </property>
      <property name="readOnly">
       <bool>false</bool>
@@ -75,7 +62,7 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>nettestTimeStamp</cstring>
+      <cstring>nettestSeqNumber</cstring>
      </property>
     </widget>
    </item>
@@ -88,15 +75,56 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>nettestSeqNumber</cstring>
+      <cstring>nettestTimeStamp</cstring>
      </property>
     </widget>
+   </item>
+   <item row="0" column="2" colspan="2">
+    <widget class="QComboBox" name="cmbSeqNumberMode">
+     <item>
+      <property name="text">
+       <string>Фиксированный</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Последовательный</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="1" column="2" colspan="2">
+    <widget class="QComboBox" name="cmbTimeStampMode">
+     <item>
+      <property name="text">
+       <string>Фиксированная</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Системный таймер</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>nettestTimeStamp</tabstop>
   <tabstop>nettestSeqNumber</tabstop>
+  <tabstop>nettestTimeStamp</tabstop>
  </tabstops>
  <resources/>
  <connections/>

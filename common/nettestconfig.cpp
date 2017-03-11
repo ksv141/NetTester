@@ -42,18 +42,27 @@ See AbstractProtocolConfigForm::loadWidget() for more info
 */
 void NetTestConfigForm::loadWidget(AbstractProtocol *proto)
 {
-    // TODO nettestTimeStamp
     nettestTimeStamp->setText(
         proto->fieldData(
             NetTestProtocol::nettest_timestamp,
             AbstractProtocol::FieldValue
         ).toString());
-    // TODO nettestSeqNumber
     nettestSeqNumber->setText(
         proto->fieldData(
             NetTestProtocol::nettest_seqnumber,
             AbstractProtocol::FieldValue
         ).toString());
+
+    cmbTimeStampMode->setCurrentIndex(
+            proto->fieldData(
+                NetTestProtocol::nettest_timestampMode,
+                AbstractProtocol::FieldValue
+                ).toUInt());
+    cmbSeqNumberMode->setCurrentIndex(
+            proto->fieldData(
+                NetTestProtocol::nettest_seqnumberMode,
+                AbstractProtocol::FieldValue
+                ).toUInt());
 }
 
 /*!
@@ -63,13 +72,49 @@ See AbstractProtocolConfigForm::storeWidget() for more info
 */
 void NetTestConfigForm::storeWidget(AbstractProtocol *proto)
 {
-    // TODO nettestTimeStamp
     proto->setFieldData(
         NetTestProtocol::nettest_timestamp,
         nettestTimeStamp->text());
-    // TODO nettestSeqNumber
     proto->setFieldData(
         NetTestProtocol::nettest_seqnumber,
         nettestSeqNumber->text());
+
+    proto->setFieldData(
+            NetTestProtocol::nettest_timestampMode,
+            cmbTimeStampMode->currentIndex());
+    proto->setFieldData(
+            NetTestProtocol::nettest_seqnumberMode,
+            cmbSeqNumberMode->currentIndex());
+
 }
 
+
+void NetTestConfigForm::on_cmbSeqNumberMode_currentIndexChanged(int index)
+{
+    switch(index)
+    {
+        case OstProto::NetTest::e_sn_fixed:
+            nettestSeqNumber->setEnabled(true);
+            break;
+        case OstProto::NetTest::e_sn_inc:
+            nettestSeqNumber->setDisabled(true);
+            break;
+        default:
+            qWarning("Unhandled/Unknown PatternMode = %d",index);
+    }
+}
+
+void NetTestConfigForm::on_cmbTimeStampMode_currentIndexChanged(int index)
+{
+    switch(index)
+    {
+        case OstProto::NetTest::e_ts_fixed:
+            nettestTimeStamp->setEnabled(true);
+            break;
+        case OstProto::NetTest::e_ts_systimer:
+            nettestTimeStamp->setDisabled(true);
+            break;
+        default:
+            qWarning("Unhandled/Unknown PatternMode = %d",index);
+    }
+}
