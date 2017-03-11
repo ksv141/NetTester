@@ -33,6 +33,19 @@ void NetTestProtocol::protoDataCopyFrom(const OstProto::Protocol &protocol)
         data.MergeFrom(protocol.GetExtension(OstProto::nettest));
 }
 
+quint32 NetTestProtocol::protocolId(AbstractProtocol::ProtocolIdType type) const
+{
+    switch(type)
+    {
+        case ProtocolIdLlc: return 0xFFFFFE;
+        case ProtocolIdEth: return 0xFFFE;
+        case ProtocolIdIp: return 0xFE;
+        default:break;
+    }
+
+    return AbstractProtocol::protocolId(type);
+}
+
 QString NetTestProtocol::name() const
 {
     return QString("Протокол NetTest");

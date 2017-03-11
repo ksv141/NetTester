@@ -39,6 +39,8 @@ public:
     virtual void protoDataCopyInto(OstProto::Protocol &protocol) const;
     virtual void protoDataCopyFrom(const OstProto::Protocol &protocol);
 
+    virtual quint32 protocolId(ProtocolIdType type) const;
+
     virtual QString name() const;
     virtual QString shortName() const;
 
