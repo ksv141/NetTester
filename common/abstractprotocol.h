@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include <QLinkedList>
 #include <QString>
 #include <QVariant>
+#include <QtDebug>
 #include <qendian.h>
 
 //#include "../rpc/pbhelper.h"

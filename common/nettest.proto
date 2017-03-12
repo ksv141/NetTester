@@ -16,9 +16,9 @@ message NetTest {
     }
 
     optional TimeStampMode timestamp_mode = 1 [default = e_ts_systimer];
-    optional uint64    timestamp = 2;
+    optional uint64    timestamp = 2 [default = 0];
     optional SeqNumberMode seqnumber_mode = 3 [default = e_sn_inc];
-    optional uint64    seqnumber = 4;
+    optional uint64    seqnumber = 4 [default = 0];
 }
 
 extend Protocol {

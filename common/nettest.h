@@ -59,6 +59,8 @@ public:
 
 private:
     OstProto::NetTest    data;
+
+    quint64 mFrameCounter;
 };
 
 #endif

@@ -31,7 +31,10 @@ win32 {
 LIBS += -lm
 LIBS += -lprotobuf
 HEADERS += drone.h \
-    myservice.h
+    myservice.h \
+    abstractport.h \
+    pcapport.h \
+    linuxport.h
 SOURCES += \
     devicemanager.cpp \
     device.cpp \

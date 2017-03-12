@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
         myport = atoi(argv[1]);
 
     app.setApplicationName("Drone");
-    app.setOrganizationName("Ostinato");
+    app.setOrganizationName("academy");
 
     /* (Portable Mode) If we have a .ini file in the same directory as the 
        executable, we use that instead of the platform specific location

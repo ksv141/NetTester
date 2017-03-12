@@ -3,6 +3,7 @@
 NetTestProtocol::NetTestProtocol(StreamBase *stream, AbstractProtocol *parent)
     : AbstractProtocol(stream, parent)
 {
+    mFrameCounter = 0;
 }
 
 NetTestProtocol::~NetTestProtocol()
@@ -134,21 +135,20 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
         // TODO nettest_seqnumber
         case nettest_seqnumber:
         {
-            quint64 seqnumber = data.seqnumber();
-
             switch(attrib)
             {
                 case FieldName:            
                     return QString("SEQNUMBER");
                 case FieldValue:
-                    return seqnumber;
+                    return (quint64)data.seqnumber();
                 case FieldTextValue:
-                    return QString("%1").arg(seqnumber);
+                    return QString(fieldData(index, FieldFrameValue,
+                            streamIndex).toByteArray().toHex());
                 case FieldFrameValue:
                 {
                     QByteArray fv;
                     fv.resize(8);
-                    qToBigEndian((quint64) seqnumber, (uchar*) fv.data());
+                    qToBigEndian((quint64) data.seqnumber(), (uchar*) fv.data());
                     return fv;
                 }
                 case FieldBitSize:

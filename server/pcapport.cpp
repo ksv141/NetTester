@@ -168,6 +168,7 @@ void PcapPort::updateNotes()
             arg(notes).toStdString());
 }
 
+// Установка точности измерения времени между пакетами
 bool PcapPort::setRateAccuracy(AbstractPort::Accuracy accuracy)
 {
     if (transmitter_->setRateAccuracy(accuracy)) {
@@ -723,6 +724,7 @@ int PcapPort::PortTransmitter::sendQueueTransmit(pcap_t *p,
 
         Q_ASSERT(pktLen > 0);
 
+        // TODO сюда вставить предобработку посылаемого пакета
         pcap_sendpacket(p, pkt, pktLen);
         stats_->txPkts++;
         stats_->txBytes += pktLen;
@@ -759,12 +761,16 @@ void PcapPort::PortTransmitter::udelay(unsigned long usec)
     delay.tv_sec = 0;
     delay.tv_usec = usec;
 
+    // WTF?
+    // delay.tv_sec = delay.tv_usec / 1000000;
+    // delay.tv_usec = delay.tv_usec % 1000000;
     while (delay.tv_usec >= 1000000)
     {
         delay.tv_sec++;
         delay.tv_usec -= 1000000;
     }
 
+    // why not clock_gettime ???
     gettimeofday(&now, NULL);
     timeradd(&now, &delay, &target);
 
