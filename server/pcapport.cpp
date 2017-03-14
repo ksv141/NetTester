@@ -574,6 +574,9 @@ _restart:
             {
                 int ret;
                 PacketSequence *seq = packetSequenceList_.at(i+k);
+//                qDebug("repeat %d sendQ[%d+%d]: pkts = %ld", j, i, k,
+//                        seq->packets_);
+
 #ifdef Q_OS_WIN32
                 TimeStamp ovrStart, ovrEnd;
 
@@ -601,6 +604,7 @@ _restart:
                             overHead, kSyncTransmit);
                 }
 #else
+                // TODO [2] pre-send processing
                 ret = sendQueueTransmit(handle_, seq->sendQueue_, 
                             overHead, kSyncTransmit);
 #endif
@@ -630,6 +634,7 @@ _restart:
         i += rptSz;
     }
 
+    // если установлен режим loop, то посылка Packet Set зацикливается бесконечно
     if (returnToQIdx_ >= 0)
     {
         long usecs = loopDelay_ + overHead;
@@ -684,6 +689,7 @@ bool PcapPort::PortTransmitter::isRunning()
     return (state_ == kRunning);
 }
 
+// Отправка пакетов, накопленных в очереди, через заданный интервал
 int PcapPort::PortTransmitter::sendQueueTransmit(pcap_t *p,
         pcap_send_queue *queue, long &overHead, int sync)
 {
@@ -712,7 +718,7 @@ int PcapPort::PortTransmitter::sendQueueTransmit(pcap_t *p,
             usec += overHead;
             if (usec > 0)
             {
-                (*udelayFn_)(usec);
+                (*udelayFn_)(usec); // Ожидание требуемого интервала
                 overHead = 0;
             }
             else
@@ -724,7 +730,7 @@ int PcapPort::PortTransmitter::sendQueueTransmit(pcap_t *p,
 
         Q_ASSERT(pktLen > 0);
 
-        // TODO сюда вставить предобработку посылаемого пакета
+        // TODO [1] pre-send processing
         pcap_sendpacket(p, pkt, pktLen);
         stats_->txPkts++;
         stats_->txBytes += pktLen;

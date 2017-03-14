@@ -361,6 +361,7 @@ _stop_no_more_pkts:
 
 void AbstractPort::updatePacketListInterleaved()
 {
+    // TODO генарация набора пакетов
     int numStreams = 0;
     quint64 minGap = ULLONG_MAX;
     quint64 duration = quint64(1e9);
