@@ -419,6 +419,9 @@ void AbstractPort::updatePacketListInterleaved()
             }
             break;
         case OstProto::StreamControl::e_su_packets:
+            // TODO [3] pre-send processing
+            // Число сгенерированных пакетов соотвутствует указанному числу в секунду
+            // Необходимо добавить поле - число генерируемых пакетов, независимое от packetRate
             numPackets = streamList_[i]->packetRate();
             if (streamList_[i]->packetRate() > 0)
             {
