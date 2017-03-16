@@ -257,7 +257,7 @@ void VariableFieldsWidget::on_field_currentIndexChanged(int index)
         type->setCurrentIndex(vm["type"].toUInt());
         type->setDisabled(true);
         bitmask->setText(uintToHexStr(
-                            vm["mask"].toUInt(), 
+                            vm["mask"].toULongLong(),
                             typeSize(OstProto::VariableField::Type(
                                         vm["type"].toUInt()))));
         bitmask->setDisabled(true);
