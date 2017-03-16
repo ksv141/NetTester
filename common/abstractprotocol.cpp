@@ -1097,6 +1097,10 @@ bool varyCounter(QString protocolName, QByteArray &buf, int frameIndex,
             newfv = (oldfv & ~varField.mask()) 
                 | ((varField.value() + qrand()) & varField.mask());
             break;
+        case OstProto::VariableField::kSequential:
+            // TODO [5] pre-send processing
+            // Реализовать счетчик, уникальный для потока
+            newfv = oldfv + 1;
         default:
             qWarning("%s Unsupported varField mode %d", 
                     qPrintable(protocolName), varField.mode());
@@ -1116,7 +1120,7 @@ bool varyCounter(QString protocolName, QByteArray &buf, int frameIndex,
 void AbstractProtocol::varyProtocolFrameValue(QByteArray &buf, int frameIndex,
         const OstProto::VariableField &varField) const
 {
-
+    // TODO [6] add kCounter64
     switch (varField.type()) {
     case OstProto::VariableField::kCounter8:
         varyCounter<quint8>(shortName(), buf, frameIndex, varField);

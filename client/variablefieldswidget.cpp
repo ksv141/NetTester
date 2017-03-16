@@ -55,9 +55,10 @@ VariableFieldsWidget::VariableFieldsWidget(QWidget *parent)
     : QWidget(parent)
 {
     typeNames
-        << "Counter8"
-        << "Counter16"
-        << "Counter32";
+        << "Счетчик 8 бит"
+        << "Счетчик 16 бит"
+        << "Счетчик 32 бита"
+        << "Счетчик 64 бита";
 
     modeNames
         << "Инкремент"
@@ -303,6 +304,14 @@ void VariableFieldsWidget::on_type_currentIndexChanged(int index)
         count->setRange(0, 0xFFFF);
         step->setRange(0, 0xFFFF);
         break;
+    case OstProto::VariableField::kCounter64:
+        offset->setRange(0, protoSize - 8);
+        bitmask->setInputMask("HHHHHHHHHHHHHHHH");
+        bitmask->setText("FFFFFFFFFFFFFFFF");
+        valueRange_->setRange(0, 0xFFFFFFFF);
+        count->setRange(0, 0xFFFFFFFF);
+        step->setRange(0, 0xFFFF);
+        break;
     default:
         Q_ASSERT(false); // unreachable
         break;
@@ -370,9 +379,14 @@ void VariableFieldsWidget::loadProtocolFields(
             vm["mask"] = ((0xFFFFFFFF << (32 - bitSize)) & 0xFFFFFFFF)
                                 >> (bitOfs & 0x7);
         }
-        else { 
-            vm["type"] = int(OstProto::VariableField::kCounter32);
-            vm["mask"] = 0xFFFFFFFF;
+        else if (bitSize <= 64) {
+            vm["type"] = int(OstProto::VariableField::kCounter64);
+            vm["mask"] = (quint64)((UINT64_C(0xFFFFFFFFFFFFFFFF) << (64 - bitSize)) & UINT64_C(0xFFFFFFFFFFFFFFFF))
+                                >> (bitOfs & 0x7);
+        }
+        else {
+            vm["type"] = int(OstProto::VariableField::kCounter64);
+            vm["mask"] = (quint64)UINT64_C(0xFFFFFFFFFFFFFFFF);
         }
         field->addItem(name, vm);
     }
@@ -385,6 +399,7 @@ int VariableFieldsWidget::typeSize(OstProto::VariableField::Type type)
         case OstProto::VariableField::kCounter8 : return 1;
         case OstProto::VariableField::kCounter16: return 2;
         case OstProto::VariableField::kCounter32: return 4;
+        case OstProto::VariableField::kCounter64: return 8;
         default: break;
     }
 
@@ -398,7 +413,7 @@ int VariableFieldsWidget::fieldIndex(const OstProto::VariableField &vf)
 
     vm["type"] = int(vf.type());
     vm["offset"] = vf.offset();
-    vm["mask"] = vf.mask();
+    vm["mask"] = (quint64)vf.mask();
 
     int index = field->findData(vm);
     qDebug("vm %d %d 0x%x => index %d", vf.type(), vf.offset(), vf.mask(), index);

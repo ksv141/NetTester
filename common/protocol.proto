@@ -97,17 +97,19 @@ message VariableField {
         kCounter8 = 0;
         kCounter16 = 1;
         kCounter32 = 2;
+        kCounter64 = 3;
     }
 
     enum Mode {
         kIncrement = 0;
         kDecrement = 1;
         kRandom = 2;
+        kSequential = 3;
     }
 
     optional Type type = 1 [default = kCounter8];
     optional uint32 offset = 2;
-    optional fixed32 mask = 3 [default = 0xffffffff];
+    optional uint64 mask = 3 [default = 0xffffffffffffffff];
     optional uint32 value = 4;
     optional Mode mode = 5 [default = kIncrement];
     optional uint32 count = 6 [default = 16];
