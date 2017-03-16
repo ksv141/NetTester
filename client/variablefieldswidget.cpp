@@ -30,15 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 Q_DECLARE_METATYPE(AbstractProtocol*);
 Q_DECLARE_METATYPE(OstProto::VariableField);
 
-QStringList typeNames = QStringList()
-    << "Counter8"
-    << "Counter16"
-    << "Counter32";
+QStringList typeNames = QStringList();
 
-QStringList modeNames = QStringList()
-    << "Increment"
-    << "Decrement"
-    << "Random";
+QStringList modeNames = QStringList();
 
 #define uintToHexStr(num, bytes)    \
     QString("%1").arg(num, bytes*2, BASE_HEX, QChar('0')).toUpper()
@@ -60,6 +54,17 @@ QStringList modeNames = QStringList()
 VariableFieldsWidget::VariableFieldsWidget(QWidget *parent)
     : QWidget(parent)
 {
+    typeNames
+        << "Counter8"
+        << "Counter16"
+        << "Counter32";
+
+    modeNames
+        << "Инкремент"
+        << "Декремент"
+        << "Случайное знач."
+        << "Последовательно с 0";
+
     stream_ = NULL;
     isProgLoad_ = false;
     lastSelectedProtocolIndex_ = 0;

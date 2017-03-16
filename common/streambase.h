@@ -45,6 +45,8 @@ public:
     //! \todo (LOW) should we have a copy constructor??
 
 public:
+    // TODO [4] pre-send processing
+    // в этот класс добавить вставку seqnumber и timestamp, а также генерацию межпакетного интервала
     enum FrameLengthMode {
         e_fl_fixed,
         e_fl_inc,
