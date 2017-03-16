@@ -1121,7 +1121,6 @@ bool varyCounter(QString protocolName, QByteArray &buf, int frameIndex,
 void AbstractProtocol::varyProtocolFrameValue(QByteArray &buf, int frameIndex,
         const OstProto::VariableField &varField) const
 {
-    // TODO [6] add kCounter64
     switch (varField.type()) {
     case OstProto::VariableField::kCounter8:
         varyCounter<quint8>(shortName(), buf, frameIndex, varField);
