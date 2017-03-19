@@ -140,7 +140,13 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
                 case FieldName:            
                     return QString("SEQNUMBER");
                 case FieldValue:
-                    return (quint64)data.seqnumber();
+                {
+//                    return (quint64)data.seqnumber();
+//                    quint64 s = getNextFrameNumber();
+                    quint64 s = (quint64)streamIndex;
+                    qDebug(QString("************ s = %1, streamIndex = %2").arg(s).arg(streamIndex).toAscii());
+                    return s;
+                }
                 case FieldTextValue:
                     return QString(fieldData(index, FieldFrameValue,
                             streamIndex).toByteArray().toHex());
@@ -148,7 +154,8 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
                 {
                     QByteArray fv;
                     fv.resize(8);
-                    qToBigEndian((quint64) data.seqnumber(), (uchar*) fv.data());
+                    qToBigEndian(fieldData(index, FieldValue, streamIndex).toULongLong(),
+                                 (uchar*) fv.data());
                     return fv;
                 }
                 case FieldBitSize:

@@ -80,6 +80,7 @@ AbstractProtocol::AbstractProtocol(StreamBase *stream, AbstractProtocol *parent)
     protoSize = -1;
     _hasPayload = true;
     _cacheFlags |= FieldFrameBitOffsetCache;
+    _frameCounter = 0;
 }
 
 /*!
@@ -1066,9 +1067,12 @@ quint64 AbstractProtocol::lcm(quint64 u, quint64 v)
  */
 template <typename T>
 bool varyCounter(QString protocolName, QByteArray &buf, int frameIndex, 
-                 const OstProto::VariableField &varField)
+                 const OstProto::VariableField &varField /*, quint64 frameCounter = 0*/)
 {
-    int x = (frameIndex % varField.count()) * varField.step();
+//    qDebug("frameCounter = %lld", frameCounter);
+    int x = 0;
+    if (varField.count() > 0)
+        x = (frameIndex % varField.count()) * varField.step();
 
     T oldfv, newfv;
 
@@ -1083,12 +1087,20 @@ bool varyCounter(QString protocolName, QByteArray &buf, int frameIndex,
     if (sizeof(T) > sizeof(quint8))
         oldfv = qFromBigEndian(oldfv);
 
+    qDebug("************ farmeIndex = %x", frameIndex);
     switch(varField.mode())
     {
         case OstProto::VariableField::kIncrement:
+        {
+            quint64 mask = varField.mask();
+            quint64 _mask = ~varField.mask();
+            quint64 val = varField.value();
             newfv = (oldfv & ~varField.mask()) 
                 | ((varField.value() + x) & varField.mask());
+//            qDebug(QString("************ mask = %1, ~mask = %2, val = %3, newfv = %4")
+//                   .arg(mask,0,16).arg(_mask,0,16).arg(val).arg(newfv).toAscii());
             break;
+        }
         case OstProto::VariableField::kDecrement:
             newfv = (oldfv & ~varField.mask()) 
                 | ((varField.value() - x) & varField.mask());
@@ -1100,7 +1112,8 @@ bool varyCounter(QString protocolName, QByteArray &buf, int frameIndex,
         case OstProto::VariableField::kSequential:
             // TODO [5] pre-send processing
             // Реализовать счетчик, уникальный для потока
-            newfv = oldfv + 1;
+            newfv = (T)frameIndex;
+            qDebug("************ newfv = %x", newfv);
             break;
         default:
             qWarning("%s Unsupported varField mode %d", 

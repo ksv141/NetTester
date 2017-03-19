@@ -249,7 +249,7 @@
          <number>0</number>
         </property>
         <property name="maximum">
-         <number>0</number>
+         <number>1000000000</number>
         </property>
        </widget>
       </item>

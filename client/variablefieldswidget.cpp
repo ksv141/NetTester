@@ -38,6 +38,8 @@ QStringList modeNames = QStringList();
     QString("%1").arg(num, bytes*2, BASE_HEX, QChar('0')).toUpper()
 #define hexStrToUInt(str)    \
     str.toUInt(NULL, BASE_HEX)
+#define hexStrToUInt64(str)    \
+    str.toULongLong(NULL, BASE_HEX)
 
 /* 
  * NOTES:
@@ -54,17 +56,21 @@ QStringList modeNames = QStringList();
 VariableFieldsWidget::VariableFieldsWidget(QWidget *parent)
     : QWidget(parent)
 {
-    typeNames
-        << "Счетчик 8 бит"
-        << "Счетчик 16 бит"
-        << "Счетчик 32 бита"
-        << "Счетчик 64 бита";
+    if (typeNames.empty()) {
+        typeNames
+            << "Счетчик 8 бит"
+            << "Счетчик 16 бит"
+            << "Счетчик 32 бита"
+            << "Счетчик 64 бита";
+    }
 
-    modeNames
-        << "Инкремент"
-        << "Декремент"
-        << "Случайное знач."
-        << "Последовательно с 0";
+    if (modeNames.empty()) {
+        modeNames
+            << "Инкремент"
+            << "Декремент"
+            << "Случайное знач."
+            << "Последовательно с 0";
+    }
 
     stream_ = NULL;
     isProgLoad_ = false;
@@ -309,7 +315,7 @@ void VariableFieldsWidget::on_type_currentIndexChanged(int index)
         bitmask->setInputMask("HHHHHHHHHHHHHHHH");
         bitmask->setText("FFFFFFFFFFFFFFFF");
         valueRange_->setRange(0, 0xFFFFFFFF);
-        count->setRange(0, 0xFFFFFFFF);
+        count->setRange(0, 1000000000);
         step->setRange(0, 0xFFFF);
         break;
     default:
@@ -333,7 +339,7 @@ void VariableFieldsWidget::updateCurrentVariableField()
 
     vf.set_type(OstProto::VariableField::Type(type->currentIndex()));
     vf.set_offset(offset->value());
-    vf.set_mask(hexStrToUInt(bitmask->text()));
+    vf.set_mask(hexStrToUInt64(bitmask->text()));
     vf.set_value(value->text().toUInt());
     vf.set_mode(OstProto::VariableField::Mode(mode->currentIndex()));
     vf.set_count(count->value());
