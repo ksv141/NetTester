@@ -405,6 +405,17 @@ bool StreamBase::setAveragePacketRate(double packetsPerSec)
     return true;
 }
 
+quint32 StreamBase::sequenceNumPackets() const
+{
+    return (quint32) mControl->sequence_num_packets();
+}
+
+bool StreamBase::setSequenceNumPackets(quint32 secNumPackets)
+{
+    mControl->set_sequence_num_packets(secNumPackets);
+    return true;
+}
+
 bool StreamBase::isFrameVariable() const
 {
     ProtocolListIterator    *iter;
