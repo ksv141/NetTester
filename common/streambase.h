@@ -131,6 +131,9 @@ public:
     double averagePacketRate() const;
     bool setAveragePacketRate(double packetsPerSec);
 
+    quint32 sequenceNumPackets() const;
+    bool setSequenceNumPackets(quint32 secNumPackets);
+
     bool isFrameVariable() const;
     bool isFrameSizeVariable() const;
     int frameSizeVariableCount() const;
