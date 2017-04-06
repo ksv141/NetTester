@@ -559,7 +559,7 @@ void AbstractPort::updatePacketListInterleaved()
                 lastPktTxNsec = nsec;
 
                 pktCount[i]++;
-                qDebug("********* pktCount[%d] = %d", i, pktCount[i]);
+                qDebug("********* pktCount[%d] = %d    burstSize[%d] = %d", i, pktCount[i], i, burstSize[i]);
                 schedNsec[i] += (pktCount.at(i) < np1.at(i)) ? 
                     ipg1.at(i) : ipg2.at(i);
                 while (schedNsec.at(i) >= 1e9)
