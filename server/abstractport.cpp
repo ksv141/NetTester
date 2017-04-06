@@ -388,6 +388,7 @@ void AbstractPort::updatePacketListInterleaved()
     // First sort the streams by ordinalValue
     qSort(streamList_.begin(), streamList_.end(), StreamBase::StreamLessThan);
 
+    // Подготовка плана последовательности пакетов
     for (int i = 0; i < streamList_.size(); i++)
     {
         if (!streamList_[i]->isEnabled())
@@ -422,14 +423,16 @@ void AbstractPort::updatePacketListInterleaved()
             // TODO [3] pre-send processing
             // Число сгенерированных пакетов соотвутствует указанному числу в секунду
             // Необходимо добавить поле - число генерируемых пакетов, независимое от packetRate
-            numPackets = streamList_[i]->packetRate();
+//            numPackets = streamList_[i]->numPackets();
+            numPackets = streamList_[i]->packetRate();      // число генерируемых пакетов
             if (streamList_[i]->packetRate() > 0)
             {
-                ipg = 1e9/double(streamList_[i]->packetRate());
-                _ipg1 = llrint(ceil(ipg));
-                _ipg2 = quint64(floor(ipg));
-                _np1 = quint64((ipg - double(_ipg2)) * double(numPackets));
-                _np2 = quint64(numPackets) - _np1;
+                // если межпакетный интервал представлен с долями нс, то он аппроксимируется двумя ближайшими целыми интервалами
+                ipg = 1e9/double(streamList_[i]->packetRate()); // межпакетный интервал (в нс)
+                _ipg1 = llrint(ceil(ipg));      // межпакетный интервал, округленный до целого вверх
+                _ipg2 = quint64(floor(ipg));    // межпакетный интервал, округленный до целого вниз
+                _np1 = quint64((ipg - double(_ipg2)) * double(numPackets)); // число пакетов с интервалом _ipg2
+                _np2 = quint64(numPackets) - _np1;                          // число пакетов с интервалом _ipg1
                 _burstSize = 1;
             }
             break;
@@ -440,13 +443,13 @@ void AbstractPort::updatePacketListInterleaved()
         }
         qDebug("numBursts = %g, numPackets = %g\n", numBursts, numPackets);
 
-        qDebug("ibg  = %g", ibg);
+        qDebug("ibg  = %f", ibg);
         qDebug("ibg1 = %" PRIu64, _ibg1);
         qDebug("nb1  = %" PRIu64, _nb1);
         qDebug("ibg2 = %" PRIu64, _ibg2);
         qDebug("nb2  = %" PRIu64 "\n", _nb2);
 
-        qDebug("ipg  = %g", ipg);
+        qDebug("ipg  = %f", ipg);
         qDebug("ipg1 = %" PRIu64, _ipg1);
         qDebug("np1  = %" PRIu64, _np1);
         qDebug("ipg2 = %" PRIu64, _ipg2);
@@ -493,13 +496,13 @@ void AbstractPort::updatePacketListInterleaved()
         pktCount.append(0);
         burstCount.append(0);
 
-        if (streamList_[i]->isFrameVariable())
+        if (streamList_[i]->isFrameVariable())  // если поля протокола изменяющиеся, то создается заготовка пустого пакета
         {
             isVariable.append(true);
             pktBuf.append(QByteArray());
             pktLen.append(0);
         }
-        else
+        else    // если содержимое пакета не изменяющееся, то формируется фиксированный пакет, заполненный данными
         {
             isVariable.append(false);
             pktBuf.append(QByteArray());
@@ -522,6 +525,8 @@ void AbstractPort::updatePacketListInterleaved()
     quint64 nsec = 0;
     quint64 lastPktTxSec = 0;
     quint64 lastPktTxNsec = 0;
+
+    // генерация последовательности пакетов в соответствии с планом
     do
     {
         for (int i = 0; i < numStreams; i++)
@@ -532,6 +537,7 @@ void AbstractPort::updatePacketListInterleaved()
 
             for (uint j = 0; j < burstSize[i]; j++)
             {
+                // формируем очередной пакет
                 if (isVariable.at(i))
                 {
                     buf = pktBuf_;
@@ -548,11 +554,12 @@ void AbstractPort::updatePacketListInterleaved()
                     continue;
 
                 qDebug("q(%d) sec = %" PRIu64 " nsec = %" PRIu64, i, sec, nsec);
-                appendToPacketList(sec, nsec, buf, len); 
+                appendToPacketList(sec, nsec, buf, len);    // добавляем пакет в список
                 lastPktTxSec = sec;
                 lastPktTxNsec = nsec;
 
                 pktCount[i]++;
+                qDebug("********* pktCount[%d] = %d", i, pktCount[i]);
                 schedNsec[i] += (pktCount.at(i) < np1.at(i)) ? 
                     ipg1.at(i) : ipg2.at(i);
                 while (schedNsec.at(i) >= 1e9)
