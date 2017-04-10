@@ -209,6 +209,10 @@ message Port {
     optional bool is_exclusive_control = 6;
     optional TransmitMode transmit_mode = 7 [default = kSequentialTransmit];
     optional string user_name = 8;
+
+    // информация о размере буфера пакетов
+    optional bool is_pkt_buf_size_enabled = 9;  // учитывать ли размер буфера пакетов
+    optional uint32 pkt_buf_size = 10;          // размер буфера пакетов
 }
 
 message PortConfigList {

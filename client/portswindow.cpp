@@ -397,32 +397,32 @@ void PortsWindow::when_portModel_reset()
 
 void PortsWindow::on_averagePacketsPerSec_editingFinished()
 {
-    QModelIndex current = tvPortList->currentIndex();
+//    QModelIndex current = tvPortList->currentIndex();
 
-    if (proxyPortModel)
-        current = proxyPortModel->mapToSource(current);
+//    if (proxyPortModel)
+//        current = proxyPortModel->mapToSource(current);
 
-    Q_ASSERT(plm->isPort(current));
+//    Q_ASSERT(plm->isPort(current));
 
-    bool isOk;
-    double pps = QLocale().toDouble(averagePacketsPerSec->text(), &isOk);
+//    bool isOk;
+//    double pps = QLocale().toDouble(averagePacketsPerSec->text(), &isOk);
 
-    plm->port(current).setAveragePacketRate(pps);
+//    plm->port(current).setAveragePacketRate(pps);
 }
 
 void PortsWindow::on_averageBitsPerSec_editingFinished()
 {
-    QModelIndex current = tvPortList->currentIndex();
+//    QModelIndex current = tvPortList->currentIndex();
 
-    if (proxyPortModel)
-        current = proxyPortModel->mapToSource(current);
+//    if (proxyPortModel)
+//        current = proxyPortModel->mapToSource(current);
 
-    Q_ASSERT(plm->isPort(current));
+//    Q_ASSERT(plm->isPort(current));
 
-    bool isOk;
-    double bps = QLocale().toDouble(averageBitsPerSec->text(), &isOk);
+//    bool isOk;
+//    double bps = QLocale().toDouble(averageBitsPerSec->text(), &isOk);
 
-    plm->port(current).setAverageBitRate(bps);
+//    plm->port(current).setAverageBitRate(bps);
 }
 
 void PortsWindow::updatePortRates()
@@ -438,10 +438,10 @@ void PortsWindow::updatePortRates()
     if (!plm->isPort(current))
         return;
 
-    averagePacketsPerSec->setText(QString("%L1")
-            .arg(plm->port(current).averagePacketRate(), 0, 'f', 4));
-    averageBitsPerSec->setText(QString("%L1")
-            .arg(plm->port(current).averageBitRate(), 0, 'f', 0));
+//    averagePacketsPerSec->setText(QString("%L1")
+//            .arg(plm->port(current).averagePacketRate(), 0, 'f', 4));
+//    averageBitsPerSec->setText(QString("%L1")
+//            .arg(plm->port(current).averageBitRate(), 0, 'f', 0));
 }
 
 void PortsWindow::updateStreamViewActions()
