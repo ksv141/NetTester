@@ -103,6 +103,12 @@ public:
     double averageBitRate()
         { return avgBitsPerSec_; }
 
+    bool isPktBufSizeEnabled()
+        { return d.is_pkt_buf_size_enabled(); }
+    quint32 pktBufSize()
+        { return d.pkt_buf_size(); }
+
+
     //void setAdminEnable(AdminStatus status) { mAdminStatus = status; }
     void setAlias(QString alias) { mUserAlias = alias; }
     //void setExclusive(bool flag);

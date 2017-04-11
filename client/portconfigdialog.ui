@@ -1,38 +1,42 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>PortConfigDialog</class>
- <widget class="QDialog" name="PortConfigDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="PortConfigDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>244</width>
-    <height>233</height>
+    <width>295</width>
+    <height>252</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Port Config</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <widget class="QGroupBox" name="transmitModeBox" >
-     <property name="title" >
-      <string>Transmit Mode</string>
+    <widget class="QGroupBox" name="transmitModeBox">
+     <property name="title">
+      <string>Режим передачи ПБД</string>
      </property>
-     <layout class="QVBoxLayout" >
+     <layout class="QVBoxLayout">
       <item>
-       <widget class="QRadioButton" name="sequentialStreamsButton" >
-        <property name="text" >
-         <string>Sequential Streams</string>
+       <widget class="QRadioButton" name="interleavedStreamsButton">
+        <property name="text">
+         <string>Передается смесь потоков</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="interleavedStreamsButton" >
-        <property name="text" >
-         <string>Interleaved Streams</string>
+       <widget class="QRadioButton" name="sequentialStreamsButton">
+        <property name="text">
+         <string>Потоки передают последовательно</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -40,22 +44,22 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
-      <string>Reservation</string>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Резервирование</string>
      </property>
-     <layout class="QVBoxLayout" >
+     <layout class="QVBoxLayout">
       <item>
-       <widget class="QLabel" name="reservedBy" >
-        <property name="text" >
-         <string>Reserved by: </string>
+       <widget class="QLabel" name="reservedBy">
+        <property name="text">
+         <string>Зарезервировано: </string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="reserveButton" >
-        <property name="text" >
-         <string>Reserve</string>
+       <widget class="QCheckBox" name="reserveButton">
+        <property name="text">
+         <string>Зарезервировать за собой</string>
         </property>
        </widget>
       </item>
@@ -63,18 +67,18 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="exclusiveControlButton" >
-     <property name="text" >
-      <string>Exclusive Control</string>
+    <widget class="QCheckBox" name="exclusiveControlButton">
+     <property name="text">
+      <string>Монопольный доступ к порту</string>
      </property>
     </widget>
    </item>
    <item>
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>226</width>
        <height>71</height>
@@ -83,12 +87,12 @@
     </spacer>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox" >
-     <property name="orientation" >
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -102,11 +106,11 @@
    <receiver>PortConfigDialog</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>234</x>
      <y>205</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>157</x>
      <y>214</y>
     </hint>
@@ -118,11 +122,11 @@
    <receiver>PortConfigDialog</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>234</x>
      <y>205</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>243</x>
      <y>214</y>
     </hint>
