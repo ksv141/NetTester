@@ -207,7 +207,7 @@ message Port {
     optional string notes = 4;
     optional bool is_enabled = 5;
     optional bool is_exclusive_control = 6;
-    optional TransmitMode transmit_mode = 7 [default = kSequentialTransmit];
+    optional TransmitMode transmit_mode = 7 [default = kInterleavedTransmit];
     optional string user_name = 8;
 
     optional bool is_pkt_buf_size_enabled = 9 [default = true]; // флаг, учитывать ли размер буфера пакетов

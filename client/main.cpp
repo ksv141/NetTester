@@ -31,6 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include <QSettings>
 #include <QtGlobal>
 #include <QTextCodec>
+#include <QTranslator>
+#include <QLibraryInfo>
 
 #include <google/protobuf/stubs/common.h>
 
@@ -52,6 +54,14 @@ int main(int argc, char* argv[])
     app.setOrganizationName("Academy");
     app.setProperty("version", version);
     app.setProperty("revision", revision);
+
+    QTranslator qtHelpTranslator;
+    qtHelpTranslator.load("qt_help_ru",QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    app.installTranslator(&qtHelpTranslator);
+
+    QTranslator qtTranslator;
+    qtTranslator.load("qt_ru",QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    app.installTranslator(&qtTranslator);
 
     QTextCodec::setCodecForTr(QTextCodec::codecForName ("utf8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName ("utf8"));

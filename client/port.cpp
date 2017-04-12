@@ -481,6 +481,14 @@ bool Port::modifiablePortConfig(OstProto::Port &config) const
         modCfg.set_user_name(config.user_name());
         change = true;
     }
+    if (config.is_pkt_buf_size_enabled() != d.is_pkt_buf_size_enabled()) {
+        modCfg.set_is_pkt_buf_size_enabled(config.is_pkt_buf_size_enabled());
+        change = true;
+    }
+    if (config.pkt_buf_size() != d.pkt_buf_size()) {
+        modCfg.set_pkt_buf_size(config.pkt_buf_size());
+        change = true;
+    }
 
     if (change) {
         modCfg.mutable_port_id()->set_id(id());

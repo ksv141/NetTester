@@ -722,11 +722,15 @@ void PortsWindow::on_actionPort_Configuration_triggered()
     config.set_transmit_mode(plm->port(current).transmitMode());
     config.set_is_exclusive_control(plm->port(current).hasExclusiveControl());
     config.set_user_name(plm->port(current).userName().toStdString());
+    config.set_is_pkt_buf_size_enabled(plm->port(current).isPktBufSizeEnabled());
+    config.set_pkt_buf_size(plm->port(current).pktBufSize());
 
     PortConfigDialog dialog(config, this);
 
     if (dialog.exec() == QDialog::Accepted)
         plm->portGroup(current.parent()).modifyPort(current.row(), config);
+
+
 }
 
 void PortsWindow::on_actionNew_Stream_triggered()

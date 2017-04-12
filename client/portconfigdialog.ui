@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>295</width>
-    <height>252</height>
+    <width>338</width>
+    <height>331</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Port Config</string>
+   <string>Конфигурация порта</string>
   </property>
   <layout class="QVBoxLayout">
    <item>
@@ -31,9 +31,93 @@
        </widget>
       </item>
       <item>
+       <layout class="QHBoxLayout" name="pktBufHLayout">
+        <property name="leftMargin">
+         <number>15</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QGroupBox" name="pktBufGroupBox">
+          <property name="title">
+           <string>Буфер ПБД</string>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>6</number>
+           </property>
+           <property name="leftMargin">
+            <number>15</number>
+           </property>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>9</number>
+           </property>
+           <property name="bottomMargin">
+            <number>9</number>
+           </property>
+           <item>
+            <widget class="QFrame" name="pktBufSizeFrame">
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <property name="leftMargin">
+               <number>1</number>
+              </property>
+              <property name="topMargin">
+               <number>1</number>
+              </property>
+              <property name="rightMargin">
+               <number>1</number>
+              </property>
+              <property name="bottomMargin">
+               <number>1</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>Размер буфера ПБД, Мб</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="pktBufSize">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>100000</number>
+                </property>
+                <property name="value">
+                 <number>100</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <widget class="QRadioButton" name="sequentialStreamsButton">
         <property name="text">
-         <string>Потоки передают последовательно</string>
+         <string>Потоки передаются последовательно</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -59,7 +143,7 @@
       <item>
        <widget class="QCheckBox" name="reserveButton">
         <property name="text">
-         <string>Зарезервировать за собой</string>
+         <string>Зарезервировать</string>
         </property>
        </widget>
       </item>
@@ -129,6 +213,38 @@
     <hint type="destinationlabel">
      <x>243</x>
      <y>214</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>interleavedStreamsButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>pktBufGroupBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>152</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>155</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pktBufGroupBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>pktBufSizeFrame</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>155</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>155</x>
+     <y>123</y>
     </hint>
    </hints>
   </connection>

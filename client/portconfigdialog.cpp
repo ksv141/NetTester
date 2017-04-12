@@ -47,23 +47,26 @@ PortConfigDialog::PortConfigDialog(OstProto::Port &portConfig, QWidget *parent)
     // XXX: what if myself_ is empty?
     if (currentUser.isEmpty()) {
         reservedBy_ = kNone;
-        reservedBy->setText("Unreserved");
-        reserveButton->setText("Reserve");
+        reservedBy->setText("Незарезервировано");
+        reserveButton->setText("Зарезервировать");
     }
     else if (currentUser == myself_) {
         reservedBy_ = kSelf;
-        reservedBy->setText("Reserved by: me <i>("+currentUser+")</i>");
-        reserveButton->setText("Reserve (uncheck to unreserve)");
+        reservedBy->setText("Зарезервировано: <i>("+currentUser+")</i>");
+        reserveButton->setText("Зарезервировать (снять резервирование)");
         reserveButton->setChecked(true);
     }
     else {
         reservedBy_ = kOther;
-        reservedBy->setText("Reserved by: <i>"+currentUser+"</i>");
-        reserveButton->setText("Force reserve");
+        reservedBy->setText("Зарезервировано: <i>"+currentUser+"</i>");
+        reserveButton->setText("Принудительно зарезервировать");
     }
     qDebug("reservedBy_ = %d", reservedBy_);
 
     exclusiveControlButton->setChecked(portConfig_.is_exclusive_control());
+
+    pktBufGroupBox->setChecked(portConfig_.is_pkt_buf_size_enabled());
+    pktBufSize->setValue((int)portConfig_.pkt_buf_size());
 }
 
 void PortConfigDialog::accept()
@@ -72,8 +75,16 @@ void PortConfigDialog::accept()
 
     if (sequentialStreamsButton->isChecked())
         pc.set_transmit_mode(OstProto::kSequentialTransmit);
-    else if (interleavedStreamsButton->isChecked())
+    else if (interleavedStreamsButton->isChecked()) {
         pc.set_transmit_mode(OstProto::kInterleavedTransmit);
+        if (pktBufGroupBox->isChecked()) {
+            pc.set_is_pkt_buf_size_enabled(true);
+            pc.set_pkt_buf_size((::google::protobuf::uint32)pktBufSize->value());
+        }
+        else {
+            pc.set_is_pkt_buf_size_enabled(false);
+        }
+    }
     else
         Q_ASSERT(false); // Unreachable!!!
 
@@ -111,6 +122,16 @@ void PortConfigDialog::accept()
         portConfig_.set_is_exclusive_control(pc.is_exclusive_control());
     else
         portConfig_.clear_is_exclusive_control();
+
+    if (pc.is_pkt_buf_size_enabled() != portConfig_.is_pkt_buf_size_enabled())
+        portConfig_.set_is_pkt_buf_size_enabled(pc.is_pkt_buf_size_enabled());
+    else
+        portConfig_.clear_is_pkt_buf_size_enabled();
+
+    if (pc.pkt_buf_size() != portConfig_.pkt_buf_size())
+        portConfig_.set_pkt_buf_size(pc.pkt_buf_size());
+    else
+        portConfig_.clear_pkt_buf_size();
 
     QDialog::accept();
 }

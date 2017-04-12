@@ -29,6 +29,9 @@ class PortConfigDialog : public QDialog, public Ui::PortConfigDialog
 public:
     PortConfigDialog(OstProto::Port &portConfig, QWidget *parent);
 
+private slots:
+    void on_buttonBox_accepted();
+
 private:
     virtual void accept();
 

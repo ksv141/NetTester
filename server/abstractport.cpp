@@ -86,6 +86,14 @@ bool AbstractPort::modify(const OstProto::Port &port)
         data_.set_user_name(port.user_name());
     }
 
+    if (port.has_is_pkt_buf_size_enabled()) {
+        data_.set_is_pkt_buf_size_enabled(port.is_pkt_buf_size_enabled());
+    }
+
+    if (port.has_pkt_buf_size()) {
+        data_.set_pkt_buf_size(port.pkt_buf_size());
+    }
+
     return ret;
 }    
 
