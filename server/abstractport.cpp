@@ -533,6 +533,8 @@ void AbstractPort::updatePacketListInterleaved()
     quint64 nsec = 0;
     quint64 lastPktTxSec = 0;
     quint64 lastPktTxNsec = 0;
+    quint64 sumLen = 0;
+    bool continueGenerate = false;
 
     // генерация последовательности пакетов в соответствии с планом
     do
@@ -561,13 +563,14 @@ void AbstractPort::updatePacketListInterleaved()
                 if (len <= 0)
                     continue;
 
-                qDebug("q(%d) sec = %" PRIu64 " nsec = %" PRIu64, i, sec, nsec);
+                //qDebug("q(%d) sec = %" PRIu64 " nsec = %" PRIu64, i, sec, nsec);
                 appendToPacketList(sec, nsec, buf, len);    // добавляем пакет в список
                 lastPktTxSec = sec;
                 lastPktTxNsec = nsec;
+                sumLen += len;
 
                 pktCount[i]++;
-                qDebug("********* pktCount[%d] = %d    burstSize[%d] = %d", i, pktCount[i], i, burstSize[i]);
+                //qDebug("********* pktCount[%d] = %d    burstSize[%d] = %d", i, pktCount[i], i, burstSize[i]);
                 schedNsec[i] += (pktCount.at(i) < np1.at(i)) ? 
                     ipg1.at(i) : ipg2.at(i);
                 while (schedNsec.at(i) >= 1e9)
@@ -593,7 +596,16 @@ void AbstractPort::updatePacketListInterleaved()
             sec++;
             nsec -= long(1e9);
         }
-    } while ((sec < durSec) || (nsec < durNsec));
+
+        // проверка условия продолжения генерации пакетов
+        // в зависимости от режима пакеты генерируются до достижения 1 с или до максимального размера буфера
+        if (data_.is_pkt_buf_size_enabled())
+            continueGenerate = sumLen < data_.pkt_buf_size()*1000000;
+        else
+            continueGenerate = ((sec < durSec) || (nsec < durNsec));
+
+    } while (continueGenerate);
+//    } while ((sec < durSec) || (nsec < durNsec));
 
     qint64 delaySec = durSec - lastPktTxSec;
     qint64 delayNsec = durNsec - lastPktTxNsec;

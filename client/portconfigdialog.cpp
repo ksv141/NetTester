@@ -92,6 +92,8 @@ void PortConfigDialog::accept()
         case kSelf:
             if (!reserveButton->isChecked())
                 pc.set_user_name(""); // unreserve
+            else
+                pc.set_user_name(myself_.toStdString());
             break;
 
         case kOther:
