@@ -77,6 +77,20 @@ static void inline getTimeStamp(TimeStamp*) {}
 static long inline udiffTimeStamp(const TimeStamp*, const TimeStamp*) { return 0; }
 #endif
 
+// вычисление точного временного интервала для clock_gettine()
+timespec diff(timespec start, timespec end)
+{
+    timespec temp;
+    if ((end.tv_nsec-start.tv_nsec)<0) {
+        temp.tv_sec = end.tv_sec-start.tv_sec-1;
+        temp.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
+    } else {
+        temp.tv_sec = end.tv_sec-start.tv_sec;
+        temp.tv_nsec = end.tv_nsec-start.tv_nsec;
+    }
+    return temp;
+}
+
 PcapPort::PcapPort(int id, const char *device)
     : AbstractPort(id, device)
 {
@@ -117,6 +131,11 @@ void PcapPort::init()
         transmitter_->useExternalStats(&stats_);
 
     transmitter_->setHandle(monitorRx_->handle());
+
+    if (isTimeStampEnabled)
+        transmitter_->enableTimeStamp(timeStampOffset, timeStampSize);
+    else
+        transmitter_->disableTimeStamp();
 
     updateNotes();
 
@@ -663,6 +682,11 @@ void PcapPort::PortTransmitter::start()
         return;
     }
 
+    if (clock_gettime(CLOCK_MONOTONIC_RAW, &timeBeginTransmit) != 0) {
+        qWarning("Can't get begin transmit time!");
+        return;
+    }
+
     state_ = kNotStarted;
     QThread::start();
 
@@ -687,6 +711,18 @@ void PcapPort::PortTransmitter::stop()
 bool PcapPort::PortTransmitter::isRunning()
 {
     return (state_ == kRunning);
+}
+
+void PcapPort::PortTransmitter::enableTimeStamp(int offset, size_t size)
+{
+    isTimeStampEnabled = true;
+    timeStampOffset = offset;
+    timeStampSize = size;
+}
+
+void PcapPort::PortTransmitter::disableTimeStamp()
+{
+    isTimeStampEnabled = false;
 }
 
 // Отправка пакетов, накопленных в очереди, через заданный интервал
@@ -731,6 +767,10 @@ int PcapPort::PortTransmitter::sendQueueTransmit(pcap_t *p,
         Q_ASSERT(pktLen > 0);
 
         // TODO [1] pre-send processing
+        if (isTimeStampEnabled) {
+            insertTimeStamp(pkt, pktLen);
+        }
+
         pcap_sendpacket(p, pkt, pktLen);
         stats_->txPkts++;
         stats_->txBytes += pktLen;
@@ -746,6 +786,12 @@ int PcapPort::PortTransmitter::sendQueueTransmit(pcap_t *p,
     }
 
     return 0;
+}
+
+void PcapPort::PortTransmitter::insertTimeStamp(uchar *pkt, int pktLen)
+{
+    if ((timeStampOffset + timeStampSize) > pktLen)
+        return;
 }
 
 void PcapPort::PortTransmitter::udelay(unsigned long usec)

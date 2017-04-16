@@ -122,6 +122,9 @@ public:
     quint64 deviceMacAddress(int streamId, int frameIndex);
     quint64 neighborMacAddress(int streamId, int frameIndex);
 
+    void enableTimeStamp(int offset, size_t size);  // включение вставки временной метки
+    void disableTimeStamp();                        // выключение вставки временной метки
+
 protected:
     void addNote(QString note);
 
@@ -139,6 +142,12 @@ protected:
     //! \todo Need lock for stats access/update
 
     DeviceManager *deviceManager_;
+
+    // Данные для вставки временной метки
+    // временная метка вставляется в потоке передачи фрейма непосредственно перед отправкой
+    bool isTimeStampEnabled = false;    // флаг включения вставки временной метки
+    int timeStampOffset = -1;           // смещение временной метки от начала фрейма
+    size_t timeStampSize = 8;           // размер временной метки в байтах
 
 private:
     bool    isSendQueueDirty_;

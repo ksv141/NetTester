@@ -551,7 +551,7 @@ void AbstractPort::updatePacketListInterleaved()
                 if (isVariable.at(i))
                 {
                     buf = pktBuf_;
-                    len = streamList_[i]->frameValue(pktBuf_, sizeof(pktBuf_), 
+                    len = streamList_[i]->frameValue(pktBuf_, sizeof(pktBuf_), // заполняем изменяющиеся поля
                             pktCount[i]);
                 }
                 else
@@ -600,26 +600,22 @@ void AbstractPort::updatePacketListInterleaved()
         // проверка условия продолжения генерации пакетов
         // в зависимости от режима пакеты генерируются до достижения 1 с или до максимального размера буфера
         if (data_.is_pkt_buf_size_enabled())
-            continueGenerate = sumLen < data_.pkt_buf_size()*1000000;
+            continueGenerate = sumLen < data_.pkt_buf_size()*1000;
         else
             continueGenerate = ((sec < durSec) || (nsec < durNsec));
 
     } while (continueGenerate);
 //    } while ((sec < durSec) || (nsec < durNsec));
 
-    if (!data_.is_pkt_buf_size_enabled())
+    qint64 delaySec = durSec - lastPktTxSec;
+    qint64 delayNsec = durNsec - lastPktTxNsec;
+    while (delayNsec < 0)
     {
-        qint64 delaySec = durSec - lastPktTxSec;
-        qint64 delayNsec = durNsec - lastPktTxNsec;
-        while (delayNsec < 0)
-        {
-            delayNsec += long(1e9);
-            delaySec--;
-        }
-        qDebug("loop Delay = %" PRId64 "/%" PRId64, delaySec, delayNsec);
-        setPacketListLoopMode(true, delaySec, delayNsec);
+        delayNsec += long(1e9);
+        delaySec--;
     }
-
+    qDebug("loop Delay = %" PRId64 "/%" PRId64, delaySec, delayNsec);
+    setPacketListLoopMode(true, delaySec, delayNsec);
     isSendQueueDirty_ = false;
 }
 
@@ -734,4 +730,16 @@ quint64 AbstractPort::neighborMacAddress(int streamId, int frameIndex)
     }
 
     return 0;
+}
+
+void AbstractPort::enableTimeStamp(int offset, size_t size)
+{
+    isTimeStampEnabled = true;
+    timeStampOffset = offset;
+    timeStampSize = size;
+}
+
+void AbstractPort::disableTimeStamp()
+{
+    isTimeStampEnabled = false;
 }

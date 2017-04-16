@@ -132,7 +132,6 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
             break;
 
         }
-        // TODO nettest_seqnumber
         case nettest_seqnumber:
         {
             switch(attrib)
@@ -141,10 +140,7 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
                     return QString("SEQNUMBER");
                 case FieldValue:
                 {
-//                    return (quint64)data.seqnumber();
-//                    quint64 s = getNextFrameNumber();
                     quint64 s = (quint64)streamIndex;
-                    qDebug(QString("************ s = %1, streamIndex = %2").arg(s).arg(streamIndex).toAscii());
                     return s;
                 }
                 case FieldTextValue:

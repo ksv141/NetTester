@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #ifndef _SERVER_PCAP_PORT_H
 #define _SERVER_PCAP_PORT_H
 
+#include <ctime>
 #include <QTemporaryFile>
 #include <QThread>
 #include <pcap.h>
@@ -126,6 +127,9 @@ protected:
         void start();
         void stop();
         bool isRunning();
+
+        void enableTimeStamp(int offset, size_t size);  // включение вставки временной метки
+        void disableTimeStamp();                        // выключение вставки временной метки
     private:
         enum State 
         {
@@ -133,6 +137,8 @@ protected:
             kRunning,
             kFinished
         };
+
+        timespec timeBeginTransmit; // время начала передачи пакетов
 
         class PacketSequence
         {
@@ -202,6 +208,15 @@ protected:
         pcap_t *handle_;
         volatile bool stop_;
         volatile State state_;
+
+        // вставка временной метки во фрейм
+        void insertTimeStamp(uchar* pkt, int pktLen);
+
+        // Данные для вставки временной метки
+        // временная метка вставляется в потоке передачи фрейма непосредственно перед отправкой
+        bool isTimeStampEnabled = false;    // флаг включения вставки временной метки
+        int timeStampOffset = -1;           // смещение временной метки от начала фрейма
+        size_t timeStampSize = 8;           // размер временной метки в байтах
     };
 
     class PortCapturer: public QThread
