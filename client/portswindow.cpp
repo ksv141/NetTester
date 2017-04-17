@@ -724,6 +724,9 @@ void PortsWindow::on_actionPort_Configuration_triggered()
     config.set_user_name(plm->port(current).userName().toStdString());
     config.set_is_pkt_buf_size_enabled(plm->port(current).isPktBufSizeEnabled());
     config.set_pkt_buf_size(plm->port(current).pktBufSize());
+    config.set_is_time_stamp_enabled(plm->port(current).isTimeStampEnabled());
+    config.set_time_stamp_offset(plm->port(current).timeStampOffset());
+    config.set_time_stamp_size(plm->port(current).timeStampSize());
 
     PortConfigDialog dialog(config, this);
 

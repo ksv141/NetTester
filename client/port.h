@@ -108,6 +108,13 @@ public:
     quint32 pktBufSize()
         { return d.pkt_buf_size(); }
 
+    bool isTimeStampEnabled()
+        {return d.is_time_stamp_enabled(); }
+    quint32 timeStampOffset()
+        {return d.time_stamp_offset(); }
+    quint32 timeStampSize()
+        {return d.time_stamp_size(); }
+
 
     //void setAdminEnable(AdminStatus status) { mAdminStatus = status; }
     void setAlias(QString alias) { mUserAlias = alias; }

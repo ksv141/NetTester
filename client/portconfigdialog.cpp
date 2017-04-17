@@ -67,6 +67,10 @@ PortConfigDialog::PortConfigDialog(OstProto::Port &portConfig, QWidget *parent)
 
     pktBufGroupBox->setChecked(portConfig_.is_pkt_buf_size_enabled());
     pktBufSize->setValue((int)portConfig_.pkt_buf_size());
+
+    timeStampGroupBox->setChecked(portConfig_.is_time_stamp_enabled());
+    timeStampOffset->setValue((int)portConfig_.time_stamp_offset());
+    timeStampSize->setValue((int)portConfig_.time_stamp_size());
 }
 
 void PortConfigDialog::accept()
@@ -109,6 +113,10 @@ void PortConfigDialog::accept()
 
     pc.set_is_exclusive_control(exclusiveControlButton->isChecked());
 
+    pc.set_is_time_stamp_enabled(timeStampGroupBox->isChecked());
+    pc.set_time_stamp_offset((::google::protobuf::uint32)timeStampOffset->value());
+    pc.set_time_stamp_size((::google::protobuf::uint32)timeStampSize->value());
+
     // Update fields that have changed, clear the rest
     if (pc.transmit_mode() != portConfig_.transmit_mode())
         portConfig_.set_transmit_mode(pc.transmit_mode());
@@ -134,6 +142,21 @@ void PortConfigDialog::accept()
         portConfig_.set_pkt_buf_size(pc.pkt_buf_size());
     else
         portConfig_.clear_pkt_buf_size();
+
+    if (pc.is_time_stamp_enabled() != portConfig_.is_time_stamp_enabled())
+        portConfig_.set_is_time_stamp_enabled(pc.is_time_stamp_enabled());
+    else
+        portConfig_.clear_is_time_stamp_enabled();
+
+    if (pc.time_stamp_offset() != portConfig_.time_stamp_offset())
+        portConfig_.set_time_stamp_offset(pc.time_stamp_offset());
+    else
+        portConfig_.clear_time_stamp_offset();
+
+    if (pc.time_stamp_size() != portConfig_.time_stamp_size())
+        portConfig_.set_time_stamp_size(pc.time_stamp_size());
+    else
+        portConfig_.clear_time_stamp_size();
 
     QDialog::accept();
 }

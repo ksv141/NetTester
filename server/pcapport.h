@@ -61,7 +61,11 @@ public:
 
     virtual void startTransmit() { 
         Q_ASSERT(!isDirty());
-        transmitter_->start(); 
+        if (data_.is_time_stamp_enabled())
+            transmitter_->enableTimeStamp(data_.time_stamp_offset(), data_.time_stamp_size());
+        else
+            transmitter_->disableTimeStamp();
+        transmitter_->start();
     }
     virtual void stopTransmit()  { transmitter_->stop();  }
     virtual bool isTransmitOn() { return transmitter_->isRunning(); }

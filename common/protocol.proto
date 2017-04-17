@@ -212,6 +212,10 @@ message Port {
 
     optional bool is_pkt_buf_size_enabled = 9 [default = true]; // флаг, учитывать ли размер буфера пакетов
     optional uint32 pkt_buf_size = 10 [default = 100];          // размер буфера пакетов
+
+    optional bool is_time_stamp_enabled = 11 [default = true];  // флаг, вставлять ли временные метки во все фреймы с данного порта
+    optional uint32 time_stamp_offset = 12 [default = 34];      // смещение для временной метки относительно начала фрейма
+    optional uint32 time_stamp_size = 13 [default = 8];         // размер временной метки
 }
 
 message PortConfigList {

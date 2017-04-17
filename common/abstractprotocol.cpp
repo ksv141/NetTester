@@ -80,7 +80,6 @@ AbstractProtocol::AbstractProtocol(StreamBase *stream, AbstractProtocol *parent)
     protoSize = -1;
     _hasPayload = true;
     _cacheFlags |= FieldFrameBitOffsetCache;
-    _frameCounter = 0;
 }
 
 /*!

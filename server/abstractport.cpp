@@ -94,6 +94,18 @@ bool AbstractPort::modify(const OstProto::Port &port)
         data_.set_pkt_buf_size(port.pkt_buf_size());
     }
 
+    if (port.has_is_time_stamp_enabled()) {
+        data_.set_is_time_stamp_enabled(port.is_time_stamp_enabled());
+    }
+
+    if (port.has_time_stamp_offset()) {
+        data_.set_time_stamp_offset(port.time_stamp_offset());
+    }
+
+    if (port.has_time_stamp_size()) {
+        data_.set_time_stamp_size(port.time_stamp_size());
+    }
+
     return ret;
 }    
 
@@ -730,17 +742,5 @@ quint64 AbstractPort::neighborMacAddress(int streamId, int frameIndex)
     }
 
     return 0;
-}
-
-void AbstractPort::enableTimeStamp(int offset, size_t size)
-{
-    isTimeStampEnabled = true;
-    timeStampOffset = offset;
-    timeStampSize = size;
-}
-
-void AbstractPort::disableTimeStamp()
-{
-    isTimeStampEnabled = false;
 }
 

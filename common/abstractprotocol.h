@@ -55,8 +55,6 @@ private:
     mutable QHash<int, int> _fieldFrameBitOffset;
     OstProto::Protocol _data;
 
-    mutable quint64 _frameCounter;  // счетчик ПБД
-
 protected:
     StreamBase          *mpStream; //!< Stream that this protocol belongs to
     AbstractProtocol    *parent;   //!< Parent protocol, if any
@@ -180,10 +178,6 @@ public:
 private:
     void varyProtocolFrameValue(QByteArray &buf, int frameIndex,
                                 const OstProto::VariableField &varField) const;
-protected:
-    inline quint64 getNextFrameNumber() const {
-        return _frameCounter++;
-    }
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractProtocol::FieldFlags);
 #endif

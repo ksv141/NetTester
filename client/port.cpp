@@ -489,6 +489,18 @@ bool Port::modifiablePortConfig(OstProto::Port &config) const
         modCfg.set_pkt_buf_size(config.pkt_buf_size());
         change = true;
     }
+    if (config.is_time_stamp_enabled() != d.is_time_stamp_enabled()) {
+        modCfg.set_is_time_stamp_enabled(config.is_time_stamp_enabled());
+        change = true;
+    }
+    if (config.time_stamp_offset() != d.time_stamp_offset()) {
+        modCfg.set_time_stamp_offset(config.time_stamp_offset());
+        change = true;
+    }
+    if (config.time_stamp_size() != d.time_stamp_size()) {
+        modCfg.set_time_stamp_size(config.time_stamp_size());
+        change = true;
+    }
 
     if (change) {
         modCfg.mutable_port_id()->set_id(id());

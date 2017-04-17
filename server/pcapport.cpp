@@ -132,8 +132,8 @@ void PcapPort::init()
 
     transmitter_->setHandle(monitorRx_->handle());
 
-    if (isTimeStampEnabled)
-        transmitter_->enableTimeStamp(timeStampOffset, timeStampSize);
+    if (data_.is_time_stamp_enabled())
+        transmitter_->enableTimeStamp(data_.time_stamp_offset(), data_.time_stamp_size());
     else
         transmitter_->disableTimeStamp();
 
@@ -799,6 +799,9 @@ void PcapPort::PortTransmitter::insertTimeStamp(uchar *pkt, int pktLen)
     }
 
     diff(timeBeginTransmit, cur_time);
+    uint32_t sec = static_cast<uint32_t>(std::difftime(cur_time.tv_sec, 0));
+    *((uint32_t*)(pkt + timeStampOffset)) = sec;
+    *((long*)(pkt + timeStampOffset + sizeof(uint32_t))) = cur_time.tv_nsec;
 }
 
 void PcapPort::PortTransmitter::udelay(unsigned long usec)
