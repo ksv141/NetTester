@@ -78,17 +78,17 @@ static long inline udiffTimeStamp(const TimeStamp*, const TimeStamp*) { return 0
 #endif
 
 // вычисление точного временного интервала для clock_gettine()
-timespec diff(timespec start, timespec end)
+// результат записывается в параметр end
+void diff(timespec& start, timespec& end)
 {
-    timespec temp;
     if ((end.tv_nsec-start.tv_nsec)<0) {
-        temp.tv_sec = end.tv_sec-start.tv_sec-1;
-        temp.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
+        end.tv_sec = end.tv_sec-start.tv_sec-1;
+        end.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
     } else {
-        temp.tv_sec = end.tv_sec-start.tv_sec;
-        temp.tv_nsec = end.tv_nsec-start.tv_nsec;
+        end.tv_sec = end.tv_sec-start.tv_sec;
+        end.tv_nsec = end.tv_nsec-start.tv_nsec;
     }
-    return temp;
+    return;
 }
 
 PcapPort::PcapPort(int id, const char *device)
@@ -792,6 +792,13 @@ void PcapPort::PortTransmitter::insertTimeStamp(uchar *pkt, int pktLen)
 {
     if ((timeStampOffset + timeStampSize) > pktLen)
         return;
+
+    timespec cur_time;
+    if (clock_gettime(CLOCK_MONOTONIC_RAW, &cur_time) != 0) {
+        return;
+    }
+
+    diff(timeBeginTransmit, cur_time);
 }
 
 void PcapPort::PortTransmitter::udelay(unsigned long usec)

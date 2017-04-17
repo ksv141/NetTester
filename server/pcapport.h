@@ -130,6 +130,7 @@ protected:
 
         void enableTimeStamp(int offset, size_t size);  // включение вставки временной метки
         void disableTimeStamp();                        // выключение вставки временной метки
+
     private:
         enum State 
         {
@@ -137,8 +138,6 @@ protected:
             kRunning,
             kFinished
         };
-
-        timespec timeBeginTransmit; // время начала передачи пакетов
 
         class PacketSequence
         {
@@ -217,6 +216,8 @@ protected:
         bool isTimeStampEnabled = false;    // флаг включения вставки временной метки
         int timeStampOffset = -1;           // смещение временной метки от начала фрейма
         size_t timeStampSize = 8;           // размер временной метки в байтах
+        timespec timeBeginTransmit;         // время начала передачи пакетов
+
     };
 
     class PortCapturer: public QThread

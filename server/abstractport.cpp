@@ -743,3 +743,4 @@ void AbstractPort::disableTimeStamp()
 {
     isTimeStampEnabled = false;
 }
+
