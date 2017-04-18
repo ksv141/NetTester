@@ -68,7 +68,8 @@ PortManager::PortManager()
 #if defined(Q_OS_WIN32)
         port = new WinPcapPort(i, device->name);
 #elif defined(Q_OS_LINUX)
-        port = new LinuxPort(i, device->name);
+//        port = new LinuxPort(i, device->name);
+        port = new PcapPort(i, device->name);
 #elif defined(Q_OS_BSD4)
         port = new BsdPort(i, device->name);
 #else

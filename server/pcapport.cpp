@@ -359,7 +359,8 @@ void PcapPort::PortMonitor::run()
 void PcapPort::PortMonitor::stop()
 {
     stop_ = true;
-    pcap_breakloop(handle());
+    if (handle())
+        pcap_breakloop(handle());
 }
 
 /*
