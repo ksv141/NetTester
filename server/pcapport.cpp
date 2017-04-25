@@ -795,11 +795,12 @@ void PcapPort::PortTransmitter::insertTimeStamp(uchar *pkt, int pktLen)
         return;
 
     timespec cur_time;
-    if (clock_gettime(CLOCK_MONOTONIC_RAW, &cur_time) != 0) {
+//    if (clock_gettime(CLOCK_MONOTONIC_RAW, &cur_time) != 0) {
+    if (clock_gettime(CLOCK_REALTIME, &cur_time) != 0) {
         return;
     }
 
-    diff(timeBeginTransmit, cur_time);
+    //diff(timeBeginTransmit, cur_time);
     uint32_t sec = static_cast<uint32_t>(std::difftime(cur_time.tv_sec, 0));
     *((uint32_t*)(pkt + timeStampOffset)) = sec;
     *((long*)(pkt + timeStampOffset + sizeof(uint32_t))) = cur_time.tv_nsec;
