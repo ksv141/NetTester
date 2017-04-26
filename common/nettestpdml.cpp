@@ -44,6 +44,7 @@ PdmlNetTestProtocol::PdmlNetTestProtocol()
 
     fieldMap_.insert("nettest.timestamp", OstProto::NetTest::kTimestampFieldNumber);
     fieldMap_.insert("nettest.seqnumber", OstProto::NetTest::kSeqnumberFieldNumber);
+    fieldMap_.insert("nettest.streamId", OstProto::NetTest::kStreamIdFieldNumber);
 }
 
 PdmlNetTestProtocol::~PdmlNetTestProtocol()

@@ -200,6 +200,12 @@ enum TransmitMode {
     kInterleavedTransmit = 1;
 }
 
+// режим доступа порта к заголовку NetTest
+enum NettestStackMode {
+    kStandardStack = 0;
+    kSpecialStack = 1;
+}
+
 message Port {
     required PortId port_id = 1;
     optional string name = 2;
@@ -216,6 +222,11 @@ message Port {
     optional bool is_time_stamp_enabled = 11 [default = true];  // флаг, вставлять ли временные метки во все фреймы с данного порта
     optional uint32 time_stamp_offset = 12 [default = 34];      // смещение для временной метки относительно начала фрейма
     optional uint32 time_stamp_size = 13 [default = 8];         // размер временной метки
+
+    optional bool is_nettest_enabled = 14 [default = true];     // флаг включения режима измерения NetTest
+    optional NettestStackMode nettest_stack_mode = 15 [default = kStandardStack]; // режим доступа порта к заголовку NetTest
+    optional uint32 nettest_hdr_offset = 16 [default = 34];     // смещение начала заголовка NetTest относительно начала фрейма
+    optional uint32 nettest_stream_id = 17 [default = 0];       // id потока, подлежащего измерению
 }
 
 message PortConfigList {

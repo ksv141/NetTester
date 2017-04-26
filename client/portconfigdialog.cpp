@@ -71,6 +71,25 @@ PortConfigDialog::PortConfigDialog(OstProto::Port &portConfig, QWidget *parent)
     timeStampGroupBox->setChecked(portConfig_.is_time_stamp_enabled());
     timeStampOffset->setValue((int)portConfig_.time_stamp_offset());
     timeStampSize->setValue((int)portConfig_.time_stamp_size());
+
+    nettestSpecialFrame->setEnabled(false);
+    streamId->setValidator(new QIntValidator(0, 0xffff, this));
+
+    nettestModeGroupBox->setChecked(portConfig_.is_nettest_enabled());
+    switch(portConfig_.nettest_stack_mode())
+    {
+    case OstProto::kStandardStack:
+        nettestStandardButton->setChecked(true);
+        break;
+    case OstProto::kSpecialStack:
+        nettestSpecialButton->setChecked(true);
+        break;
+    default:
+        Q_ASSERT(false); // Unreachable!!!
+        break;
+    }
+    nettestHdrOffset->setValue((int)portConfig_.nettest_hdr_offset());
+    streamId->setText(QString::number(portConfig_.nettest_stream_id()));
 }
 
 void PortConfigDialog::accept()

@@ -54,6 +54,11 @@ void NetTestConfigForm::loadWidget(AbstractProtocol *proto)
             NetTestProtocol::nettest_seqnumber,
             AbstractProtocol::FieldValue
         ).toString());
+    nettestStreamID->setText(
+        proto->fieldData(
+            NetTestProtocol::nettest_streamId,
+            AbstractProtocol::FieldValue
+        ).toString());
 
     cmbTimeStampMode->setCurrentIndex(
             proto->fieldData(
@@ -80,6 +85,9 @@ void NetTestConfigForm::storeWidget(AbstractProtocol *proto)
     proto->setFieldData(
         NetTestProtocol::nettest_seqnumber,
         nettestSeqNumber->text());
+    proto->setFieldData(
+        NetTestProtocol::nettest_streamId,
+        nettestStreamID->text());
 
     proto->setFieldData(
             NetTestProtocol::nettest_timestampMode,

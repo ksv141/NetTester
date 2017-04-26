@@ -76,6 +76,7 @@ AbstractProtocol::FieldFlags NetTestProtocol::fieldFlags(int index) const
     {
         case nettest_timestamp:
         case nettest_seqnumber:
+        case nettest_streamId:
             break;
 
         case nettest_timestampMode: // Мета-поля протокола, для них сбрасываем флаг фреймового поля и устанавливаем флаг мета-поля
@@ -160,6 +161,35 @@ QVariant NetTestProtocol::fieldData(int index, FieldAttrib attrib,
             }
             break;
         }
+        case nettest_streamId:
+        {
+            switch(attrib)
+            {
+            case FieldName:
+                return QString("STREAM ID");
+            case FieldValue:
+            {
+                quint16 s = (quint16)data.stream_id();
+                return s;
+            }
+            case FieldTextValue:
+                return QString(fieldData(index, FieldFrameValue,
+                                         streamIndex).toByteArray().toHex());
+            case FieldFrameValue:
+            {
+                QByteArray fv;
+                fv.resize(2);
+                qToBigEndian((quint16)fieldData(index, FieldValue, streamIndex).toUInt(),
+                             (uchar*) fv.data());
+                return fv;
+            }
+            case FieldBitSize:
+                return 16;
+            default:
+                break;
+            }
+            break;
+        }
 
         case nettest_timestampMode:
             switch(attrib)
@@ -215,6 +245,14 @@ bool NetTestProtocol::setFieldData(int index, const QVariant &value,
             if (!isOk)
                 a = 0;
             data.set_seqnumber(a);
+            break;
+        }
+        case nettest_streamId:
+        {
+            quint16 a = (quint16)value.toUInt(&isOk);
+            if (!isOk)
+                a = 0;
+            data.set_stream_id(a);
             break;
         }
 
