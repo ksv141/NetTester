@@ -3,7 +3,6 @@
 NetTestProtocol::NetTestProtocol(StreamBase *stream, AbstractProtocol *parent)
     : AbstractProtocol(stream, parent)
 {
-    mFrameCounter = 0;
 }
 
 NetTestProtocol::~NetTestProtocol()

@@ -19,6 +19,7 @@ message NetTest {
     optional uint64    timestamp = 2 [default = 0];
     optional SeqNumberMode seqnumber_mode = 3 [default = e_sn_inc];
     optional uint64    seqnumber = 4 [default = 0];
+    optional uint32 stream_id = 5 [default = 0];
 }
 
 extend Protocol {

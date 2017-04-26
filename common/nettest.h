@@ -6,10 +6,10 @@
 
 /* 
 Nettest Protocol Frame Format -
-    +-------------+--------------+
-    |  timestamp  |   seqnumber  |
-    |    (64)     |     (64)     |
-    +-------------+--------------+
+    +-------------+-------------+--------------+
+    |  stream id  |  timestamp  |   seqnumber  |
+    |     (16)    |    (64)     |     (64)     |
+    +-------------+-------------+--------------+
 Figures in brackets represent field width in bits
 */
 
@@ -21,6 +21,7 @@ public:
         // Frame Fields
         nettest_timestamp = 0,
         nettest_seqnumber,
+        nettest_streamId,
 
         // Meta Fields
         nettest_timestampMode,
@@ -59,8 +60,6 @@ public:
 
 private:
     OstProto::NetTest    data;
-
-    quint64 mFrameCounter;
 };
 
 #endif

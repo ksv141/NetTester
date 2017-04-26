@@ -24,6 +24,8 @@ NetTestConfigForm::NetTestConfigForm(QWidget *parent)
     : AbstractProtocolConfigForm(parent)
 {
     setupUi(this);
+
+    nettestStreamID->setValidator(new QIntValidator(0, 0xffff, this));
 }
 
 NetTestConfigForm::~NetTestConfigForm()
