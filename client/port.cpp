@@ -501,6 +501,26 @@ bool Port::modifiablePortConfig(OstProto::Port &config) const
         modCfg.set_time_stamp_size(config.time_stamp_size());
         change = true;
     }
+    if (config.is_nettest_enabled() != d.is_nettest_enabled()) {
+        modCfg.set_is_nettest_enabled(config.is_nettest_enabled());
+        change = true;
+    }
+    if (config.nettest_stack_mode() != d.nettest_stack_mode()) {
+        modCfg.set_nettest_stack_mode(config.nettest_stack_mode());
+        change = true;
+    }
+    if (config.nettest_hdr_offset() != d.nettest_hdr_offset()) {
+        modCfg.set_nettest_hdr_offset(config.nettest_hdr_offset());
+        change = true;
+    }
+    if (config.nettest_stream_id() != d.nettest_stream_id()) {
+        modCfg.set_nettest_stream_id(config.nettest_stream_id());
+        change = true;
+    }
+    if (config.is_nettest_error_check_enabled() != d.is_nettest_error_check_enabled()) {
+        modCfg.set_is_nettest_error_check_enabled(config.is_nettest_error_check_enabled());
+        change = true;
+    }
 
     if (change) {
         modCfg.mutable_port_id()->set_id(id());

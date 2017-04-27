@@ -27,6 +27,7 @@ message Payload {
         e_dp_inc_byte = 1;
         e_dp_dec_byte = 2;
         e_dp_random = 3;
+        e_dp_recurrent = 4;
     }
 
     // Data Pattern

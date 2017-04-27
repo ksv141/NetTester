@@ -73,6 +73,7 @@ void PayloadConfigForm::on_cmbPatternMode_currentIndexChanged(int index)
         case OstProto::Payload::e_dp_inc_byte:
         case OstProto::Payload::e_dp_dec_byte:
         case OstProto::Payload::e_dp_random:
+        case OstProto::Payload::e_dp_recurrent:
             lePattern->setDisabled(true);
             break;
         default:

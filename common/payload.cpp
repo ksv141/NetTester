@@ -151,6 +151,20 @@ QVariant PayloadProtocol::fieldData(int index, FieldAttrib attrib,
                             for (int i = 0; i < dataLen; i++)
                                 fv[i] =  qrand() % (0xFF + 1);
                             break;
+                        case OstProto::Payload::e_dp_recurrent:
+                        {
+                            int m = 256;
+                            int a = 3;
+                            int c = 1;
+                            for (int i = 0; i < dataLen; i++)
+                            {
+                                if (i == 0)
+                                    fv[i] = 1;
+                                else
+                                    fv[i] = (fv[i-1] * a + c) % m;
+                            }
+                            break;
+                        }
                         default:
                             qWarning("Unhandled data pattern %d", 
                                 data.pattern_mode());

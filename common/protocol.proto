@@ -227,6 +227,7 @@ message Port {
     optional NettestStackMode nettest_stack_mode = 15 [default = kStandardStack]; // режим доступа порта к заголовку NetTest
     optional uint32 nettest_hdr_offset = 16 [default = 34];     // смещение начала заголовка NetTest относительно начала фрейма
     optional uint32 nettest_stream_id = 17 [default = 0];       // id потока, подлежащего измерению
+    optional bool is_nettest_error_check_enabled = 18 [default = false];// флаг включения контроля ошибок в теле фрейма (по рекуррентной последовательности)
 }
 
 message PortConfigList {

@@ -106,6 +106,26 @@ bool AbstractPort::modify(const OstProto::Port &port)
         data_.set_time_stamp_size(port.time_stamp_size());
     }
 
+    if (port.has_is_nettest_enabled()) {
+        data_.set_is_nettest_enabled(port.is_nettest_enabled());
+    }
+
+    if (port.has_nettest_stack_mode()) {
+        data_.set_nettest_stack_mode(port.nettest_stack_mode());
+    }
+
+    if (port.has_nettest_hdr_offset()) {
+        data_.set_nettest_hdr_offset(port.nettest_hdr_offset());
+    }
+
+    if (port.has_nettest_stream_id()) {
+        data_.set_nettest_stream_id(port.nettest_stream_id());
+    }
+
+    if (port.has_is_nettest_error_check_enabled()) {
+        data_.set_is_nettest_error_check_enabled(port.is_nettest_error_check_enabled());
+    }
+
     return ret;
 }    
 

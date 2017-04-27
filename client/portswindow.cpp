@@ -727,6 +727,11 @@ void PortsWindow::on_actionPort_Configuration_triggered()
     config.set_is_time_stamp_enabled(plm->port(current).isTimeStampEnabled());
     config.set_time_stamp_offset(plm->port(current).timeStampOffset());
     config.set_time_stamp_size(plm->port(current).timeStampSize());
+    config.set_is_nettest_enabled(plm->port(current).isNetTestEnabled());
+    config.set_nettest_stack_mode(plm->port(current).netTestStackMode());
+    config.set_nettest_hdr_offset(plm->port(current).netTestHdrOffset());
+    config.set_nettest_stream_id(plm->port(current).netTestStreamId());
+    config.set_is_nettest_error_check_enabled(plm->port(current).isNetTestErrorCheckEnabled());
 
     PortConfigDialog dialog(config, this);
 

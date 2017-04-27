@@ -90,6 +90,8 @@ PortConfigDialog::PortConfigDialog(OstProto::Port &portConfig, QWidget *parent)
     }
     nettestHdrOffset->setValue((int)portConfig_.nettest_hdr_offset());
     streamId->setText(QString::number(portConfig_.nettest_stream_id()));
+
+    errorChecks->setChecked(portConfig_.is_nettest_error_check_enabled());
 }
 
 void PortConfigDialog::accept()
@@ -136,6 +138,17 @@ void PortConfigDialog::accept()
     pc.set_time_stamp_offset((::google::protobuf::uint32)timeStampOffset->value());
     pc.set_time_stamp_size((::google::protobuf::uint32)timeStampSize->value());
 
+    pc.set_is_nettest_enabled(nettestModeGroupBox->isChecked());
+    if (nettestStandardButton->isChecked())
+        pc.set_nettest_stack_mode(OstProto::kStandardStack);
+    else if (nettestSpecialButton->isChecked())
+        pc.set_nettest_stack_mode(OstProto::kSpecialStack);
+    else
+        Q_ASSERT(false); // Unreachable!!!
+    pc.set_nettest_hdr_offset((::google::protobuf::uint32)nettestHdrOffset->value());
+    pc.set_nettest_stream_id((::google::protobuf::uint32)streamId->text().toUInt());
+    pc.set_is_nettest_error_check_enabled(errorChecks->isChecked());
+
     // Update fields that have changed, clear the rest
     if (pc.transmit_mode() != portConfig_.transmit_mode())
         portConfig_.set_transmit_mode(pc.transmit_mode());
@@ -176,6 +189,31 @@ void PortConfigDialog::accept()
         portConfig_.set_time_stamp_size(pc.time_stamp_size());
     else
         portConfig_.clear_time_stamp_size();
+
+    if (pc.is_nettest_enabled() != portConfig_.is_nettest_enabled())
+        portConfig_.set_is_nettest_enabled(pc.is_nettest_enabled());
+    else
+        portConfig_.clear_is_nettest_enabled();
+
+    if (pc.nettest_stack_mode() != portConfig_.nettest_stack_mode())
+        portConfig_.set_nettest_stack_mode(pc.nettest_stack_mode());
+    else
+        portConfig_.clear_nettest_stack_mode();
+
+    if (pc.nettest_hdr_offset() != portConfig_.nettest_hdr_offset())
+        portConfig_.set_nettest_hdr_offset(pc.nettest_hdr_offset());
+    else
+        portConfig_.clear_nettest_hdr_offset();
+
+    if (pc.nettest_stream_id() != portConfig_.nettest_stream_id())
+        portConfig_.set_nettest_stream_id(pc.nettest_stream_id());
+    else
+        portConfig_.clear_nettest_stream_id();
+
+    if (pc.is_nettest_error_check_enabled() != portConfig_.is_nettest_error_check_enabled())
+        portConfig_.set_is_nettest_error_check_enabled(pc.is_nettest_error_check_enabled());
+    else
+        portConfig_.clear_is_nettest_error_check_enabled();
 
     QDialog::accept();
 }

@@ -115,6 +115,16 @@ public:
     quint32 timeStampSize()
         {return d.time_stamp_size(); }
 
+    bool isNetTestEnabled()
+        {return d.is_nettest_enabled(); }
+    OstProto::NettestStackMode netTestStackMode()
+        { return d.nettest_stack_mode(); }
+    quint32 netTestHdrOffset()
+        {return d.nettest_hdr_offset(); }
+    quint32 netTestStreamId()
+        {return d.nettest_stream_id(); }
+    bool isNetTestErrorCheckEnabled()
+        {return d.is_nettest_error_check_enabled(); }
 
     //void setAdminEnable(AdminStatus status) { mAdminStatus = status; }
     void setAlias(QString alias) { mUserAlias = alias; }

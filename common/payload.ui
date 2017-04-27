@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Type</string>
+      <string>Тип</string>
      </property>
      <property name="buddy">
       <cstring>cmbPatternMode</cstring>
@@ -28,22 +28,27 @@
     <widget class="QComboBox" name="cmbPatternMode">
      <item>
       <property name="text">
-       <string>Fixed Word</string>
+       <string>Фиксированное значение</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Increment Byte</string>
+       <string>Инкремент байта</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Decrement Byte</string>
+       <string>Декремент байта</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Random</string>
+       <string>Случайное значение</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Рекуррента (NetTest)</string>
       </property>
      </item>
     </widget>
@@ -64,7 +69,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Pattern</string>
+      <string>Шаблон</string>
      </property>
      <property name="buddy">
       <cstring>lePattern</cstring>
