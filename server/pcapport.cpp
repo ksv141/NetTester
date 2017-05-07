@@ -139,6 +139,14 @@ void PcapPort::init()
 
     updateNotes();
 
+    if (data_.is_nettest_enabled())
+        monitorRx_->enableNettest((PortMonitor::NettestStackMode)data_.nettest_stack_mode(),
+                                  data_.nettest_hdr_offset(),
+                                  data_.nettest_stream_id(),
+                                  data_.is_nettest_error_check_enabled());
+    else
+        monitorRx_->disableNettest();
+
     monitorRx_->start();
     monitorTx_->start();
 }
@@ -195,6 +203,29 @@ bool PcapPort::setRateAccuracy(AbstractPort::Accuracy accuracy)
         return true;
     }
     return false;
+}
+
+void PcapPort::modifyTransmitterConfig()
+{
+    if (data_.is_time_stamp_enabled())
+    {
+        transmitter_->enableTimeStamp(data_.time_stamp_offset(), data_.time_stamp_size());
+    }
+    else
+    {
+        transmitter_->disableTimeStamp();
+    }
+}
+
+void PcapPort::modifyMonitorConfig()
+{
+    if (data_.is_nettest_enabled())
+        monitorRx_->enableNettest((PortMonitor::NettestStackMode)data_.nettest_stack_mode(),
+                                  data_.nettest_hdr_offset(),
+                                  data_.nettest_stream_id(),
+                                  data_.is_nettest_error_check_enabled());
+    else
+        monitorRx_->disableNettest();
 }
 
 void PcapPort::startDeviceEmulation()
@@ -323,6 +354,10 @@ void PcapPort::PortMonitor::run()
                 case kDirectionRx:
                     stats_->rxPkts++;
                     stats_->rxBytes += hdr->len;
+
+                    if (isNettestEnabled) {
+                        netTestProcessing(hdr, data);
+                    }
                     break;
 
                 case kDirectionTx:
@@ -361,6 +396,26 @@ void PcapPort::PortMonitor::stop()
     stop_ = true;
     if (handle())
         pcap_breakloop(handle());
+}
+
+void PcapPort::PortMonitor::enableNettest(NettestStackMode stackMode, quint32 hdrOffset, quint32 streamId, bool errorCheck)
+{
+    isNettestEnabled = true;
+    nettestStackMode = stackMode;
+    nettestHdrOffset = hdrOffset;
+    nettestStreamId = streamId;
+    isNettestErrorCheckEnabled = errorCheck;
+}
+
+void PcapPort::PortMonitor::disableNettest()
+{
+    isNettestEnabled = false;
+}
+
+void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *data)
+{
+//    stats_->rxPkts++;
+//    stats_->rxBytes += hdr->len;
 }
 
 /*
@@ -804,6 +859,11 @@ void PcapPort::PortTransmitter::insertTimeStamp(uchar *pkt, int pktLen)
     uint32_t sec = static_cast<uint32_t>(std::difftime(cur_time.tv_sec, 0));
     *((uint32_t*)(pkt + timeStampOffset)) = sec;
     *((long*)(pkt + timeStampOffset + sizeof(uint32_t))) = cur_time.tv_nsec;
+}
+
+bool PcapPort::PortTransmitter::getIsTimeStampEnabled() const
+{
+    return isTimeStampEnabled;
 }
 
 void PcapPort::PortTransmitter::udelay(unsigned long usec)

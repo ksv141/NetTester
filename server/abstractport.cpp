@@ -126,6 +126,9 @@ bool AbstractPort::modify(const OstProto::Port &port)
         data_.set_is_nettest_error_check_enabled(port.is_nettest_error_check_enabled());
     }
 
+    modifyTransmitterConfig();
+    modifyMonitorConfig();
+
     return ret;
 }    
 

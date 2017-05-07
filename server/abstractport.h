@@ -78,6 +78,11 @@ public:
     virtual bool hasExclusiveControl() = 0;
     virtual bool setExclusiveControl(bool exclusive) = 0;
 
+    // обновление конфигурации передатчика
+    virtual void modifyTransmitterConfig() { }
+    // обновление конфигурации приемника
+    virtual void modifyMonitorConfig() { }
+
     int streamCount() { return streamList_.size(); }
     StreamBase* streamAtIndex(int index);
     StreamBase* stream(int streamId);

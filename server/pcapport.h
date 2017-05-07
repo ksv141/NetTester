@@ -39,7 +39,10 @@ public:
     virtual bool hasExclusiveControl() { return false; }
     virtual bool setExclusiveControl(bool /*exclusive*/) { return false; }
 
-    virtual bool setRateAccuracy(AbstractPort::Accuracy accuracy); 
+    virtual bool setRateAccuracy(AbstractPort::Accuracy accuracy);
+
+    virtual void modifyTransmitterConfig();
+    virtual void modifyMonitorConfig();
 
     virtual void clearPacketList() { 
         transmitter_->clearPacketList();
@@ -61,10 +64,6 @@ public:
 
     virtual void startTransmit() { 
         Q_ASSERT(!isDirty());
-        if (data_.is_time_stamp_enabled())
-            transmitter_->enableTimeStamp(data_.time_stamp_offset(), data_.time_stamp_size());
-        else
-            transmitter_->disableTimeStamp();
         transmitter_->start();
     }
     virtual void stopTransmit()  { transmitter_->stop();  }
@@ -98,6 +97,13 @@ protected:
         Direction direction() { return direction_; }
         bool isDirectional() { return isDirectional_; }
         bool isPromiscuous() { return isPromisc_; }
+
+        enum NettestStackMode {
+          kStandardStack = 0,
+          kSpecialStack = 1
+        };
+        void enableNettest(NettestStackMode stackMode, quint32 hdrOffset, quint32 streamId, bool errorCheck);  // включение режима измерения NetTest
+        void disableNettest();                        // выключение режима измерения NetTest
     protected:
         AbstractPort::PortStats *stats_;
         bool stop_;
@@ -106,6 +112,16 @@ protected:
         Direction direction_;
         bool isDirectional_;
         bool isPromisc_;
+
+        // Данные для режима измерения NetTest
+        bool isNettestEnabled = true;           // флаг включения режима измерения NetTest
+        NettestStackMode nettestStackMode = kStandardStack; // режим доступа порта к заголовку NetTest
+        quint32 nettestHdrOffset = -1;          // смещение начала заголовка NetTest относительно начала фрейма
+        quint32 nettestStreamId = 0;            // id потока, подлежащего измерению
+        bool isNettestErrorCheckEnabled = false;// флаг включения контроля ошибок в теле фрейма (по рекуррентной последовательности)
+
+        // Обработка принятого кадра в режиме NetTest
+        void netTestProcessing(pcap_pkthdr* hdr, const uchar* data);
     };
 
     class PortTransmitter: public QThread
@@ -135,8 +151,10 @@ protected:
         void enableTimeStamp(int offset, size_t size);  // включение вставки временной метки
         void disableTimeStamp();                        // выключение вставки временной метки
 
+        bool getIsTimeStampEnabled() const;
+
     private:
-        enum State 
+        enum State
         {
             kNotStarted,
             kRunning,
