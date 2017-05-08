@@ -52,6 +52,9 @@ public:
         quint64    txBytes;
         quint64    txPps;
         quint64    txBps;
+
+        // NetTest
+
     };
 
     enum Accuracy

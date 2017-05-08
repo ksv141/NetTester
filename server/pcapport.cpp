@@ -52,6 +52,24 @@ static long inline udiffTimeStamp(const TimeStamp *start, const TimeStamp *end)
 
     return usecs;
 }
+
+// inline-код для вычисления интервала времени в мкс
+// a,b - типа timeval
+// result - uint64
+# define _udifftimestamp(a, b, result)              \
+  do {                                              \
+    (a)->tv_sec = (a)->tv_sec - (b)->tv_sec;		\
+    (a)->tv_usec = (a)->tv_usec - (b)->tv_usec;     \
+    if ((a)->tv_usec < 0) {                         \
+      --(a)->tv_sec;                                \
+      (a)->tv_usec += 1000000;                      \
+    }                                               \
+    (result) = (a)->tv_usec;                        \
+    if ((a)->tv_sec)                                \
+        (result) += (a)->tv_sec*1000000;            \
+  } while (0)
+
+
 #elif defined(Q_OS_WIN32)
 static quint64 gTicksFreq;
 typedef LARGE_INTEGER TimeStamp;
@@ -77,19 +95,21 @@ static void inline getTimeStamp(TimeStamp*) {}
 static long inline udiffTimeStamp(const TimeStamp*, const TimeStamp*) { return 0; }
 #endif
 
+#define NETTEST_HDR_STANDARD_OFFSET 34
+
 // вычисление точного временного интервала для clock_gettine()
 // результат записывается в параметр end
-void diff(timespec& start, timespec& end)
-{
-    if ((end.tv_nsec-start.tv_nsec)<0) {
-        end.tv_sec = end.tv_sec-start.tv_sec-1;
-        end.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
-    } else {
-        end.tv_sec = end.tv_sec-start.tv_sec;
-        end.tv_nsec = end.tv_nsec-start.tv_nsec;
-    }
-    return;
-}
+//void diff(timespec& start, timespec& end)
+//{
+//    if ((end.tv_nsec-start.tv_nsec)<0) {
+//        end.tv_sec = end.tv_sec-start.tv_sec-1;
+//        end.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
+//    } else {
+//        end.tv_sec = end.tv_sec-start.tv_sec;
+//        end.tv_nsec = end.tv_nsec-start.tv_nsec;
+//    }
+//    return;
+//}
 
 PcapPort::PcapPort(int id, const char *device)
     : AbstractPort(id, device)
@@ -403,6 +423,8 @@ void PcapPort::PortMonitor::enableNettest(NettestStackMode stackMode, quint32 hd
     isNettestEnabled = true;
     nettestStackMode = stackMode;
     nettestHdrOffset = hdrOffset;
+    if (nettestStackMode == kStandardStack)
+        nettestHdrOffset = NETTEST_HDR_STANDARD_OFFSET;
     nettestStreamId = streamId;
     isNettestErrorCheckEnabled = errorCheck;
 }
@@ -414,6 +436,20 @@ void PcapPort::PortMonitor::disableNettest()
 
 void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *data)
 {
+    // для стандартного размещения заголовка NetTest проверяем id протокола в заголовке IPv4
+    if (nettestStackMode == kStandardStack) {
+        if (hdr->len < 52)      // длина стандартного пакета NetTest не менее 52 байт
+            return;
+        if (*(data + 0x17) != 0xfe)
+            return;
+    }
+    // проверяем ID потока
+    quint16 streamId = qFromBigEndian<quint16>(data + nettestHdrOffset + 16);
+    if (streamId != nettestStreamId)
+        return;
+
+    qDebug("*********** STREAM_ID = %d", streamId);
+
 //    stats_->rxPkts++;
 //    stats_->rxBytes += hdr->len;
 }
