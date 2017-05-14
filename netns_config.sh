@@ -1,4 +1,8 @@
 #!/bin/sh
+
+case $1 in
+setup)
+
 #Настройка netns для измерений.
 
 #Создаем два виртуальных сетевых стека:
@@ -19,9 +23,18 @@ ip link set nteth1 netns NetTestClient
 #Поднимаем все созданные интерфейсы
 
 ifconfig veth0 192.168.2.1/24 up
-ip netns exec NetTestServer ifconfig nteth0 192.168.2.2/24 up
-
-ifconfig veth1 192.168.3.1/24 up
+ip netns exec NetTestServer ifconfig nteth0 192.168.3.1/24 up
+ifconfig veth1 192.168.2.2/24 up
 ip netns exec NetTestClient ifconfig nteth1 192.168.3.2/24 up
+;;
 
+remove)
+ip netns del NetTestServer
+ip netns del NetTestClient
+;;
+
+*)
+echo "неверный параметр"
+
+esac
 
