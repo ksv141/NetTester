@@ -99,6 +99,9 @@ case $1 in
 	ip rule del from 192.168.3.2
 	ip rule del from 192.168.2.2
 	ip rule del from 192.168.2.2
+	ip route flush table 1
+	ip route flush table 2
+	ip route flush table 3
 	echo "Удалены маршруты для реального/эмулированного удаленного хоста"
 	ip netns del NetTestServer
 	ip netns del NetTestClient
