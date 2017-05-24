@@ -47,6 +47,8 @@ case $1 in
 
 	ip link add veth0 type veth peer name nteth0
 	ip link add veth1 type veth peer name nteth1
+	ip link set veth0 address 00:00:00:00:00:02
+	ip link set nteth0 address 00:00:00:00:00:01
 	ip link set nteth0 netns NetTestServer
 	ip link set nteth1 netns NetTestClient
 	echo "Созданы veth-интерфейсы к виртуальным стекам"
