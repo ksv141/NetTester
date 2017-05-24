@@ -75,6 +75,9 @@ case $1 in
 	ip netns exec NetTestServer ip route add default via 192.168.2.1
 	ip netns exec NetTestClient ip route add default via 192.168.3.1
 	echo "Созданы маршруты для виртуальных стеков"
+	#Отключаем icmp request для предотвращения сообщений Protocol unreachable
+	ip netns exec NetTestClient iptables -A OUTPUT -p icmp --icmp-type 3 -j DROP
+	echo "Отключены ответы icmp type 3"
 
 	if [ $EMUL -eq 1 ]; then
 		echo 1 > /proc/sys/net/ipv4/ip_forward
