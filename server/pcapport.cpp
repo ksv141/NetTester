@@ -438,17 +438,31 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
 {
     // для стандартного размещения заголовка NetTest проверяем id протокола в заголовке IPv4
     if (nettestStackMode == kStandardStack) {
-        if (hdr->len < 52)      // длина стандартного пакета NetTest не менее 52 байт
+        if (hdr->len < 52) {      // длина стандартного пакета NetTest не менее 52 байт
             return;
-        if (*(data + 0x17) != 0xfe)
+        }
+        if (*(data + 0x17) != 0xfe) {
             return;
+        }
     }
     // проверяем ID потока
     quint16 streamId = qFromBigEndian<quint16>(data + nettestHdrOffset + 16);
-    if (streamId != nettestStreamId)
+    if (streamId != nettestStreamId) {
         return;
+    }
 
-    qDebug("*********** STREAM_ID = %d", streamId);
+    // Извлекаем № пакета
+    quint64 seqNum = qFromBigEndian<quint64>(data + nettestHdrOffset + 8);
+
+    // Извлекаем временную метку
+    timeval timestamp, receive_time;
+    timestamp.tv_sec = *(uint32_t*)(data + nettestHdrOffset);
+    timestamp.tv_usec = (*(long*)(data + nettestHdrOffset + sizeof(uint32_t)))/1000;
+
+    uint64_t delta_us;
+    _udifftimestamp(&hdr->ts, &timestamp, delta_us);
+//    qDebug("*********** SEC = %u, nSec = %d", sec, nsec);
+    qDebug("*********** SECNUM = %llu, DELTA = %llu", seqNum, delta_us);
 
 //    stats_->rxPkts++;
 //    stats_->rxBytes += hdr->len;
