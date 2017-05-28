@@ -514,6 +514,60 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
     }
     stats_->ntPrevDelayUs = delta_us;
 
+/* измерение перемешивания и потерь
+ *
+const int pktLossWndSize = 5;          // размер окна для разупорядоченных пакетов
+const int bitSetSize = pktLossWndSize * 2 - 1;
+
+int getWndPosition(int pktNum, int pkts) {
+    int res;
+    res = pktNum - pkts + pktLossWndSize - 1;
+    return res;
+}
+
+int main(int argc, char *argv[])
+{
+    bitset<bitSetSize> pktLossWindow;
+    pktLossWindow.reset();
+    ifstream input("in.txt");
+    if (!input.is_open())
+        return 0;
+    int pktSecNum;
+    int pkts = 0;
+    int lossCount = 0;
+    int outOfWndCount = 0;
+    while (input >> pktSecNum) {
+        cout << pktSecNum << " ";
+        int pos = getWndPosition(pktSecNum, pkts);
+        if (pos < 0) {
+            lossCount--;
+            pkts--;
+        }
+        else if (pos >= bitSetSize) {
+//            outOfWndCount++;
+            lossCount--;
+            pkts--;
+        }
+        else {
+            pktLossWindow[pos] = 1;
+            if ((pktLossWindow[0] == 0) && (pkts >= pktLossWndSize - 1)) {
+                lossCount++;
+                outOfWndCount++;
+                pkts++;
+            }
+
+            cout << pkts << " " << pktLossWindow << endl;
+            pktLossWindow >>= 1;
+        }
+
+        pkts++;
+    }
+    cout << "loss = " << lossCount << " out of wnd = " << outOfWndCount << endl;
+    return 0;
+}
+
+*/
+
     qDebug("*** CurDl=%.3f, MmoDl=%.3f, AvgDl=%.3f, MaxDl=%.3f, MinDl=%.3f, CurJt=%.3f, MmoJt=%.3f, AvgJt=%.3f, MaxJt=%.3f, MinJt=%.3f",
            (double)delta_us/1000,
            (double)stats_->ntMmoDelayUs/1000,
