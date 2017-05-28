@@ -686,6 +686,17 @@ void AbstractPort::stats(PortStats *stats)
     stats->rxFrameErrors = (stats_.rxFrameErrors >= epochStats_.rxFrameErrors) ?
                         stats_.rxFrameErrors - epochStats_.rxFrameErrors :
                         stats_.rxFrameErrors + (maxStatsValue_ - epochStats_.rxFrameErrors);
+
+    stats->ntPkts = stats_.ntPkts;
+    stats->ntBytes = stats_.ntBytes;
+    stats->ntAvgDelayUs = stats_.ntAvgDelayUs;
+    stats->ntMmoDelayUs = stats_.ntMmoDelayUs;
+    stats->ntMinDelayUs = stats_.ntMinDelayUs;
+    stats->ntMaxDelayUs = stats_.ntMaxDelayUs;
+    stats->ntAvgJitterUs = stats_.ntAvgJitterUs;
+    stats->ntMmoJitterUs = stats_.ntMmoJitterUs;
+    stats->ntMinJitterUs = stats_.ntMinJitterUs;
+    stats->ntMaxJitterUs = stats_.ntMaxJitterUs;
 }
 
 void AbstractPort::clearDeviceNeighbors()

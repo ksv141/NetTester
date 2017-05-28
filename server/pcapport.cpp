@@ -97,6 +97,17 @@ static long inline udiffTimeStamp(const TimeStamp*, const TimeStamp*) { return 0
 
 #define NETTEST_HDR_STANDARD_OFFSET 34
 
+// inline-код для вычисления абсолютного значения разности интервалов времени в мкс
+// a,b - типа uint
+// result - uint
+# define _absdelta(a, b, result)    \
+  do {                              \
+    if ((a) > (b))                  \
+        (result) = (a) - (b);       \
+    else                            \
+        (result) = (b) - (a);       \
+  } while (0)                       \
+
 // вычисление точного временного интервала для clock_gettine()
 // результат записывается в параметр end
 //void diff(timespec& start, timespec& end)
@@ -459,13 +470,62 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
     timestamp.tv_sec = *(uint32_t*)(data + nettestHdrOffset);
     timestamp.tv_usec = (*(long*)(data + nettestHdrOffset + sizeof(uint32_t)))/1000;
 
-    uint64_t delta_us;
+    uint32_t delta_us;
     _udifftimestamp(&hdr->ts, &timestamp, delta_us);
-//    qDebug("*********** SEC = %u, nSec = %d", sec, nsec);
-    qDebug("*********** SECNUM = %llu, DELTA = %llu", seqNum, delta_us);
+    quint32 _deltaDelay = 0;
 
-//    stats_->rxPkts++;
-//    stats_->rxBytes += hdr->len;
+    // Считаем статистику
+    stats_->ntPkts++;
+    stats_->ntBytes += hdr->len;
+
+    if (stats_->ntPkts <= 1) {
+        stats_->ntMmoDelayUs = delta_us;
+        stats_->ntAvgDelayUs = delta_us;
+        stats_->ntMaxDelayUs = delta_us;
+        stats_->ntMinDelayUs = delta_us;
+
+        stats_->ntAvgJitterUs = 0;
+        stats_->ntMmoJitterUs = 0;
+        stats_->ntPrevDelayUs = 0;
+    }
+    else {
+        stats_->ntMmoDelayUs = (delta_us + (ntMmoWndSize - 1)*stats_->ntMmoDelayUs)/ntMmoWndSize;
+        stats_->ntAvgDelayUs = (delta_us + (stats_->ntPkts - 1)*stats_->ntAvgDelayUs)/stats_->ntPkts;
+        if (stats_->ntMinDelayUs > delta_us)
+            stats_->ntMinDelayUs = delta_us;
+        if (stats_->ntMaxDelayUs < delta_us)
+            stats_->ntMaxDelayUs = delta_us;
+
+        _absdelta(stats_->ntPrevDelayUs, delta_us, _deltaDelay);
+        if (stats_->ntPkts == 2) {
+            stats_->ntMmoJitterUs = _deltaDelay;
+            stats_->ntAvgJitterUs = _deltaDelay;
+            stats_->ntMaxJitterUs = _deltaDelay;
+            stats_->ntMinJitterUs = _deltaDelay;
+        }
+        else {
+            stats_->ntMmoJitterUs = (qint32)stats_->ntMmoJitterUs + (((qint32)_deltaDelay - (qint32)stats_->ntMmoJitterUs) >> 4);
+            stats_->ntAvgJitterUs = (_deltaDelay + (stats_->ntPkts - 1)*stats_->ntAvgJitterUs)/stats_->ntPkts;
+            if (stats_->ntMinJitterUs > _deltaDelay)
+                stats_->ntMinJitterUs = _deltaDelay;
+            if (stats_->ntMaxJitterUs < _deltaDelay)
+                stats_->ntMaxJitterUs = _deltaDelay;
+        }
+    }
+    stats_->ntPrevDelayUs = delta_us;
+
+    qDebug("*** CurDl=%.3f, MmoDl=%.3f, AvgDl=%.3f, MaxDl=%.3f, MinDl=%.3f, CurJt=%.3f, MmoJt=%.3f, AvgJt=%.3f, MaxJt=%.3f, MinJt=%.3f",
+           (double)delta_us/1000,
+           (double)stats_->ntMmoDelayUs/1000,
+           (double)stats_->ntAvgDelayUs/1000,
+           (double)stats_->ntMaxDelayUs/1000,
+           (double)stats_->ntMinDelayUs/1000,
+           (double)_deltaDelay/1000,
+           (double)stats_->ntMmoJitterUs/1000,
+           (double)stats_->ntAvgJitterUs/1000,
+           (double)stats_->ntMaxJitterUs/1000,
+           (double)stats_->ntMinJitterUs/1000
+           );
 }
 
 /*
@@ -686,6 +746,7 @@ void PcapPort::PortTransmitter::run()
 
     state_ = kRunning;
     i = 0;
+    long last_usec;
     while (i < packetSequenceList_.size())
     {
 
@@ -730,14 +791,15 @@ _restart:
                 }
 #else
                 // TODO [2] pre-send processing
-                ret = sendQueueTransmit(handle_, seq->sendQueue_, 
+                ret = sendQueueTransmit(handle_, seq->sendQueue_,
                             overHead, kSyncTransmit);
 #endif
 
                 if (ret >= 0)
                 {
                     long usecs = seq->usecDelay_ + overHead; 
-                    if (usecs > 0) 
+                    last_usec = usecs;
+                    if (usecs > 0)
                     {
                         (*udelayFn_)(usecs);
                         overHead = 0;
@@ -762,7 +824,7 @@ _restart:
     // если установлен режим loop, то посылка Packet Set зацикливается бесконечно
     if (returnToQIdx_ >= 0)
     {
-        long usecs = loopDelay_ + overHead;
+        long usecs = last_usec;
 
         if (usecs > 0)
         {

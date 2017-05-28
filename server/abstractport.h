@@ -33,6 +33,8 @@ class QIODevice;
 // TODO: send notification back to client(s)
 #define notify qWarning
 
+#define ntMmoWndSize 16     // размер окна усреднения для MMO (пакетов)
+
 class AbstractPort
 {
 public:
@@ -53,8 +55,20 @@ public:
         quint64    txPps;
         quint64    txBps;
 
-        // NetTest
+        // NetTest (статистические параметры принятого потока)
+        quint64    ntPkts;              // число принятых пакетов
+        quint64    ntBytes;             // число принятых байт
 
+        quint32    ntAvgDelayUs;        // средняя задержка от начала измерения (мкс)
+        quint32    ntMmoDelayUs;        // модифицированное скользящее среднее задержки (мкс)
+        quint32    ntMaxDelayUs;        // максимальная задержка от начала измерения (мкс)
+        quint32    ntMinDelayUs;        // минимальная задержка от начала измерения (мкс)
+        quint32    ntPrevDelayUs;       // предыдущее значение задержки (мкс) (для вычисления джиттера)
+
+        quint32    ntAvgJitterUs;       // средняя вариация задержки от начала измерения (мкс)
+        quint32    ntMmoJitterUs;       // инкрементальная вариация задержки (мкс) (RFC 3393, RFC 3550)
+        quint32    ntMaxJitterUs;       // максимальная задержка от начала измерения (мкс)
+        quint32    ntMinJitterUs;       // минимальная задержка от начала измерения (мкс)
     };
 
     enum Accuracy
@@ -117,7 +131,10 @@ public:
     virtual QIODevice* captureData() = 0;
 
     void stats(PortStats *stats);
-    void resetStats() { epochStats_ = stats_; }
+    void resetStats() {
+//        qDebug("**** rxPkts = %d, ntPkts = %d", stats_.rxPkts, stats_.ntPkts);
+        memset((void*) &stats_, 0, sizeof(stats_));
+        epochStats_ = stats_; }
 
     DeviceManager* deviceManager();
     virtual void startDeviceEmulation() = 0;
