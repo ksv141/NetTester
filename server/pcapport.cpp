@@ -97,6 +97,10 @@ static long inline udiffTimeStamp(const TimeStamp*, const TimeStamp*) { return 0
 
 #define NETTEST_HDR_STANDARD_OFFSET 34
 
+#define pktLossWndSize = 32;                  // размер окна для разупорядоченных пакетов
+#define bitSetSize = pktLossWndSize * 2 - 1;  // размер bitset для вычисления
+#define minFieldSize = 100;                   // минимальный размер конечного поля для обнаружения начала последовательности
+
 // inline-код для вычисления абсолютного значения разности интервалов времени в мкс
 // a,b - типа uint
 // result - uint
@@ -516,35 +520,30 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
 
 /* измерение перемешивания и потерь
  *
-const int pktLossWndSize = 5;          // размер окна для разупорядоченных пакетов
-const int bitSetSize = pktLossWndSize * 2 - 1;
 
-int getWndPosition(int pktNum, int pkts) {
-    int res;
-    res = pktNum - pkts + pktLossWndSize - 1;
-    return res;
-}
-
-int main(int argc, char *argv[])
-{
-    bitset<bitSetSize> pktLossWindow;
+    std::bitset<bitSetSize> pktLossWindow;
     pktLossWindow.reset();
-    ifstream input("in.txt");
-    if (!input.is_open())
-        return 0;
     int pktSecNum;
     int pkts = 0;
     int lossCount = 0;
     int outOfWndCount = 0;
+    int firstPktNum = 0;
+    int prevPktNum = -minFieldSize;     // номер предыдущего принятого пакета
     while (input >> pktSecNum) {
         cout << pktSecNum << " ";
-        int pos = getWndPosition(pktSecNum, pkts);
+
+        if (prevPktNum - pktSecNum >= minFieldSize) {
+            pkts = 0;
+        }
+        prevPktNum = pktSecNum;
+        if (pkts == 0)
+            firstPktNum = pktSecNum;
+        int pos = pktSecNum - firstPktNum - pkts + pktLossWndSize - 1;
         if (pos < 0) {
             lossCount--;
             pkts--;
         }
         else if (pos >= bitSetSize) {
-//            outOfWndCount++;
             lossCount--;
             pkts--;
         }
@@ -562,9 +561,6 @@ int main(int argc, char *argv[])
 
         pkts++;
     }
-    cout << "loss = " << lossCount << " out of wnd = " << outOfWndCount << endl;
-    return 0;
-}
 
 */
 
