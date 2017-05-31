@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #define _SERVER_PCAP_PORT_H
 
 #include <ctime>
+#include <bitset>
 #include <QTemporaryFile>
 #include <QThread>
 #include <pcap.h>
@@ -78,6 +79,8 @@ public:
     virtual void stopDeviceEmulation();
     virtual int sendEmulationPacket(PacketBuffer *pktBuf);
 
+    void resetStats();
+
 protected:
     enum Direction
     {
@@ -88,6 +91,17 @@ protected:
     class PortMonitor: public QThread
     {
     public:
+        struct PktLossData {
+            static const int ntPktLossWndSize = 32;                      // размер окна для разупорядоченных пакетов
+            static const int ntBitSetSize = ntPktLossWndSize * 2 - 1;    // размер bitset для вычисления
+            static const int minFieldSize = 100;                         // минимальный размер конечного поля для обнаружения начала нового цикла нумерации пакетов
+
+            std::bitset<ntBitSetSize> ntPktLossWindow;
+            qint64 pkts;
+            quint64 firstPktNum;
+            quint64 prevPktNum;
+        };
+
         PortMonitor(const char *device, Direction direction,
                 AbstractPort::PortStats *stats);
     ~PortMonitor();
@@ -97,6 +111,7 @@ protected:
         Direction direction() { return direction_; }
         bool isDirectional() { return isDirectional_; }
         bool isPromiscuous() { return isPromisc_; }
+        void resetLossStats();
 
         enum NettestStackMode {
           kStandardStack = 0,
@@ -119,6 +134,7 @@ protected:
         quint32 nettestHdrOffset = -1;          // смещение начала заголовка NetTest относительно начала фрейма
         quint32 nettestStreamId = 0;            // id потока, подлежащего измерению
         bool isNettestErrorCheckEnabled = false;// флаг включения контроля ошибок в теле фрейма (по рекуррентной последовательности)
+        PktLossData nettestLossData;            // данные для измерения потерь
 
         // Обработка принятого кадра в режиме NetTest
         void netTestProcessing(pcap_pkthdr* hdr, const uchar* data);

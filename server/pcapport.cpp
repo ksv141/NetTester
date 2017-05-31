@@ -30,7 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 pcap_if_t *PcapPort::deviceList_ = NULL;
 
-
 #if defined(Q_OS_LINUX)
 typedef struct timeval TimeStamp;
 static void inline getTimeStamp(TimeStamp *stamp)
@@ -96,10 +95,6 @@ static long inline udiffTimeStamp(const TimeStamp*, const TimeStamp*) { return 0
 #endif
 
 #define NETTEST_HDR_STANDARD_OFFSET 34
-
-#define pktLossWndSize = 32;                  // размер окна для разупорядоченных пакетов
-#define bitSetSize = pktLossWndSize * 2 - 1;  // размер bitset для вычисления
-#define minFieldSize = 100;                   // минимальный размер конечного поля для обнаружения начала последовательности
 
 // inline-код для вычисления абсолютного значения разности интервалов времени в мкс
 // a,b - типа uint
@@ -278,6 +273,12 @@ int PcapPort::sendEmulationPacket(PacketBuffer *pktBuf)
     return emulXcvr_->transmitPacket(pktBuf);
 }
 
+void PcapPort::resetStats()
+{
+    monitorRx_->resetLossStats();
+    AbstractPort::resetStats();
+}
+
 /*
  * ------------------------------------------------------------------- *
  * Port Monitor
@@ -433,6 +434,14 @@ void PcapPort::PortMonitor::stop()
         pcap_breakloop(handle());
 }
 
+void PcapPort::PortMonitor::resetLossStats()
+{
+    nettestLossData.ntPktLossWindow.reset();
+    nettestLossData.pkts = 0;
+    nettestLossData.firstPktNum = 0;
+    nettestLossData.prevPktNum = -nettestLossData.minFieldSize;
+}
+
 void PcapPort::PortMonitor::enableNettest(NettestStackMode stackMode, quint32 hdrOffset, quint32 streamId, bool errorCheck)
 {
     isNettestEnabled = true;
@@ -518,51 +527,35 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
     }
     stats_->ntPrevDelayUs = delta_us;
 
-/* измерение перемешивания и потерь
- *
-
-    std::bitset<bitSetSize> pktLossWindow;
-    pktLossWindow.reset();
-    int pktSecNum;
-    int pkts = 0;
-    int lossCount = 0;
-    int outOfWndCount = 0;
-    int firstPktNum = 0;
-    int prevPktNum = -minFieldSize;     // номер предыдущего принятого пакета
-    while (input >> pktSecNum) {
-        cout << pktSecNum << " ";
-
-        if (prevPktNum - pktSecNum >= minFieldSize) {
-            pkts = 0;
-        }
-        prevPktNum = pktSecNum;
-        if (pkts == 0)
-            firstPktNum = pktSecNum;
-        int pos = pktSecNum - firstPktNum - pkts + pktLossWndSize - 1;
-        if (pos < 0) {
-            lossCount--;
-            pkts--;
-        }
-        else if (pos >= bitSetSize) {
-            lossCount--;
-            pkts--;
-        }
-        else {
-            pktLossWindow[pos] = 1;
-            if ((pktLossWindow[0] == 0) && (pkts >= pktLossWndSize - 1)) {
-                lossCount++;
-                outOfWndCount++;
-                pkts++;
-            }
-
-            cout << pkts << " " << pktLossWindow << endl;
-            pktLossWindow >>= 1;
-        }
-
-        pkts++;
+    // Считаем потери и перемешивания
+    if (nettestLossData.prevPktNum - seqNum >= nettestLossData.minFieldSize) {
+        nettestLossData.pkts = 0;
     }
+    nettestLossData.prevPktNum = seqNum;
+    if (nettestLossData.pkts == 0)
+        nettestLossData.firstPktNum = seqNum;
+    qint64 pos = seqNum - nettestLossData.firstPktNum - nettestLossData.pkts + nettestLossData.ntPktLossWndSize - 1;
+    if (pos < 0) {
+        stats_->ntLossCount--;
+        nettestLossData.pkts--;
+    }
+    else if (pos >= nettestLossData.ntBitSetSize) {
+        stats_->ntLossCount--;
+        nettestLossData.pkts--;
+    }
+    else {
+        nettestLossData.ntPktLossWindow[pos] = 1;
+        if ((nettestLossData.ntPktLossWindow[0] == 0) && (nettestLossData.pkts >= nettestLossData.ntPktLossWndSize - 1)) {
+            stats_->ntLossCount++;
+            stats_->ntOutOfWndCount++;
+            nettestLossData.pkts++;
+        }
 
-*/
+        //            cout << pkts << " " << pktLossWindow << endl;
+        nettestLossData.ntPktLossWindow >>= 1;
+    }
+    nettestLossData.pkts++;
+
 
     qDebug("*** CurDl=%.3f, MmoDl=%.3f, AvgDl=%.3f, MaxDl=%.3f, MinDl=%.3f, CurJt=%.3f, MmoJt=%.3f, AvgJt=%.3f, MaxJt=%.3f, MinJt=%.3f",
            (double)delta_us/1000,
@@ -576,6 +569,7 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
            (double)stats_->ntMaxJitterUs/1000,
            (double)stats_->ntMinJitterUs/1000
            );
+    qDebug("******* LossCount = %d, OutOfWndCount = %d", stats_->ntLossCount, stats_->ntOutOfWndCount);
 }
 
 /*

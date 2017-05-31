@@ -33,7 +33,7 @@ class QIODevice;
 // TODO: send notification back to client(s)
 #define notify qWarning
 
-#define ntMmoWndSize 16     // размер окна усреднения для MMO (пакетов)
+#define ntMmoWndSize 16                             // размер окна усреднения для MMO (пакетов)
 
 class AbstractPort
 {
@@ -69,6 +69,10 @@ public:
         quint32    ntMmoJitterUs;       // инкрементальная вариация задержки (мкс) (RFC 3393, RFC 3550)
         quint32    ntMaxJitterUs;       // максимальная задержка от начала измерения (мкс)
         quint32    ntMinJitterUs;       // минимальная задержка от начала измерения (мкс)
+
+        // NetTest (данные для измерения перемешивания и потерь)
+        int ntLossCount;                // количество потерянных пакетов
+        int ntOutOfWndCount;            // количество пакетов за пределами окна приема (включает также и число потерянных пакетов)
     };
 
     enum Accuracy
@@ -131,7 +135,7 @@ public:
     virtual QIODevice* captureData() = 0;
 
     void stats(PortStats *stats);
-    void resetStats() {
+    virtual void resetStats() {
 //        qDebug("**** rxPkts = %d, ntPkts = %d", stats_.rxPkts, stats_.ntPkts);
         memset((void*) &stats_, 0, sizeof(stats_));
         epochStats_ = stats_; }
