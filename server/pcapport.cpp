@@ -528,13 +528,17 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
     stats_->ntPrevDelayUs = delta_us;
 
     // Считаем потери и перемешивания
-    if (nettestLossData.prevPktNum - seqNum >= nettestLossData.minFieldSize) {
-        nettestLossData.pkts = 0;
-    }
+    if (nettestLossData.prevPktNum > seqNum)
+        if (nettestLossData.prevPktNum - seqNum >= nettestLossData.minFieldSize) {
+            nettestLossData.pkts = 0;
+//            qDebug("===== prev=%llu, #%llu, minFieldSize=%d", nettestLossData.prevPktNum, seqNum, nettestLossData.minFieldSize);
+        }
+
     nettestLossData.prevPktNum = seqNum;
     if (nettestLossData.pkts == 0)
         nettestLossData.firstPktNum = seqNum;
-    qint64 pos = seqNum - nettestLossData.firstPktNum - nettestLossData.pkts + nettestLossData.ntPktLossWndSize - 1;
+    qint64 pos = (qint64)seqNum - (quint64)nettestLossData.firstPktNum - nettestLossData.pkts + nettestLossData.ntPktLossWndSize - 1;
+//    qDebug("* pkts=%llu, #%llu, pos=%llu", nettestLossData.pkts, seqNum, pos);
     if (pos < 0) {
         stats_->ntLossCount--;
         nettestLossData.pkts--;
@@ -555,21 +559,19 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
         nettestLossData.ntPktLossWindow >>= 1;
     }
     nettestLossData.pkts++;
+//    qDebug("******* pkts=%llu", nettestLossData.pkts);
 
 
-    qDebug("*** CurDl=%.3f, MmoDl=%.3f, AvgDl=%.3f, MaxDl=%.3f, MinDl=%.3f, CurJt=%.3f, MmoJt=%.3f, AvgJt=%.3f, MaxJt=%.3f, MinJt=%.3f",
+    qDebug("* #%llu, CurDl=%.3f, MmoDl=%.3f, CurJt=%.3f, MmoJt=%.3f, Loss=%d, OutOfWnd=%d",
+           seqNum,
            (double)delta_us/1000,
            (double)stats_->ntMmoDelayUs/1000,
-           (double)stats_->ntAvgDelayUs/1000,
-           (double)stats_->ntMaxDelayUs/1000,
-           (double)stats_->ntMinDelayUs/1000,
            (double)_deltaDelay/1000,
            (double)stats_->ntMmoJitterUs/1000,
-           (double)stats_->ntAvgJitterUs/1000,
-           (double)stats_->ntMaxJitterUs/1000,
-           (double)stats_->ntMinJitterUs/1000
+           stats_->ntLossCount,
+           stats_->ntOutOfWndCount
            );
-    qDebug("******* LossCount = %d, OutOfWndCount = %d", stats_->ntLossCount, stats_->ntOutOfWndCount);
+//    qDebug("******* LossCount = %d, OutOfWndCount = %d", stats_->ntLossCount, stats_->ntOutOfWndCount);
 }
 
 /*
