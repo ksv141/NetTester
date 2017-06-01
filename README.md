@@ -15,3 +15,23 @@ ping 192.168.2.2
 
 ping 192.168.3.2
 
+## Тестирование измерителя на эмулированном хосте с помощью утилиты управления трафиком tc
+
+Эмуляция задержки:
+
+tc qdisc add dev eth1 root netem delay 800ms    (задержка на 800 мс)
+
+tc qdisc change dev eth0 root netem delay 800ms 100ms  (задержка на 800 мс с равномерным отклонением в 100 мс)
+
+tc qdisc change dev eth0 root netem delay 100ms 20ms distribution normal  (задержка на 100 мс с нормальным распределением отклонения в 20 мс)
+
+Эмуляция потери пакетов:
+
+tc qdisc change dev eth0 root netem loss 0.1%
+
+Эмуляция перемешивания пакетов:
+
+tc qdisc change dev eth0 root netem gap 5 delay 10ms   (каждый 5-й пакет будет отправлен немедленно, тогда как остальные будут задержаны на 10мс)
+
+tc qdisc change dev eth0 root netem delay 10ms reorder 25% 50%    (25% пакетов( с корреляцией 50%) будут посланы немедленно, тогда как остальные будут задержаны на 10мс)
+
