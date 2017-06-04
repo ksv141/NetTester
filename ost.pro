@@ -1,4 +1,3 @@
-QMAKE_CXXFLAGS += -std=c++11
 TEMPLATE = subdirs
 SUBDIRS = client server ostproto ostprotogui rpc binding extra
 

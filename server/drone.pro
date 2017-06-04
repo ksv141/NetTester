@@ -1,5 +1,6 @@
 TEMPLATE = app
 CONFIG += qt ver_info
+QMAKE_CXXFLAGS += -std=c++11
 QT += network script xml
 QT -= gui
 DEFINES += HAVE_REMOTE WPCAP

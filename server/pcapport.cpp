@@ -540,13 +540,14 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
     if (nettestLossData.pkts == 0)
         nettestLossData.firstPktNum = seqNum;
     qint64 pos = (qint64)seqNum - (quint64)nettestLossData.firstPktNum - nettestLossData.pkts + nettestLossData.ntPktLossWndSize - 1;
-
+    qDebug("**** pos=%ld", pos);
     if ((pos >= 0) && (pos < nettestLossData.ntBitSetSize)) {
         nettestLossData.ntPktLossWindow[pos] = 1;
         if ((nettestLossData.ntPktLossWindow[0] == 0) && (nettestLossData.pkts >= nettestLossData.ntPktLossWndSize - 1)) {
             stats_->ntLossCount++;
             stats_->ntOutOfWndCount++;
-            nettestLossData.pkts++;
+//            nettestLossData.pkts++;
+            qDebug("******** lost packet");
         }
 
         nettestLossData.ntPktLossWindow >>= 1;
@@ -573,14 +574,16 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
 
     nettestLossData.pkts++;
 
-    qDebug("* #%llu, CurDl=%.3f, MmoDl=%.3f, CurJt=%.3f, MmoJt=%.3f, Loss=%.3f, OutOfWnd=%.3f",
+    qDebug("* pkts=%llu, #%llu, CurDl=%.3f, MmoDl=%.3f, CurJt=%.3f, MmoJt=%.3f, nLoss=%d, kLoss=%.3f, OutOfWnd=%.3f",
+           stats_->ntPkts,
            seqNum,
            (double)delta_us/1000,
            (double)stats_->ntMmoDelayUs/1000,
            (double)_deltaDelay/1000,
            (double)stats_->ntMmoJitterUs/1000,
+           stats_->ntLossCount,
            (double)stats_->ntLossCount/(stats_->ntPkts + stats_->ntLossCount),
-           (double)stats_->ntOutOfWndCount/(stats_->ntPkts + stats_->ntLossCount)
+           (double)stats_->ntOutOfWndCount/(stats_->ntPkts + stats_->ntOutOfWndCount)
            );
 //    qDebug("******* LossCount = %d, OutOfWndCount = %d", stats_->ntLossCount, stats_->ntOutOfWndCount);
 }
