@@ -530,6 +530,76 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
     stats_->ntPrevDelayUs = delta_us;
 
     // Считаем потери и перемешивания
+
+
+
+/*
+ * const int pktLossWndSize = 10;                   // размер окна для разупорядоченных пакетов
+const int bitSetSize = pktLossWndSize * 2 - 1;  // размер bitset для вычисления
+const int minFieldSize = 20;                    // минимальный размер конечного поля для обнаружения начала последовательности
+const int initialPos = pktLossWndSize - 1;      // начальное значение указателя в окне (середина pktLossWindow)
+
+int main(int argc, char *argv[])
+{
+    std::bitset<bitSetSize> pktLossWindow;
+    pktLossWindow.reset();
+    freopen("./SequenceGenerator/data.txt","r",stdin);
+
+    __uint64_t pktSecNum;
+    __int64_t pkts = 0;
+    int lossCount = 0;
+    int outOfWndCount = 0;
+    __uint64_t firstPktNum = 0;
+    __int64_t prevPktNum = -minFieldSize;       // номер предыдущего принятого пакета
+    int posOffset = 0;                          // смещение позиции указателя относительно центра окна
+    bool beginSequence = true;                  // признак начала последовательности номеров
+    while (cin >> pktSecNum) {
+        cout << pktSecNum << " ";
+
+        if (prevPktNum - (__int64_t)pktSecNum >= minFieldSize) {
+            beginSequence = true;
+        }
+        if (beginSequence) {
+            firstPktNum = pktSecNum;
+            beginSequence = false;
+        }
+        else
+            posOffset += pktSecNum - prevPktNum - 1;
+        prevPktNum = pktSecNum;
+        int pos = initialPos + posOffset;
+        if (pos < 0) {
+            lossCount--;
+        }
+        else if (pos >= bitSetSize) {
+//            outOfWndCount++;
+            lossCount--;
+        }
+        else {
+            if (pktLossWindow[pos] == 1)
+                cout << "pktLossWindow[pos]" << " ";
+            pktLossWindow[pos] = 1;
+              while((pktLossWindow[0] == 0) && (pkts >= pktLossWndSize - 1)) {
+                lossCount++;
+                outOfWndCount++;
+                pkts++;
+                posOffset--;
+                pktLossWindow >>= 1;
+            }
+        }
+
+        pkts++;
+        pktLossWindow >>= 1;
+        cout << pkts << " " << pktLossWindow << endl;
+    }
+    outOfWndCount -= lossCount;
+    cout << "loss = " << lossCount << " out of wnd = " << outOfWndCount << endl;
+    fclose(stdin);
+    return 0;
+}
+
+ * */
+
+
     if (nettestLossData.prevPktNum > seqNum)
         if (nettestLossData.prevPktNum - seqNum >= nettestLossData.minFieldSize) {
             nettestLossData.pkts = 0;
@@ -552,25 +622,6 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
 
         nettestLossData.ntPktLossWindow >>= 1;
     }
-
-//    if (pos < 0) {
-//        stats_->ntLossCount--;
-//        nettestLossData.pkts--;
-//    }
-//    else if (pos >= nettestLossData.ntBitSetSize) {
-//        stats_->ntLossCount--;
-//        nettestLossData.pkts--;
-//    }
-//    else {
-//        nettestLossData.ntPktLossWindow[pos] = 1;
-//        if ((nettestLossData.ntPktLossWindow[0] == 0) && (nettestLossData.pkts >= nettestLossData.ntPktLossWndSize - 1)) {
-//            stats_->ntLossCount++;
-//            stats_->ntOutOfWndCount++;
-//            nettestLossData.pkts++;
-//        }
-
-//        nettestLossData.ntPktLossWindow >>= 1;
-//    }
 
     nettestLossData.pkts++;
 
