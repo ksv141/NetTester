@@ -442,6 +442,8 @@ void PcapPort::PortMonitor::resetLossStats()
     nettestLossData.pkts = 0;
     nettestLossData.firstPktNum = 0;
     nettestLossData.prevPktNum = -nettestLossData.minFieldSize;
+    nettestLossData.posOffset = 0;
+    nettestLossData.beginSequence = true;
 }
 
 void PcapPort::PortMonitor::enableNettest(NettestStackMode stackMode, quint32 hdrOffset, quint32 streamId, bool errorCheck)
@@ -481,13 +483,49 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
     quint64 seqNum = qFromBigEndian<quint64>(data + nettestHdrOffset + 8);
 
     // Извлекаем временную метку
-    timeval timestamp, receive_time;
+    timeval timestamp;
     timestamp.tv_sec = *(uint32_t*)(data + nettestHdrOffset);
     timestamp.tv_usec = (*(long*)(data + nettestHdrOffset + sizeof(uint32_t)))/1000;
 
     uint32_t delta_us;
     _udifftimestamp(&hdr->ts, &timestamp, delta_us);
     quint32 _deltaDelay = 0;
+
+
+    // Считаем потери и перемешивания
+    int _loss = 0;
+    if ((qint64)nettestLossData.prevPktNum - (qint64)seqNum >= nettestLossData.minFieldSize) {
+        nettestLossData.beginSequence = true;
+    }
+
+    if (nettestLossData.beginSequence) {
+        nettestLossData.beginSequence = false;
+    }
+    else {
+        nettestLossData.posOffset += (qint64)seqNum - (qint64)nettestLossData.prevPktNum - 1;
+    }
+    int pos = nettestLossData.initialPos + nettestLossData.posOffset;
+    nettestLossData.prevPktNum = seqNum;
+
+    if ((pos < 0) || (pos >= nettestLossData.ntBitSetSize)) {
+        stats_->ntLossCount--;
+        _loss = -1;
+    }
+    else {
+        nettestLossData.ntPktLossWindow[pos] = 1;
+        while((nettestLossData.ntPktLossWindow[0] == 0) &&
+              (nettestLossData.pkts >= nettestLossData.ntPktLossWndSize - 1)) {
+            stats_->ntLossCount++;
+            _loss = 1;
+            stats_->ntOutOfWndCount++;
+            nettestLossData.pkts++;
+            nettestLossData.posOffset--;
+            nettestLossData.ntPktLossWindow >>= 1;
+        }
+    }
+    nettestLossData.pkts++;
+    nettestLossData.ntPktLossWindow >>= 1;
+
 
     // Считаем статистику
     stats_->ntPkts++;
@@ -502,6 +540,11 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
         stats_->ntAvgJitterUs = 0;
         stats_->ntMmoJitterUs = 0;
         stats_->ntPrevDelayUs = 0;
+
+        stats_->ntMmoLossKoeff = 0;
+        stats_->ntLossKoeff = 0;
+        stats_->ntMmoOutOfWndKoeff = 0;
+        stats_->ntOutOfWndKoeff = 0;
     }
     else {
         stats_->ntMmoDelayUs = (delta_us + (ntMmoWndSize - 1)*stats_->ntMmoDelayUs)/ntMmoWndSize;
@@ -512,6 +555,10 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
             stats_->ntMaxDelayUs = delta_us;
 
         _absdelta(stats_->ntPrevDelayUs, delta_us, _deltaDelay);
+
+        stats_->ntMmoLossKoeff = ((double)_loss + (ntMmoLossWndSize - 1)*stats_->ntMmoLossKoeff)/ntMmoLossWndSize;
+        stats_->ntLossKoeff = ((double)_loss + (stats_->ntPkts - 1)*stats_->ntLossKoeff)/stats_->ntPkts;
+
         if (stats_->ntPkts == 2) {
             stats_->ntMmoJitterUs = _deltaDelay;
             stats_->ntAvgJitterUs = _deltaDelay;
@@ -529,114 +576,14 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
     }
     stats_->ntPrevDelayUs = delta_us;
 
-    // Считаем потери и перемешивания
+
+    #ifdef QT_DEBUG
+        qDebug() << "ntMmoLoss=" << stats_->ntMmoLossKoeff << "  ntLoss=" << stats_->ntLossKoeff << " ntLoss1=" << (double)stats_->ntLossCount/((qint64)stats_->ntPkts + stats_->ntLossCount);
+//    #include <string>
+//        qDebug() << QString(nettestLossData.ntPktLossWindow.to_string().c_str()) << " " << (double)stats_->ntLossCount/((qint64)stats_->ntPkts + stats_->ntLossCount);
+    #endif
 
 
-
-/*
- * const int pktLossWndSize = 10;                   // размер окна для разупорядоченных пакетов
-const int bitSetSize = pktLossWndSize * 2 - 1;  // размер bitset для вычисления
-const int minFieldSize = 20;                    // минимальный размер конечного поля для обнаружения начала последовательности
-const int initialPos = pktLossWndSize - 1;      // начальное значение указателя в окне (середина pktLossWindow)
-
-int main(int argc, char *argv[])
-{
-    std::bitset<bitSetSize> pktLossWindow;
-    pktLossWindow.reset();
-    freopen("./SequenceGenerator/data.txt","r",stdin);
-
-    __uint64_t pktSecNum;
-    __int64_t pkts = 0;
-    int lossCount = 0;
-    int outOfWndCount = 0;
-    __uint64_t firstPktNum = 0;
-    __int64_t prevPktNum = -minFieldSize;       // номер предыдущего принятого пакета
-    int posOffset = 0;                          // смещение позиции указателя относительно центра окна
-    bool beginSequence = true;                  // признак начала последовательности номеров
-    while (cin >> pktSecNum) {
-        cout << pktSecNum << " ";
-
-        if (prevPktNum - (__int64_t)pktSecNum >= minFieldSize) {
-            beginSequence = true;
-        }
-        if (beginSequence) {
-            firstPktNum = pktSecNum;
-            beginSequence = false;
-        }
-        else
-            posOffset += pktSecNum - prevPktNum - 1;
-        prevPktNum = pktSecNum;
-        int pos = initialPos + posOffset;
-        if (pos < 0) {
-            lossCount--;
-        }
-        else if (pos >= bitSetSize) {
-//            outOfWndCount++;
-            lossCount--;
-        }
-        else {
-            if (pktLossWindow[pos] == 1)
-                cout << "pktLossWindow[pos]" << " ";
-            pktLossWindow[pos] = 1;
-              while((pktLossWindow[0] == 0) && (pkts >= pktLossWndSize - 1)) {
-                lossCount++;
-                outOfWndCount++;
-                pkts++;
-                posOffset--;
-                pktLossWindow >>= 1;
-            }
-        }
-
-        pkts++;
-        pktLossWindow >>= 1;
-        cout << pkts << " " << pktLossWindow << endl;
-    }
-    outOfWndCount -= lossCount;
-    cout << "loss = " << lossCount << " out of wnd = " << outOfWndCount << endl;
-    fclose(stdin);
-    return 0;
-}
-
- * */
-
-
-    if (nettestLossData.prevPktNum > seqNum)
-        if (nettestLossData.prevPktNum - seqNum >= nettestLossData.minFieldSize) {
-            nettestLossData.pkts = 0;
-//            qDebug("===== prev=%llu, #%llu, minFieldSize=%d", nettestLossData.prevPktNum, seqNum, nettestLossData.minFieldSize);
-        }
-
-    nettestLossData.prevPktNum = seqNum;
-    if (nettestLossData.pkts == 0)
-        nettestLossData.firstPktNum = seqNum;
-    qint64 pos = (qint64)seqNum - (quint64)nettestLossData.firstPktNum - nettestLossData.pkts + nettestLossData.ntPktLossWndSize - 1;
-    qDebug("**** pos=%ld", pos);
-    if ((pos >= 0) && (pos < nettestLossData.ntBitSetSize)) {
-        nettestLossData.ntPktLossWindow[pos] = 1;
-        if ((nettestLossData.ntPktLossWindow[0] == 0) && (nettestLossData.pkts >= nettestLossData.ntPktLossWndSize - 1)) {
-            stats_->ntLossCount++;
-            stats_->ntOutOfWndCount++;
-//            nettestLossData.pkts++;
-            qDebug("******** lost packet");
-        }
-
-        nettestLossData.ntPktLossWindow >>= 1;
-    }
-
-    nettestLossData.pkts++;
-
-    qDebug("* pkts=%llu, #%llu, CurDl=%.3f, MmoDl=%.3f, CurJt=%.3f, MmoJt=%.3f, nLoss=%d, kLoss=%.3f, OutOfWnd=%.3f",
-           stats_->ntPkts,
-           seqNum,
-           (double)delta_us/1000,
-           (double)stats_->ntMmoDelayUs/1000,
-           (double)_deltaDelay/1000,
-           (double)stats_->ntMmoJitterUs/1000,
-           stats_->ntLossCount,
-           (double)stats_->ntLossCount/(stats_->ntPkts + stats_->ntLossCount),
-           (double)stats_->ntOutOfWndCount/(stats_->ntPkts + stats_->ntOutOfWndCount)
-           );
-//    qDebug("******* LossCount = %d, OutOfWndCount = %d", stats_->ntLossCount, stats_->ntOutOfWndCount);
 }
 
 /*

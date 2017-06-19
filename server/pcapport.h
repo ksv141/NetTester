@@ -92,14 +92,17 @@ protected:
     {
     public:
         struct PktLossData {
-            static const int ntPktLossWndSize = 3;                      // размер окна для разупорядоченных пакетов
-            static const int ntBitSetSize = ntPktLossWndSize * 2 - 1;    // размер bitset для вычисления
-            static const int minFieldSize = 100;                         // минимальный размер конечного поля для обнаружения начала нового цикла нумерации пакетов
+            static const int ntPktLossWndSize = 32;                      // размер окна для разупорядоченных пакетов
+            static const int ntBitSetSize = ntPktLossWndSize * 2 - 1;    // размер bitset для отслеживания попадания пакетов в окно
+            static const int minFieldSize = 1000;                        // минимальный размер конечного поля для обнаружения начала нового цикла нумерации пакетов
+            static const int initialPos = ntPktLossWndSize - 1;          // начальное значение указателя в окне (середина pktLossWindow)
 
             std::bitset<ntBitSetSize> ntPktLossWindow;
             qint64 pkts;
             quint64 firstPktNum;
-            quint64 prevPktNum;
+            quint64 prevPktNum;     // номер предыдущего принятого пакета
+            int posOffset;          // смещение позиции указателя относительно центра окна
+            bool beginSequence;     // признак начала последовательности номеров
         };
 
         PortMonitor(const char *device, Direction direction,

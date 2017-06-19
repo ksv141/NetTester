@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 #include <QList>
 #include <QtGlobal>
+#include <QtDebug>
 
 #include "../common/protocol.pb.h"
 
@@ -33,7 +34,8 @@ class QIODevice;
 // TODO: send notification back to client(s)
 #define notify qWarning
 
-#define ntMmoWndSize 16                             // размер окна усреднения для MMO (пакетов)
+#define ntMmoWndSize 16         // размер окна усреднения для MMO задержки и джиттера
+#define ntMmoLossWndSize 128    // размер окна усреднения для MMO потерь и перемешивания
 
 class AbstractPort
 {
@@ -73,6 +75,10 @@ public:
         // NetTest (данные для измерения перемешивания и потерь)
         int ntLossCount;                // количество потерянных пакетов
         int ntOutOfWndCount;            // количество пакетов за пределами окна приема (включает также и число потерянных пакетов)
+        double     ntLossKoeff;         // коэффициент потерь от начала измерения (%)
+        double     ntOutOfWndKoeff;     // коэффициент пакетов вне окна от начала измерения (%)
+        double     ntMmoLossKoeff;      // MMO коэффициента потерь от начала измерения
+        double     ntMmoOutOfWndKoeff;  // MMO коэффициента пакетов вне окна от начала измерения
     };
 
     enum Accuracy
