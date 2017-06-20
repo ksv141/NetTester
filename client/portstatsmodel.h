@@ -66,47 +66,82 @@ typedef enum {
     e_STAT_RX_FIFO_ERRORS,
     e_STAT_RX_FRAME_ERRORS,
 
-    e_STATISTICS_END = e_STAT_RX_FRAME_ERRORS,
+    // NetTest
+    e_STAT_NT_PKTS,
+    e_STAT_NT_BYTES,
+    e_STAT_NT_AVG_DELAY,
+    e_STAT_NT_MMO_DELAY,
+    e_STAT_NT_MAX_DELAY,
+    e_STAT_NT_MIN_DELAY,
+    e_STAT_NT_AVG_JITTER,
+    e_STAT_NT_MMO_JITTER,
+    e_STAT_NT_MAX_JITTER,
+    e_STAT_NT_MIN_JITTER,
+    e_STAT_NT_LOSS_COUNT,
+    e_STAT_NT_OUT_WND_COUNT,
+    e_STAT_NT_LOSS_KOEFF,
+    e_STAT_NT_MMO_LOSS,
+    e_STAT_NT_OUT_WND_KOEFF,
+    e_STAT_NT_MMO_OUT_WND,
+
+
+    e_STATISTICS_END = e_STAT_NT_MMO_OUT_WND,
 
     e_STAT_MAX
 } PortStat;
 
 static QStringList PortStatName = (QStringList()
-    << "User"
+    << QObject::trUtf8("Пользователь")                       //"User"
 
-    << "Link State"
-    << "Transmit State"
-    << "Capture State"
-
-    << "Frames Received"
-    << "Frames Sent"
-    << "Frame Send Rate (fps)"
-    << "Frame Receive Rate (fps)"
-    << "Bytes Received"
-    << "Bytes Sent"
-    << "Byte Send Rate (Bps)"
-    << "Byte Receive Rate (Bps)"
+    << QObject::trUtf8("Состояние линка")                    //"Link State"
+    << QObject::trUtf8("Передача потока")                    //"Transmit State"
+    << QObject::trUtf8("Захват потока")                      //"Capture State"
+    << QObject::trUtf8("Принято кадров")                     //"Frames Received"
+    << QObject::trUtf8("Отправлено кадров")                  //"Frames Sent"
+    << QObject::trUtf8("Скорость передачи (кадр/с)")         //"Frame Send Rate (fps)"
+    << QObject::trUtf8("Скорость приема (кадр/с)")           //"Frame Receive Rate (fps)"
+    << QObject::trUtf8("Принято байт")                       //"Bytes Received"
+    << QObject::trUtf8("Отправлено байт")                    //"Bytes Sent"
+    << QObject::trUtf8("Скорость передачи (байт/с)")         //"Byte Send Rate (Bps)"
+    << QObject::trUtf8("Скорость приема (байт/с)")           //"Byte Receive Rate (Bps)"
 #if 0
     << "Frames Received (NIC)"
     << "Frames Sent (NIC)"
     << "Bytes Received (NIC)"
     << "Bytes Sent (NIC)"
 #endif
-    << "Receive Drops"
-    << "Receive Errors"
-    << "Receive Fifo Errors"
-    << "Receive Frame Errors"
+    << QObject::trUtf8("Отброшено на приеме")                //"Receive Drops"
+    << QObject::trUtf8("Ошибок передачи")                    //"Receive Errors"
+    << QObject::trUtf8("Ошибок fifo на приеме")              //"Receive Fifo Errors"
+    << QObject::trUtf8("Ошибок в принятых кадрах")           //"Receive Frame Errors"
+
+    << QObject::trUtf8("NetTest: принято пакетов")
+    << QObject::trUtf8("NetTest: принято байт")
+    << QObject::trUtf8("NetTest: ср. задержка (мкс)")
+    << QObject::trUtf8("NetTest: MMO ср. задержки (мкс)")
+    << QObject::trUtf8("NetTest: макс. задержка (мкс)")
+    << QObject::trUtf8("NetTest: мин. задержка (мкс)")
+    << QObject::trUtf8("NetTest: ср. вариация задержки (мкс)")
+    << QObject::trUtf8("NetTest: инкремент. вариац. задержки (мкс)")
+    << QObject::trUtf8("NetTest: макс. вариац. задержки (мкс)")
+    << QObject::trUtf8("NetTest: мин. вариац. задержки (мкс)")
+    << QObject::trUtf8("NetTest: потеряно пакетов")
+    << QObject::trUtf8("NetTest: пакетов за предел. окна")
+    << QObject::trUtf8("NetTest: коэфф. потерь (%)")
+    << QObject::trUtf8("NetTest: MMO потерь (%)")
+    << QObject::trUtf8("NetTest: коэфф. за пред. окна (%)")
+    << QObject::trUtf8("NetTest: MMO за пред. окна (%)")
 );
 
 static QStringList LinkStateName = (QStringList()
-    << "Unknown"
-    << "Down"
-    << "Up"
+    << QObject::trUtf8("Неизвестно")
+    << QObject::trUtf8("Выкл.")
+    << QObject::trUtf8("Вкл.")
 );
 
 static QStringList BoolStateName = (QStringList()
-    << "Off"
-    << "On"
+    << QObject::trUtf8("Выкл.")
+    << QObject::trUtf8("Вкл.")
 );
 
 class PortGroupList;

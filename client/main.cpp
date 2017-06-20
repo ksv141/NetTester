@@ -65,6 +65,7 @@ int main(int argc, char* argv[])
 
     QTextCodec::setCodecForTr(QTextCodec::codecForName ("utf8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName ("utf8"));
+//    QTextCodec::setCodecForLocale(QTextCodec::codecForName ("utf8"));
 
     appParams.parseCommandLine(argc, argv);
 

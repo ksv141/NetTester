@@ -283,6 +283,27 @@ message PortStats {
     optional uint64 rx_errors = 101;
     optional uint64 rx_fifo_errors = 102;
     optional uint64 rx_frame_errors = 103;
+
+    optional uint64    ntPkts = 200;
+    optional uint64    ntBytes = 201;
+
+    optional uint32    ntAvgDelayUs = 202;
+    optional uint32    ntMmoDelayUs = 203;
+    optional uint32    ntMaxDelayUs = 204;
+    optional uint32    ntMinDelayUs = 205;
+
+    optional uint32    ntAvgJitterUs = 206;
+    optional uint32    ntMmoJitterUs = 207;
+    optional uint32    ntMaxJitterUs = 208;
+    optional uint32    ntMinJitterUs = 209;
+
+    optional int32     ntLossCount = 210;
+    optional int32     ntOutOfWndCount = 211;
+    optional double    ntLossKoeff = 212;
+    optional double    ntOutOfWndKoeff = 213;
+    optional double    ntMmoLossKoeff = 214;
+    optional double    ntMmoOutOfWndKoeff = 215;
+
 }
 
 message PortStatsList {

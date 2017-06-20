@@ -591,10 +591,8 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
 
 
     #ifdef QT_DEBUG
-//        qDebug() << "MmoLoss=" << stats_->ntMmoLossKoeff << "  MmoOutWnd=" << stats_->ntMmoOutOfWndKoeff
-//                 << "MmoOutWnd-=" << stats_->ntMmoOutOfWndKoeff - stats_->ntMmoLossKoeff;
-        qDebug() << "MmoLoss=" << stats_->ntMmoLossKoeff << "  Loss=" << stats_->ntLossKoeff
-                 << "MmoOutWnd=" << stats_->ntMmoOutOfWndKoeff - stats_->ntMmoLossKoeff << " OutWnd=" << stats_->ntOutOfWndKoeff - stats_->ntLossKoeff;
+//        qDebug() << "MmoLoss=" << stats_->ntMmoLossKoeff << "  Loss=" << stats_->ntLossKoeff
+//                 << "MmoOutWnd=" << stats_->ntMmoOutOfWndKoeff - stats_->ntMmoLossKoeff << " OutWnd=" << stats_->ntOutOfWndKoeff - stats_->ntLossKoeff;
 //    #include <string>
 //        qDebug() << QString(nettestLossData.ntPktLossWindow.to_string().c_str()) << " " << nettestLossData.posOffset <<
 //                    " " <<  stats_->ntOutOfWndCount << " " << stats_->ntLossCount;

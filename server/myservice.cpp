@@ -528,6 +528,27 @@ void MyService::getStats(::google::protobuf::RpcController* /*controller*/,
         s->set_rx_errors(stats.rxErrors);
         s->set_rx_fifo_errors(stats.rxFifoErrors);
         s->set_rx_frame_errors(stats.rxFrameErrors);
+
+        // NetTest
+        s->set_ntpkts(stats.ntPkts);
+        s->set_ntbytes(stats.ntBytes);
+
+        s->set_ntavgdelayus(stats.ntAvgDelayUs);
+        s->set_ntmmodelayus(stats.ntMmoDelayUs);
+        s->set_ntmaxdelayus(stats.ntMaxDelayUs);
+        s->set_ntmindelayus(stats.ntMinDelayUs);
+
+        s->set_ntavgjitterus(stats.ntAvgJitterUs);
+        s->set_ntmmojitterus(stats.ntMmoJitterUs);
+        s->set_ntmaxjitterus(stats.ntMaxJitterUs);
+        s->set_ntminjitterus(stats.ntMinJitterUs);
+
+        s->set_ntlosscount(stats.ntLossCount);
+        s->set_ntoutofwndcount(stats.ntOutOfWndCount);
+        s->set_ntlosskoeff(stats.ntLossKoeff);
+        s->set_ntoutofwndkoeff(stats.ntOutOfWndKoeff);
+        s->set_ntmmolosskoeff(stats.ntMmoLossKoeff);
+        s->set_ntmmooutofwndkoeff(stats.ntMmoOutOfWndKoeff);
     }
 
     done->Run();
