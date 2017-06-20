@@ -494,6 +494,7 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
 
     // Считаем потери и перемешивания
     int _loss = 0;
+    int _out = 0;
     if ((qint64)nettestLossData.prevPktNum - (qint64)seqNum >= nettestLossData.minFieldSize) {
         nettestLossData.beginSequence = true;
     }
@@ -504,6 +505,15 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
     else {
         nettestLossData.posOffset += (qint64)seqNum - (qint64)nettestLossData.prevPktNum - 1;
     }
+
+    // восстановление исходного состояния окна в случае потери последовательности
+    if (nettestLossData.ntPktLossWindow.none() && nettestLossData.pkts > 0) {
+        nettestLossData.posOffset = 0;
+        nettestLossData.pkts = 0;
+//        if (stats_->ntLossCount < 0)
+//            stats_->ntLossCount = 0;
+    }
+
     int pos = nettestLossData.initialPos + nettestLossData.posOffset;
     nettestLossData.prevPktNum = seqNum;
 
@@ -518,6 +528,7 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
             stats_->ntLossCount++;
             _loss = 1;
             stats_->ntOutOfWndCount++;
+            _out = 1;
             nettestLossData.pkts++;
             nettestLossData.posOffset--;
             nettestLossData.ntPktLossWindow >>= 1;
@@ -558,6 +569,8 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
 
         stats_->ntMmoLossKoeff = ((double)_loss + (ntMmoLossWndSize - 1)*stats_->ntMmoLossKoeff)/ntMmoLossWndSize;
         stats_->ntLossKoeff = ((double)_loss + (stats_->ntPkts - 1)*stats_->ntLossKoeff)/stats_->ntPkts;
+        stats_->ntMmoOutOfWndKoeff = ((double)_out + (ntMmoLossWndSize - 1)*stats_->ntMmoOutOfWndKoeff)/ntMmoLossWndSize;
+        stats_->ntOutOfWndKoeff = ((double)_out + (stats_->ntPkts - 1)*stats_->ntOutOfWndKoeff)/stats_->ntPkts;
 
         if (stats_->ntPkts == 2) {
             stats_->ntMmoJitterUs = _deltaDelay;
@@ -578,9 +591,13 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
 
 
     #ifdef QT_DEBUG
-        qDebug() << "ntMmoLoss=" << stats_->ntMmoLossKoeff << "  ntLoss=" << stats_->ntLossKoeff << " ntLoss1=" << (double)stats_->ntLossCount/((qint64)stats_->ntPkts + stats_->ntLossCount);
+//        qDebug() << "MmoLoss=" << stats_->ntMmoLossKoeff << "  MmoOutWnd=" << stats_->ntMmoOutOfWndKoeff
+//                 << "MmoOutWnd-=" << stats_->ntMmoOutOfWndKoeff - stats_->ntMmoLossKoeff;
+        qDebug() << "MmoLoss=" << stats_->ntMmoLossKoeff << "  Loss=" << stats_->ntLossKoeff
+                 << "MmoOutWnd=" << stats_->ntMmoOutOfWndKoeff - stats_->ntMmoLossKoeff << " OutWnd=" << stats_->ntOutOfWndKoeff - stats_->ntLossKoeff;
 //    #include <string>
-//        qDebug() << QString(nettestLossData.ntPktLossWindow.to_string().c_str()) << " " << (double)stats_->ntLossCount/((qint64)stats_->ntPkts + stats_->ntLossCount);
+//        qDebug() << QString(nettestLossData.ntPktLossWindow.to_string().c_str()) << " " << nettestLossData.posOffset <<
+//                    " " <<  stats_->ntOutOfWndCount << " " << stats_->ntLossCount;
     #endif
 
 
