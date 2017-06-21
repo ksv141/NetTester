@@ -73,12 +73,13 @@ public:
         quint32    ntMinJitterUs;       // минимальная вариация задержки от начала измерения (мкс)
 
         // NetTest (данные для измерения перемешивания и потерь)
-        int ntLossCount;                // количество потерянных пакетов
-        int ntOutOfWndCount;            // количество пакетов за пределами окна приема (включает также и число потерянных пакетов)
+        qint32    ntLossCount;                // количество потерянных пакетов
+        qint32    ntOutOfWndCount;            // количество пакетов за пределами окна приема (включает также и число потерянных пакетов)
         double     ntLossKoeff;         // коэффициент потерь от начала измерения (%)
         double     ntOutOfWndKoeff;     // коэффициент пакетов вне окна от начала измерения (%)
         double     ntMmoLossKoeff;      // MMO коэффициента потерь от начала измерения
         double     ntMmoOutOfWndKoeff;  // MMO коэффициента пакетов вне окна от начала измерения
+
     };
 
     enum Accuracy
@@ -144,7 +145,8 @@ public:
     virtual void resetStats() {
 //        qDebug("**** rxPkts = %d, ntPkts = %d", stats_.rxPkts, stats_.ntPkts);
         memset((void*) &stats_, 0, sizeof(stats_));
-        epochStats_ = stats_; }
+        epochStats_ = stats_;
+    }
 
     DeviceManager* deviceManager();
     virtual void startDeviceEmulation() = 0;

@@ -697,6 +697,13 @@ void AbstractPort::stats(PortStats *stats)
     stats->ntMmoJitterUs = stats_.ntMmoJitterUs;
     stats->ntMinJitterUs = stats_.ntMinJitterUs;
     stats->ntMaxJitterUs = stats_.ntMaxJitterUs;
+
+    stats->ntLossCount = stats_.ntLossCount;
+    stats->ntOutOfWndCount = stats_.ntOutOfWndCount;
+    stats->ntLossKoeff = stats_.ntLossKoeff;
+    stats->ntOutOfWndKoeff = stats_.ntOutOfWndKoeff;
+    stats->ntMmoLossKoeff = stats_.ntMmoLossKoeff;
+    stats->ntMmoOutOfWndKoeff = stats_.ntMmoOutOfWndKoeff;
 }
 
 void AbstractPort::clearDeviceNeighbors()
