@@ -5,6 +5,10 @@ QT += network script xml
 LIBS += \
     -lprotobuf
 
+CONFIG(release, debug|release) {
+    DEFINES += QT_NO_DEBUG_OUTPUT
+}
+
 PROTOS = \
     protocol.proto \
     emulproto.proto

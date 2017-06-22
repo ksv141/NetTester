@@ -487,9 +487,20 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
     timestamp.tv_sec = *(uint32_t*)(data + nettestHdrOffset);
     timestamp.tv_usec = (*(long*)(data + nettestHdrOffset + sizeof(uint32_t)))/1000;
 
+    timeval cur_time = hdr->ts;
     uint32_t delta_us;
-    _udifftimestamp(&hdr->ts, &timestamp, delta_us);
+    _udifftimestamp(&cur_time, &timestamp, delta_us);
+    if (delta_us == 0)
+        delta_us = 1;
     quint32 _deltaDelay = 0;
+
+    // Считаем время между пакетами
+    cur_time = hdr->ts;
+    uint32_t interval_us;
+    _udifftimestamp(&cur_time, &stats_->ntPrevRecvTime, interval_us);
+    stats_->ntPrevRecvTime = hdr->ts;
+    if (interval_us == 0)
+        interval_us = 1;
 
 
     // Считаем потери и перемешивания
@@ -556,6 +567,7 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
         stats_->ntLossKoeff = 0;
         stats_->ntMmoOutOfWndKoeff = 0;
         stats_->ntOutOfWndKoeff = 0;
+        stats_->ntBps = 0;
     }
     else {
         stats_->ntMmoDelayUs = (delta_us + (ntMmoWndSize - 1)*stats_->ntMmoDelayUs)/ntMmoWndSize;
@@ -564,6 +576,7 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
             stats_->ntMinDelayUs = delta_us;
         if (stats_->ntMaxDelayUs < delta_us)
             stats_->ntMaxDelayUs = delta_us;
+
 
         _absdelta(stats_->ntPrevDelayUs, delta_us, _deltaDelay);
 
@@ -577,6 +590,7 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
             stats_->ntAvgJitterUs = _deltaDelay;
             stats_->ntMaxJitterUs = _deltaDelay;
             stats_->ntMinJitterUs = _deltaDelay;
+            stats_->ntBps = (quint64)hdr->len*8000000/(quint64)interval_us;
         }
         else {
             stats_->ntMmoJitterUs = (qint32)stats_->ntMmoJitterUs + (((qint32)_deltaDelay - (qint32)stats_->ntMmoJitterUs) >> 4);
@@ -585,14 +599,16 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
                 stats_->ntMinJitterUs = _deltaDelay;
             if (stats_->ntMaxJitterUs < _deltaDelay)
                 stats_->ntMaxJitterUs = _deltaDelay;
+
+            stats_->ntBps = (quint64)hdr->len*8000000/(quint64)interval_us;
+//            stats_->ntBps = ((quint64)hdr->len*8000000/(quint64)interval_us + (ntMmoWndSize - 1)*stats_->ntBps)/ntMmoWndSize;
         }
     }
     stats_->ntPrevDelayUs = delta_us;
 
 
     #ifdef QT_DEBUG
-//        qDebug() << "MmoLoss=" << stats_->ntMmoLossKoeff << "  Loss=" << stats_->ntLossKoeff
-//                 << "MmoOutWnd=" << stats_->ntMmoOutOfWndKoeff - stats_->ntMmoLossKoeff << " OutWnd=" << stats_->ntOutOfWndKoeff - stats_->ntLossKoeff;
+//        qDebug() << "Seq=" << seqNum << " Interval=" << interval_us << " Bps=" << stats_->ntBps;
 //    #include <string>
 //        qDebug() << QString(nettestLossData.ntPktLossWindow.to_string().c_str()) << " " << nettestLossData.posOffset <<
 //                    " " <<  stats_->ntOutOfWndCount << " " << stats_->ntLossCount;

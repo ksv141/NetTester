@@ -532,6 +532,7 @@ void MyService::getStats(::google::protobuf::RpcController* /*controller*/,
         // NetTest
         s->set_ntpkts(stats.ntPkts);
         s->set_ntbytes(stats.ntBytes);
+        s->set_ntbps(stats.ntBps);
 
         s->set_ntavgdelayus(stats.ntAvgDelayUs);
         s->set_ntmmodelayus(stats.ntMmoDelayUs);

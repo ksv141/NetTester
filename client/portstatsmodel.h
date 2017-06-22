@@ -69,6 +69,7 @@ typedef enum {
     // NetTest
     e_STAT_NT_PKTS,
     e_STAT_NT_BYTES,
+    e_STAT_NT_BPS,
     e_STAT_NT_AVG_DELAY,
     e_STAT_NT_MMO_DELAY,
     e_STAT_NT_MAX_DELAY,
@@ -117,6 +118,7 @@ static QStringList PortStatName = (QStringList()
 
     << QObject::trUtf8("NetTest: принято пакетов")
     << QObject::trUtf8("NetTest: принято байт")
+    << QObject::trUtf8("NetTest: скорость потока (Мбит/с)")
     << QObject::trUtf8("NetTest: ср. задержка (мкс)")
     << QObject::trUtf8("NetTest: MMO ср. задержки (мкс)")
     << QObject::trUtf8("NetTest: макс. задержка (мкс)")

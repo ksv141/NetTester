@@ -304,6 +304,8 @@ message PortStats {
     optional double    ntMmoLossKoeff = 214;
     optional double    ntMmoOutOfWndKoeff = 215;
 
+    optional uint64    ntBps = 216;
+
 }
 
 message PortStatsList {

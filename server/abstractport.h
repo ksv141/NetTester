@@ -34,7 +34,7 @@ class QIODevice;
 // TODO: send notification back to client(s)
 #define notify qWarning
 
-#define ntMmoWndSize 16         // размер окна усреднения для MMO задержки и джиттера
+#define ntMmoWndSize 32        // размер окна усреднения для MMO задержки и джиттера
 #define ntMmoLossWndSize 128    // размер окна усреднения для MMO потерь и перемешивания
 
 class AbstractPort
@@ -60,6 +60,8 @@ public:
         // NetTest (статистические параметры принятого потока)
         quint64    ntPkts;              // число принятых пакетов
         quint64    ntBytes;             // число принятых байт
+        quint64    ntBps;               // MMO скорости потока (бит/с)
+        timeval    ntPrevRecvTime;      // время поступления предыдущего пакета (для вычисления скорости потока)
 
         quint32    ntAvgDelayUs;        // средняя задержка от начала измерения (мкс)
         quint32    ntMmoDelayUs;        // модифицированное скользящее среднее задержки (мкс)
@@ -73,8 +75,8 @@ public:
         quint32    ntMinJitterUs;       // минимальная вариация задержки от начала измерения (мкс)
 
         // NetTest (данные для измерения перемешивания и потерь)
-        qint32    ntLossCount;                // количество потерянных пакетов
-        qint32    ntOutOfWndCount;            // количество пакетов за пределами окна приема (включает также и число потерянных пакетов)
+        qint32     ntLossCount;         // количество потерянных пакетов
+        qint32     ntOutOfWndCount;     // количество пакетов за пределами окна приема (включает также и число потерянных пакетов)
         double     ntLossKoeff;         // коэффициент потерь от начала измерения (%)
         double     ntOutOfWndKoeff;     // коэффициент пакетов вне окна от начала измерения (%)
         double     ntMmoLossKoeff;      // MMO коэффициента потерь от начала измерения

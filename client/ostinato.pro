@@ -1,5 +1,10 @@
 TEMPLATE = app
 CONFIG += qt ver_info
+
+CONFIG(release, debug|release) {
+    DEFINES += QT_NO_DEBUG_OUTPUT
+}
+
 macx: TARGET = Ostinato
 win32:RC_FILE = ostinato.rc
 macx:ICON = icons/logo.icns

@@ -689,6 +689,7 @@ void AbstractPort::stats(PortStats *stats)
 
     stats->ntPkts = stats_.ntPkts;
     stats->ntBytes = stats_.ntBytes;
+    stats->ntBps = stats_.ntBps;
     stats->ntAvgDelayUs = stats_.ntAvgDelayUs;
     stats->ntMmoDelayUs = stats_.ntMmoDelayUs;
     stats->ntMinDelayUs = stats_.ntMinDelayUs;

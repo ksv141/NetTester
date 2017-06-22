@@ -1,5 +1,8 @@
 TEMPLATE = lib
 CONFIG += qt staticlib warn_on
+CONFIG(release, debug|release) {
+    DEFINES += QT_NO_DEBUG_OUTPUT
+}
 
 HEADERS = src/commands.h\
           src/qhexedit.h \

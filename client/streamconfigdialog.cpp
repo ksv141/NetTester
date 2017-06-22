@@ -38,6 +38,7 @@ int StreamConfigDialog::lastTopLevelTabIndex = 0;
 int StreamConfigDialog::lastProtocolDataIndex = 0;
 
 static const uint kEthFrameOverHead = 20;
+static const uint kFrameCheckSumFieldSize = 4;
 
 StreamConfigDialog::StreamConfigDialog(Port &port, uint streamIndex,
     QWidget *parent) : QDialog (parent), mPort(port)
@@ -1134,7 +1135,7 @@ void StreamConfigDialog::on_lePacketsPerSec_textChanged(const QString &text)
     if (rbSendPackets->isChecked())
     {
         double pktsPerSec = QLocale().toDouble(text, &isOk);
-        double bitsPerSec = pktsPerSec * double((frameLen+kEthFrameOverHead)*8);
+        double bitsPerSec = pktsPerSec * double((frameLen - kFrameCheckSumFieldSize)*8);
 
         if (rbPacketsPerSec->isChecked())
             leBitsPerSec->setText(QString("%L1").arg(bitsPerSec, 0, 'f', 0));
@@ -1160,7 +1161,7 @@ void StreamConfigDialog::on_leBurstsPerSec_textChanged(const QString &text)
     {
         double burstsPerSec = QLocale().toDouble(text, &isOk);
         double bitsPerSec = burstsPerSec *
-                double(burstSize * (frameLen + kEthFrameOverHead) * 8);
+                double(burstSize * (frameLen - kFrameCheckSumFieldSize) * 8);
         if (rbBurstsPerSec->isChecked())
             leBitsPerSec->setText(QString("%L1").arg(bitsPerSec, 0, 'f', 0));
         leGapIbg->setText(QString("%L1").arg(1/double(burstsPerSec), 0, 'f',9));
@@ -1184,13 +1185,13 @@ void StreamConfigDialog::on_leBitsPerSec_textEdited(const QString &text)
     if (rbSendPackets->isChecked())
     {
         double pktsPerSec = QLocale().toDouble(text, &isOk)/
-                double((frameLen+kEthFrameOverHead)*8);
+                double((frameLen - kFrameCheckSumFieldSize)*8);
         lePacketsPerSec->setText(QString("%L1").arg(pktsPerSec, 0, 'f', 4));
     }
     else if (rbSendBursts->isChecked())
     {
         double burstsPerSec = QLocale().toDouble(text, &isOk)/
-                double(burstSize * (frameLen + kEthFrameOverHead) * 8);
+                double(burstSize * (frameLen - kFrameCheckSumFieldSize) * 8);
         leBurstsPerSec->setText(QString("%L1").arg(burstsPerSec, 0, 'f', 4));
     }
 }

@@ -178,19 +178,23 @@ QVariant PortStatsModel::data(const QModelIndex &index, int role) const
             // NetTest
             case e_STAT_NT_PKTS: return quint64(stats.ntpkts());
             case e_STAT_NT_BYTES: return quint64(stats.ntbytes());
+            case e_STAT_NT_BPS: return (double)stats.ntbps()/1000000.0;
+
             case e_STAT_NT_AVG_DELAY: return quint32(stats.ntavgdelayus());
             case e_STAT_NT_MMO_DELAY: return quint32(stats.ntmmodelayus());
             case e_STAT_NT_MAX_DELAY: return quint32(stats.ntmaxdelayus());
             case e_STAT_NT_MIN_DELAY: return quint32(stats.ntmindelayus());
+
             case e_STAT_NT_AVG_JITTER: return quint32(stats.ntavgjitterus());
             case e_STAT_NT_MMO_JITTER: return quint32(stats.ntmmojitterus());
             case e_STAT_NT_MAX_JITTER: return quint32(stats.ntmaxjitterus());
             case e_STAT_NT_MIN_JITTER: return quint32(stats.ntminjitterus());
-            case e_STAT_NT_LOSS_COUNT: return qint32(stats.ntlosscount());
+
+            case e_STAT_NT_LOSS_COUNT: return qint32(stats.ntlosscount() > 0 ? stats.ntlosscount() : 0);
             case e_STAT_NT_OUT_WND_COUNT: return qint32(stats.ntoutofwndcount() - stats.ntlosscount());
-            case e_STAT_NT_LOSS_KOEFF: return stats.ntlosskoeff()*100;
+            case e_STAT_NT_LOSS_KOEFF: return (stats.ntlosskoeff() > 0 ? stats.ntlosskoeff()*100 : 0);
             case e_STAT_NT_OUT_WND_KOEFF: return (stats.ntoutofwndkoeff() - stats.ntlosskoeff())*100;
-            case e_STAT_NT_MMO_LOSS: return stats.ntmmolosskoeff()*100;
+            case e_STAT_NT_MMO_LOSS: return (stats.ntmmolosskoeff() > 0 ? stats.ntmmolosskoeff()*100 : 0);
             case e_STAT_NT_MMO_OUT_WND: return (stats.ntmmooutofwndkoeff() - stats.ntmmolosskoeff())*100;
 
             default:

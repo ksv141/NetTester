@@ -1,5 +1,8 @@
 TEMPLATE = lib
 CONFIG += qt staticlib
+CONFIG(release, debug|release) {
+    DEFINES += QT_NO_DEBUG_OUTPUT
+}
 QT += network xml script
 INCLUDEPATH += "../extra/qhexedit2/src"
 LIBS += \

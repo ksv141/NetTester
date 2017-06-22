@@ -31,6 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 #include <signal.h>
 #endif
 
+#include <QtDebug>
+
 extern ProtocolManager *OstProtocolManager;
 extern char *version;
 extern char *revision;

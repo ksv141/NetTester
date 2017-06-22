@@ -4,6 +4,9 @@ QMAKE_CXXFLAGS += -std=c++11
 QT += network script xml
 QT -= gui
 DEFINES += HAVE_REMOTE WPCAP
+CONFIG(release, debug|release) {
+    DEFINES += QT_NO_DEBUG_OUTPUT
+}
 linux*:system(grep -q IFLA_STATS64 /usr/include/linux/if_link.h): \
     DEFINES += HAVE_IFLA_STATS64
 INCLUDEPATH += "../rpc"
