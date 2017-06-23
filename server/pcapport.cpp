@@ -494,14 +494,6 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
         delta_us = 1;
     quint32 _deltaDelay = 0;
 
-    // Считаем время между пакетами
-//    cur_time = hdr->ts;
-//    uint32_t interval_us;
-//    _udifftimestamp(&cur_time, &stats_->ntPrevRecvTime, interval_us);
-//    stats_->ntPrevRecvTime = hdr->ts;
-//    if (interval_us == 0)
-//        interval_us = 1;
-
 
     // Считаем потери и перемешивания
     int _loss = 0;
@@ -608,7 +600,6 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
             stats_->ntAvgJitterUs = _deltaDelay;
             stats_->ntMaxJitterUs = _deltaDelay;
             stats_->ntMinJitterUs = _deltaDelay;
-//            stats_->ntBps = (quint64)hdr->len*8000000/(quint64)interval_us;
         }
         else {
             stats_->ntMmoJitterUs = (qint32)stats_->ntMmoJitterUs + (((qint32)_deltaDelay - (qint32)stats_->ntMmoJitterUs) >> 4);
@@ -617,9 +608,6 @@ void PcapPort::PortMonitor::netTestProcessing(pcap_pkthdr *hdr, const uchar *dat
                 stats_->ntMinJitterUs = _deltaDelay;
             if (stats_->ntMaxJitterUs < _deltaDelay)
                 stats_->ntMaxJitterUs = _deltaDelay;
-
-//            stats_->ntBps = (quint64)hdr->len*8000000/(quint64)interval_us;
-//            stats_->ntBps = ((quint64)hdr->len*8000000/(quint64)interval_us + (ntMmoWndSize - 1)*stats_->ntBps)/ntMmoWndSize;
         }
     }
     stats_->ntPrevDelayUs = delta_us;
