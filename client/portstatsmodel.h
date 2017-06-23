@@ -118,7 +118,7 @@ static QStringList PortStatName = (QStringList()
 
     << QObject::trUtf8("NetTest: принято пакетов")
     << QObject::trUtf8("NetTest: принято байт")
-    << QObject::trUtf8("NetTest: скорость потока (Мбит/с)")
+    << QObject::trUtf8("NetTest: скорость потока (кбит/с)")
     << QObject::trUtf8("NetTest: ср. задержка (мкс)")
     << QObject::trUtf8("NetTest: MMO ср. задержки (мкс)")
     << QObject::trUtf8("NetTest: макс. задержка (мкс)")

@@ -178,7 +178,7 @@ QVariant PortStatsModel::data(const QModelIndex &index, int role) const
             // NetTest
             case e_STAT_NT_PKTS: return quint64(stats.ntpkts());
             case e_STAT_NT_BYTES: return quint64(stats.ntbytes());
-            case e_STAT_NT_BPS: return (double)stats.ntbps()/1000000.0;
+            case e_STAT_NT_BPS: return (double)stats.ntbps()/1000.0;
 
             case e_STAT_NT_AVG_DELAY: return quint32(stats.ntavgdelayus());
             case e_STAT_NT_MMO_DELAY: return quint32(stats.ntmmodelayus());
