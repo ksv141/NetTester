@@ -29,7 +29,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>&amp;File</string>
+     <string>&amp;Файл</string>
     </property>
     <addaction name="actionOpenSession"/>
     <addaction name="actionSaveSession"/>
@@ -39,7 +39,7 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>&amp;Help</string>
+     <string>&amp;Справка</string>
     </property>
     <addaction name="actionHelpOnline"/>
     <addaction name="separator"/>
@@ -48,7 +48,7 @@
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>&amp;View</string>
+     <string>&amp;Вид</string>
     </property>
     <addaction name="actionViewShowMyReservedPortsOnly"/>
     <addaction name="actionViewRestoreDefaults"/>
@@ -64,7 +64,7 @@
      <normaloff>:/icons/exit.png</normaloff>:/icons/exit.png</iconset>
    </property>
    <property name="text">
-    <string>E&amp;xit</string>
+    <string>&amp;Выход</string>
    </property>
   </action>
   <action name="actionHelpAbout">
@@ -73,7 +73,13 @@
      <normaloff>:/icons/about.png</normaloff>:/icons/about.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;About</string>
+    <string>&amp;О программе</string>
+   </property>
+   <property name="iconText">
+    <string>О программе</string>
+   </property>
+   <property name="toolTip">
+    <string>О программе</string>
    </property>
   </action>
   <action name="actionPreferences">
@@ -82,7 +88,7 @@
      <normaloff>:/icons/preferences.png</normaloff>:/icons/preferences.png</iconset>
    </property>
    <property name="text">
-    <string>Preferences</string>
+    <string>Настройки</string>
    </property>
   </action>
   <action name="actionAboutQt">
@@ -91,7 +97,13 @@
      <normaloff>:/icons/qt.png</normaloff>:/icons/qt.png</iconset>
    </property>
    <property name="text">
-    <string>About &amp;Qt</string>
+    <string>О &amp;Qt</string>
+   </property>
+   <property name="iconText">
+    <string>О Qt</string>
+   </property>
+   <property name="toolTip">
+    <string>О Qt</string>
    </property>
   </action>
   <action name="actionViewShowMyReservedPortsOnly">
@@ -99,22 +111,34 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show &amp;My Reserved Ports Only</string>
+    <string>Только &amp;зарезервированные порты</string>
+   </property>
+   <property name="iconText">
+    <string>Только зарезервированные порты</string>
+   </property>
+   <property name="toolTip">
+    <string>Только зарезервированные порты</string>
    </property>
   </action>
   <action name="actionViewRestoreDefaults">
    <property name="text">
-    <string>Restore &amp;Defaults</string>
+    <string>Восстановить вид по-&amp;умолчанию</string>
+   </property>
+   <property name="iconText">
+    <string>Восстановить вид по-умолчанию</string>
+   </property>
+   <property name="toolTip">
+    <string>Восстановить вид по-умолчанию</string>
    </property>
   </action>
   <action name="actionOpenSession">
    <property name="text">
-    <string>Open Session ...</string>
+    <string>Открыть сессию ...</string>
    </property>
   </action>
   <action name="actionSaveSession">
    <property name="text">
-    <string>Save Session ...</string>
+    <string>Сохранить сессию ...</string>
    </property>
   </action>
   <action name="actionHelpOnline">
@@ -124,6 +148,9 @@
    </property>
    <property name="text">
     <string>Help (Online)</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
  </widget>

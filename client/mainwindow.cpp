@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent)
     portsDock->setObjectName("portsDock");
     portsDock->setFeatures(
                 portsDock->features() & ~QDockWidget::DockWidgetClosable);
-    statsDock = new QDockWidget(tr("Statistics"), this);
+    statsDock = new QDockWidget(tr("Статистика"), this);
     statsDock->setObjectName("statsDock");
     statsDock->setFeatures(
                 statsDock->features() & ~QDockWidget::DockWidgetClosable);
@@ -117,9 +117,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(actionViewShowMyReservedPortsOnly, SIGNAL(toggled(bool)),
             statsWindow, SLOT(showMyReservedPortsOnly(bool)));
 
-    connect(updater, SIGNAL(newVersionAvailable(QString)), 
-            this, SLOT(onNewVersion(QString)));
-    updater->checkForNewVersion();
+//    connect(updater, SIGNAL(newVersionAvailable(QString)),
+//            this, SLOT(onNewVersion(QString)));
+//    updater->checkForNewVersion();
 
     if (appParams.argumentCount()) {
         QString fileName = appParams.argument(0);
@@ -127,7 +127,7 @@ MainWindow::MainWindow(QWidget *parent)
             on_actionOpenSession_triggered(fileName);
         else
             QMessageBox::information(NULL, qApp->applicationName(),
-                    QString("File not found: " + fileName));
+                    QString("Файл не найден: " + fileName));
     }
 
 #if 0
@@ -177,8 +177,8 @@ void MainWindow::on_actionOpenSession_triggered(QString fileName)
 
     if (portsWindow->portGroupCount()) {
         if (QMessageBox::question(this,
-                tr("Open Session"),
-                tr("Existing session will be lost. Proceed?"),
+                tr("Открыть сессию"),
+                tr("Существующая сессия будет удалена. Продолжить?"),
                 QMessageBox::Yes | QMessageBox::No,
                 QMessageBox::No) == QMessageBox::No)
             goto _exit;
@@ -187,7 +187,7 @@ void MainWindow::on_actionOpenSession_triggered(QString fileName)
     if (fileTypes.size())
         fileType = fileTypes.at(0);
 
-    fileName = QFileDialog::getOpenFileName(this, tr("Open Session"),
+    fileName = QFileDialog::getOpenFileName(this, tr("Открыть сессию"),
             dirName, fileTypes.join(";;"), &fileType);
     if (fileName.isEmpty())
         goto _exit;
@@ -228,8 +228,8 @@ void MainWindow::on_actionSaveSession_triggered()
         QString myself = appSettings->value(kUserKey, kUserDefaultValue)
                             .toString();
         if (QMessageBox::question(this,
-                tr("Save Session"),
-                QString("Some ports are reserved!\n\nOnly ports reserved by %1 will be saved. Proceed?").arg(myself),
+                tr("Сохранить сессию"),
+                QString("Некоторые порты зарезервированы!\n\nБудут сохранены только порты, зарезервированные %1. Продолжить?").arg(myself),
                 QMessageBox::Yes | QMessageBox::No,
                 QMessageBox::No) == QMessageBox::No)
             goto _exit;
@@ -246,7 +246,7 @@ void MainWindow::on_actionSaveSession_triggered()
         fileType = fileTypes.at(0);
 
 _retry:
-    fileName = QFileDialog::getSaveFileName(this, tr("Save Session"),
+    fileName = QFileDialog::getSaveFileName(this, tr("Сохранить сессию"),
             fileName, fileTypes.join(";;"), &fileType, options);
     if (fileName.isEmpty())
         goto _exit;
@@ -257,9 +257,9 @@ _retry:
                 qPrintable(fileExt), qPrintable(fileName));
         fileName.append(fileExt);
         if (QFileInfo(fileName).exists()) {
-            if (QMessageBox::warning(this, tr("Overwrite File?"), 
-                QString("The file \"%1\" already exists.\n\n"
-                    "Do you wish to overwrite it?")
+            if (QMessageBox::warning(this, tr("Переписать файл?"),
+                QString("Файл с именем \"%1\" уже существует.\n\n"
+                    "Переписать?")
                     .arg(QFileInfo(fileName).fileName()),
                 QMessageBox::Yes|QMessageBox::No,
                 QMessageBox::No) != QMessageBox::Yes)
@@ -309,7 +309,7 @@ void MainWindow::on_actionHelpAbout_triggered()
     Ui::About about;
     about.setupUi(aboutDialog);
     about.versionLabel->setText(
-            QString("Version: %1 Revision: %2").arg(version).arg(revision));
+            QString("Версия: %1").arg(version));
 
     aboutDialog->exec();
 

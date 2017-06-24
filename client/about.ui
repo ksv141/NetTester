@@ -1,66 +1,67 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>About</class>
- <widget class="QDialog" name="About" >
-  <property name="geometry" >
+ <widget class="QDialog" name="About">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>327</height>
+    <width>599</width>
+    <height>342</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="windowTitle" >
-   <string>About Ostinato</string>
+  <property name="windowTitle">
+   <string>О программе NetTest</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <widget class="QTabWidget" name="tabWidget" >
-     <property name="currentIndex" >
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab" >
-      <attribute name="title" >
-       <string>Ostinato</string>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>NetTester</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QVBoxLayout">
        <item>
-        <layout class="QHBoxLayout" >
+        <layout class="QHBoxLayout">
          <item>
-          <widget class="QLabel" name="label" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <widget class="QLabel" name="label">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="text" >
+           <property name="text">
             <string/>
            </property>
-           <property name="pixmap" >
-            <pixmap resource="ostinato.qrc" >:/icons/logo.png</pixmap>
+           <property name="pixmap">
+            <pixmap resource="ostinato.qrc">:/icons/logo.png</pixmap>
            </property>
-           <property name="scaledContents" >
+           <property name="scaledContents">
             <bool>false</bool>
            </property>
-           <property name="alignment" >
+           <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item>
-          <layout class="QVBoxLayout" >
+          <layout class="QVBoxLayout">
            <item>
             <spacer>
-             <property name="orientation" >
+             <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeHint" >
+             <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
                <height>21</height>
@@ -69,60 +70,46 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLabel" name="label_4" >
-             <property name="text" >
-              <string/>
+            <widget class="QLabel" name="label_4">
+             <property name="font">
+              <font>
+               <pointsize>24</pointsize>
+              </font>
              </property>
-             <property name="pixmap" >
-              <pixmap resource="ostinato.qrc" >:/icons/name.png</pixmap>
+             <property name="text">
+              <string>NetTester</string>
              </property>
-             <property name="alignment" >
+             <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="versionLabel" >
-             <property name="text" >
-              <string>Version/Revision Placeholder</string>
+            <widget class="QLabel" name="versionLabel">
+             <property name="text">
+              <string>Версия 1.0</string>
              </property>
-             <property name="alignment" >
+             <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="CopyrightLabel" >
-             <property name="text" >
-              <string>Copyright (c) 2007-2016 Srivats P.</string>
+            <widget class="QLabel" name="CopyrightLabel">
+             <property name="text">
+              <string>Сергей Козлов, 2017</string>
              </property>
-             <property name="alignment" >
+             <property name="alignment">
               <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="LinksLabel" >
-             <property name="text" >
-              <string>&lt;a href="http://ostinato.org">http://ostinato.org&lt;/a>&lt;br>&lt;a href="http://twitter.com/ostinato">@ostinato&lt;/a></string>
-             </property>
-             <property name="textFormat" >
-              <enum>Qt::RichText</enum>
-             </property>
-             <property name="alignment" >
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="openExternalLinks" >
-              <bool>true</bool>
              </property>
             </widget>
            </item>
            <item>
             <spacer>
-             <property name="orientation" >
+             <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeHint" >
+             <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
                <height>21</height>
@@ -134,39 +121,28 @@
          </item>
         </layout>
        </item>
-       <item>
-        <widget class="QLabel" name="label_5" >
-         <property name="text" >
-          <string>Logo (c): Dhiman Sengupta
-Icons (c): Mark James (http://www.famfamfam.com/lab/icons/silk/)</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2" >
-      <attribute name="title" >
-       <string>License</string>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Лицензия</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
-          <string>&lt;p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.&lt;/p>&lt;p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.&lt;/p>&lt;p>You should have received a copy of the GNU General Public License along with this program. If not, see &lt;a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/&lt;/a>&lt;/p></string>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GNU GPLv3&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
-         <property name="textFormat" >
+         <property name="textFormat">
           <enum>Qt::RichText</enum>
          </property>
-         <property name="alignment" >
+         <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
-         <property name="wordWrap" >
+         <property name="wordWrap">
           <bool>true</bool>
          </property>
-         <property name="openExternalLinks" >
+         <property name="openExternalLinks">
           <bool>true</bool>
          </property>
         </widget>
@@ -176,11 +152,11 @@ Icons (c): Mark James (http://www.famfamfam.com/lab/icons/silk/)</string>
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox" >
-     <property name="orientation" >
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="standardButtons" >
+     <property name="standardButtons">
       <set>QDialogButtonBox::Ok</set>
      </property>
     </widget>
@@ -188,7 +164,7 @@ Icons (c): Mark James (http://www.famfamfam.com/lab/icons/silk/)</string>
   </layout>
  </widget>
  <resources>
-  <include location="ostinato.qrc" />
+  <include location="ostinato.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -197,11 +173,11 @@ Icons (c): Mark James (http://www.famfamfam.com/lab/icons/silk/)</string>
    <receiver>About</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>353</x>
      <y>280</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>286</x>
      <y>262</y>
     </hint>
