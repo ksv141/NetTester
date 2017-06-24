@@ -96,7 +96,7 @@ void Preferences::on_wiresharkPathButton_clicked()
 {
     QString path;
 
-    path = QFileDialog::getOpenFileName(0, "Locate Wireshark",
+    path = QFileDialog::getOpenFileName(0, "Расположение Wireshark",
             wiresharkPathEdit->text()); 
 
     if (!path.isEmpty())
@@ -107,7 +107,7 @@ void Preferences::on_tsharkPathButton_clicked()
 {
     QString path;
 
-    path = QFileDialog::getOpenFileName(0, "Locate tshark",
+    path = QFileDialog::getOpenFileName(0, "Расположение tshark",
             tsharkPathEdit->text()); 
 
     if (!path.isEmpty())
@@ -118,7 +118,7 @@ void Preferences::on_gzipPathButton_clicked()
 {
     QString path;
 
-    path = QFileDialog::getOpenFileName(0, "Locate gzip",
+    path = QFileDialog::getOpenFileName(0, "Расположение gzip",
             gzipPathEdit->text()); 
 
     if (!path.isEmpty())
@@ -129,7 +129,7 @@ void Preferences::on_diffPathButton_clicked()
 {
     QString path;
 
-    path = QFileDialog::getOpenFileName(0, "Locate diff",
+    path = QFileDialog::getOpenFileName(0, "Расположение diff",
             diffPathEdit->text()); 
 
     if (!path.isEmpty())
@@ -140,7 +140,7 @@ void Preferences::on_awkPathButton_clicked()
 {
     QString path;
 
-    path = QFileDialog::getOpenFileName(0, "Locate awk",
+    path = QFileDialog::getOpenFileName(0, "Расположение awk",
             awkPathEdit->text()); 
 
     if (!path.isEmpty())

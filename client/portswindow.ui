@@ -160,7 +160,7 @@
         <item>
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>Select a port to configure streams</string>
+           <string>Выберите порт, чтобы настроить потоки</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -180,7 +180,10 @@
      <normaloff>:/icons/portgroup_add.png</normaloff>:/icons/portgroup_add.png</iconset>
    </property>
    <property name="text">
-    <string>New Port Group</string>
+    <string>Новая группа портов</string>
+   </property>
+   <property name="toolTip">
+    <string>Новая группа портов</string>
    </property>
   </action>
   <action name="actionDelete_Port_Group">
@@ -189,7 +192,10 @@
      <normaloff>:/icons/portgroup_delete.png</normaloff>:/icons/portgroup_delete.png</iconset>
    </property>
    <property name="text">
-    <string>Delete Port Group</string>
+    <string>Удалить группу портов</string>
+   </property>
+   <property name="toolTip">
+    <string>Удалить группу портов</string>
    </property>
   </action>
   <action name="actionConnect_Port_Group">
@@ -198,7 +204,10 @@
      <normaloff>:/icons/portgroup_connect.png</normaloff>:/icons/portgroup_connect.png</iconset>
    </property>
    <property name="text">
-    <string>Connect Port Group</string>
+    <string>Подключиться к группе портов</string>
+   </property>
+   <property name="toolTip">
+    <string>Удалить группу портов</string>
    </property>
   </action>
   <action name="actionDisconnect_Port_Group">
@@ -207,7 +216,10 @@
      <normaloff>:/icons/portgroup_disconnect.png</normaloff>:/icons/portgroup_disconnect.png</iconset>
    </property>
    <property name="text">
-    <string>Disconnect Port Group</string>
+    <string>Отключиться от группы портов</string>
+   </property>
+   <property name="toolTip">
+    <string>Отключиться от группы портов</string>
    </property>
   </action>
   <action name="actionNew_Stream">
@@ -216,7 +228,10 @@
      <normaloff>:/icons/stream_add.png</normaloff>:/icons/stream_add.png</iconset>
    </property>
    <property name="text">
-    <string>New Stream</string>
+    <string>Новый поток</string>
+   </property>
+   <property name="toolTip">
+    <string>Новый поток</string>
    </property>
   </action>
   <action name="actionDelete_Stream">
@@ -225,7 +240,10 @@
      <normaloff>:/icons/stream_delete.png</normaloff>:/icons/stream_delete.png</iconset>
    </property>
    <property name="text">
-    <string>Delete Stream</string>
+    <string>Удалить поток</string>
+   </property>
+   <property name="toolTip">
+    <string>Удалить поток</string>
    </property>
   </action>
   <action name="actionEdit_Stream">
@@ -234,7 +252,10 @@
      <normaloff>:/icons/stream_edit.png</normaloff>:/icons/stream_edit.png</iconset>
    </property>
    <property name="text">
-    <string>Edit Stream</string>
+    <string>Редактировать поток</string>
+   </property>
+   <property name="toolTip">
+    <string>Редактировать поток</string>
    </property>
   </action>
   <action name="actionExclusive_Control">
@@ -242,22 +263,34 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Exclusive Port Control (EXPERIMENTAL)</string>
+    <string>Монопольный доступ к порту</string>
+   </property>
+   <property name="toolTip">
+    <string>Монопольный доступ к порту</string>
    </property>
   </action>
   <action name="actionOpen_Streams">
    <property name="text">
-    <string>Open Streams ...</string>
+    <string>Открыть потоки ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Открыть потоки</string>
    </property>
   </action>
   <action name="actionSave_Streams">
    <property name="text">
-    <string>Save Streams ...</string>
+    <string>Сохранить потоки ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Сохранить потоки</string>
    </property>
   </action>
   <action name="actionPort_Configuration">
    <property name="text">
-    <string>Port Configuration ...</string>
+    <string>Конфигурация порта ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Конфигурация порта</string>
    </property>
   </action>
   <action name="actionDuplicate_Stream">
@@ -266,7 +299,10 @@
      <normaloff>:/icons/stream_duplicate.png</normaloff>:/icons/stream_duplicate.png</iconset>
    </property>
    <property name="text">
-    <string>Duplicate Stream</string>
+    <string>Дублировать поток</string>
+   </property>
+   <property name="toolTip">
+    <string>Дублировать поток</string>
    </property>
   </action>
  </widget>

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>749</width>
-    <height>507</height>
+    <width>841</width>
+    <height>525</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,7 +44,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
       <string/>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="packetConfigTab">
       <attribute name="title">
@@ -67,29 +67,29 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
        <item row="0" column="1">
         <widget class="QGroupBox" name="gbFrameLength">
          <property name="title">
-          <string>Frame Length (including FCS)</string>
+          <string>Размер кадра (включая FCS)</string>
          </property>
          <layout class="QGridLayout">
           <item row="0" column="0">
            <widget class="QComboBox" name="cmbPktLenMode">
             <item>
              <property name="text">
-              <string>Fixed</string>
+              <string>Фиксированный</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Increment</string>
+              <string>Инкрементный</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Decrement</string>
+              <string>Декрементный</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Random</string>
+              <string>Случайный</string>
              </property>
             </item>
            </widget>
@@ -97,7 +97,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
           <item row="0" column="1">
            <widget class="QLabel" name="label_18">
             <property name="text">
-             <string>Min</string>
+             <string>Мин</string>
             </property>
            </widget>
           </item>
@@ -121,7 +121,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
           <item row="1" column="1">
            <widget class="QLabel" name="label_19">
             <property name="text">
-             <string>Max</string>
+             <string>Макс</string>
             </property>
            </widget>
           </item>
@@ -148,12 +148,12 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>695</width>
-            <height>276</height>
+            <width>801</width>
+            <height>278</height>
            </rect>
           </property>
           <attribute name="label">
-           <string>Simple</string>
+           <string>Простой вид</string>
           </attribute>
           <layout class="QGridLayout">
            <item row="0" column="0">
@@ -165,7 +165,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
               <item>
                <widget class="QRadioButton" name="rbL1None">
                 <property name="text">
-                 <string>None</string>
+                 <string>Нет</string>
                 </property>
                 <property name="checked">
                  <bool>true</bool>
@@ -188,7 +188,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>Other</string>
+                 <string>Другой</string>
                 </property>
                </widget>
               </item>
@@ -207,7 +207,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
               <item>
                <widget class="QRadioButton" name="rbFtNone">
                 <property name="text">
-                 <string>None</string>
+                 <string>Нет</string>
                 </property>
                 <property name="checked">
                  <bool>true</bool>
@@ -254,7 +254,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>Other</string>
+                 <string>Другой</string>
                 </property>
                </widget>
               </item>
@@ -273,7 +273,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
               <item row="0" column="0">
                <widget class="QRadioButton" name="rbL3None">
                 <property name="text">
-                 <string>None</string>
+                 <string>Нет</string>
                 </property>
                 <property name="checked">
                  <bool>true</bool>
@@ -319,7 +319,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>IP 6over4</string>
+                 <string>IP 6 поверх 4</string>
                 </property>
                 <property name="checked">
                  <bool>false</bool>
@@ -332,7 +332,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>IP 4over6</string>
+                 <string>IP 4 поверх 6</string>
                 </property>
                 <property name="checked">
                  <bool>false</bool>
@@ -345,7 +345,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>IP 4over4</string>
+                 <string>IP 4 поверх 4</string>
                 </property>
                 <property name="checked">
                  <bool>false</bool>
@@ -358,7 +358,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>IP 6over6</string>
+                 <string>IP 6 поверх 6</string>
                 </property>
                 <property name="checked">
                  <bool>false</bool>
@@ -371,7 +371,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>Other</string>
+                 <string>Другой</string>
                 </property>
                </widget>
               </item>
@@ -474,7 +474,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
               <item row="0" column="0">
                <widget class="QRadioButton" name="rbL4None">
                 <property name="text">
-                 <string>None</string>
+                 <string>Нет</string>
                 </property>
                 <property name="checked">
                  <bool>true</bool>
@@ -527,7 +527,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>Other</string>
+                 <string>Другой</string>
                 </property>
                </widget>
               </item>
@@ -550,13 +550,13 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
               <bool>true</bool>
              </property>
              <property name="title">
-              <string>Payload</string>
+              <string>Данные</string>
              </property>
              <layout class="QVBoxLayout">
               <item>
                <widget class="QRadioButton" name="rbPayloadNone">
                 <property name="text">
-                 <string>None</string>
+                 <string>Нет</string>
                 </property>
                 <property name="checked">
                  <bool>true</bool>
@@ -566,7 +566,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
               <item>
                <widget class="QRadioButton" name="rbPayloadPattern">
                 <property name="text">
-                 <string>Pattern</string>
+                 <string>Шаблон</string>
                 </property>
                 <property name="checked">
                  <bool>false</bool>
@@ -576,7 +576,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
               <item>
                <widget class="QRadioButton" name="rbPayloadHexDump">
                 <property name="text">
-                 <string>Hex Dump</string>
+                 <string>Дамп</string>
                 </property>
                </widget>
               </item>
@@ -586,7 +586,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>Other</string>
+                 <string>Другое</string>
                 </property>
                </widget>
               </item>
@@ -600,12 +600,12 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>594</width>
-            <height>260</height>
+            <width>801</width>
+            <height>278</height>
            </rect>
           </property>
           <attribute name="label">
-           <string>Advanced</string>
+           <string>Расширенный вид</string>
           </attribute>
           <layout class="QHBoxLayout">
            <item>
@@ -613,7 +613,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
              <item>
               <widget class="QLabel" name="label">
                <property name="text">
-                <string>Available Protocols</string>
+                <string>Доступные протоколы</string>
                </property>
               </widget>
              </item>
@@ -681,7 +681,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
              <item>
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>Selected Protocols</string>
+                <string>Выбранные протоколы</string>
                </property>
               </widget>
              </item>
@@ -791,13 +791,13 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_3">
          <property name="title">
-          <string>Send</string>
+          <string>Передача</string>
          </property>
          <layout class="QVBoxLayout">
           <item>
            <widget class="QRadioButton" name="rbSendPackets">
             <property name="text">
-             <string>Packets</string>
+             <string>Пакеты</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -807,7 +807,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
           <item>
            <widget class="QRadioButton" name="rbSendBursts">
             <property name="text">
-             <string>Bursts</string>
+             <string>Пачки</string>
             </property>
            </widget>
           </item>
@@ -817,13 +817,13 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
        <item row="0" column="1" rowspan="2">
         <widget class="QGroupBox" name="groupBox_13">
          <property name="title">
-          <string>Numbers</string>
+          <string>Количество</string>
          </property>
          <layout class="QVBoxLayout">
           <item>
            <widget class="QLabel" name="label_7">
             <property name="text">
-             <string>Number of Packets</string>
+             <string>Пакетов</string>
             </property>
             <property name="buddy">
              <cstring>leNumPackets</cstring>
@@ -846,7 +846,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
           <item>
            <widget class="QLabel" name="label_13">
             <property name="text">
-             <string>Number of Bursts</string>
+             <string>Пачек</string>
             </property>
             <property name="buddy">
              <cstring>leNumBursts</cstring>
@@ -866,7 +866,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
           <item>
            <widget class="QLabel" name="label_12">
             <property name="text">
-             <string>Packets per Burst</string>
+             <string>Пакетов на пачку</string>
             </property>
             <property name="buddy">
              <cstring>lePacketsPerBurst</cstring>
@@ -889,7 +889,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
        <item row="0" column="2" rowspan="2">
         <widget class="QGroupBox" name="groupBox_14">
          <property name="title">
-          <string>Rate</string>
+          <string>Скорость</string>
          </property>
          <property name="checkable">
           <bool>false</bool>
@@ -901,7 +901,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
           <item>
            <widget class="QRadioButton" name="rbPacketsPerSec">
             <property name="text">
-             <string>Packets/Sec</string>
+             <string>Пакетов/сек</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -921,7 +921,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Bursts/Sec</string>
+             <string>Пачек/сек</string>
             </property>
            </widget>
           </item>
@@ -938,7 +938,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
           <item>
            <widget class="QRadioButton" name="rbBitsPerSec">
             <property name="text">
-             <string>Bits/Sec</string>
+             <string>Бит/сек</string>
             </property>
            </widget>
           </item>
@@ -958,20 +958,20 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
        <item row="0" column="3" rowspan="2">
         <widget class="QGroupBox" name="nextWhat">
          <property name="title">
-          <string>After this stream</string>
+          <string>После передачи потока</string>
          </property>
          <layout class="QVBoxLayout">
           <item>
            <widget class="QRadioButton" name="rbActionStop">
             <property name="text">
-             <string>Stop</string>
+             <string>Стоп</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="rbActionGotoNext">
             <property name="text">
-             <string>Goto Next Stream</string>
+             <string>К следующему потоку</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -981,7 +981,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
           <item>
            <widget class="QRadioButton" name="rbActionGotoStream">
             <property name="text">
-             <string>Goto First</string>
+             <string>К первому потоку</string>
             </property>
            </widget>
           </item>
@@ -1014,13 +1014,13 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
        <item row="1" column="0">
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
-          <string>Mode</string>
+          <string>Режим</string>
          </property>
          <layout class="QVBoxLayout">
           <item>
            <widget class="QRadioButton" name="rbModeFixed">
             <property name="text">
-             <string>Fixed</string>
+             <string>Фиксированный</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -1030,7 +1030,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
           <item>
            <widget class="QRadioButton" name="rbModeContinuous">
             <property name="text">
-             <string>Continuous</string>
+             <string>Непрерывный</string>
             </property>
            </widget>
           </item>
@@ -1043,7 +1043,7 @@ QLineEdit:enabled[inputMask = &quot;HH HH HH HH HH HH; &quot;] { background-colo
           <bool>true</bool>
          </property>
          <property name="title">
-          <string>Gaps (in seconds)</string>
+          <string>Интервалы (в сек.)</string>
          </property>
          <property name="checkable">
           <bool>false</bool>

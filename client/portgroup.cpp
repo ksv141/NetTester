@@ -302,23 +302,31 @@ void PortGroup::on_rpcChannel_notification(int notifType,
 
 void PortGroup::when_portListChanged(quint32 /*portGroupId*/)
 {
-    QString faq("http://ostinato.org/docs/faq#q-port-group-has-no-interfaces");
+//    QString faq("http://ostinato.org/docs/faq#q-port-group-has-no-interfaces");
     if (state() == QAbstractSocket::ConnectedState && numPorts() <= 0)
     {
-        if (QMessageBox::warning(NULL, tr("No ports in portgroup"),
-            QString("The portgroup %1:%2 does not contain any ports!\n\n"
-               "Packet Transmit/Capture requires elevated privileges. "
-               "Please ensure that you are running 'drone' - the server "
-               "component of Ostinato with admin/root OR setuid privilege.\n\n"
-               "For help see the Ostinato FAQ (%3)")
+        QMessageBox::warning(NULL, tr("В группе портов нет портов"),
+            QString("Группа портов %1:%2 не содержит портов!\n\n"
+               "Передача/захват пакетов требует повышенных привилегий. "
+               "Убедитесь, что запущен сервер 'drone' "
+               "с правами admin/root.\n\n")
                 .arg(serverName())
-                .arg(int(serverPort()))
-                .arg(faq.remove(QRegExp("#.*$"))),
-            QMessageBox::Ok | QMessageBox::Help,
-            QMessageBox::Ok) == QMessageBox::Help)
-        {
-            QDesktopServices::openUrl(QUrl(faq));
-        }
+                .arg(int(serverPort())),
+            QMessageBox::Ok,
+            QMessageBox::Ok);
+
+//        if (QMessageBox::warning(NULL, tr("В группе портов нет портов"),
+//            QString("Группа портов %1:%2 не содержит портов!\n\n"
+//               "Передача/захват пакетов требует повышенных привилегий. "
+//               "Убедитесь, что запущен сервер 'drone' "
+//               "с правами admin/root.\n\n")
+//                .arg(serverName())
+//                .arg(int(serverPort())),
+//            QMessageBox::Ok | QMessageBox::Help,
+//            QMessageBox::Ok) == QMessageBox::Help)
+//        {
+//            QDesktopServices::openUrl(QUrl(faq));
+//        }
     }
 }
 
@@ -439,13 +447,13 @@ void PortGroup::processPortConfigList(PbRpcController *controller)
                             && port->userName() != myself) // by someone else?
                     {
                         QString warning =
-                                QString("%1 - %2: %3 is reserved by %4.\n\n"
-                                        "Port will not be reconfigured.")
+                                QString("%1 - %2: %3 зарезервированы %4.\n\n"
+                                        "Порт не будет сконфигурирован.")
                                     .arg(serverFullName())
                                     .arg(j)
                                     .arg(port->userAlias())
                                     .arg(port->userName());
-                        QMessageBox::warning(NULL, tr("Open Session"), warning);
+                        QMessageBox::warning(NULL, tr("Открыть сессию"), warning);
                         qWarning("%s", qPrintable(warning));
                         continue;
                     }
@@ -1421,9 +1429,9 @@ void PortGroup::processViewCaptureAck(PbRpcController *controller)
 
     if (!QFile::exists(viewer))
     {
-        QMessageBox::warning(NULL, "Can't find Wireshark", 
-                viewer + QString(" does not exist!\n\nPlease correct the path"
-                " to Wireshark in the Preferences."));
+        QMessageBox::warning(NULL, "Не найден Wireshark",
+                viewer + QString(" не существует!\n\nУкажите правильный путь"
+                " к Wireshark в Настройках."));
         goto _exit;
     }
 

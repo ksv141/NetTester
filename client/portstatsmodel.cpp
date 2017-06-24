@@ -248,7 +248,7 @@ QVariant PortStatsModel::headerData(int section, Qt::Orientation orientation, in
         if (numPorts.isEmpty() || section >= numPorts.last())
             return QVariant();
         getDomainIndexes(index(0, section), portGroupIdx, portIdx);    
-        portName = QString("Port %1-%2")
+        portName = QString("Порт %1-%2")
             .arg(pgl->mPortGroups.at(portGroupIdx)->id())
             .arg(pgl->mPortGroups.at(portGroupIdx)->mPorts.at(portIdx)->id());
         if (portGroupIdx < (uint) pgl->mPortGroups.size() 

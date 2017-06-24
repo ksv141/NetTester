@@ -591,12 +591,12 @@ bool Port::openStreams(QString fileName, bool append, QString &error)
 {
     bool ret = false; 
     QDialog *optDialog;
-    QProgressDialog progress("Opening Streams", "Cancel", 0, 0, mainWindow);
+    QProgressDialog progress("Открытие потоков", "Отмена", 0, 0, mainWindow);
     OstProto::StreamConfigList streams;
     StreamFileFormat *fmt = StreamFileFormat::fileFormatFromFile(fileName);
 
     if (fmt == NULL) {
-        error = tr("Unknown streams file format");
+        error = tr("Неизвестный формат файла потоков");
         goto _fail;
     }
 
@@ -641,7 +641,7 @@ bool Port::openStreams(QString fileName, bool append, QString &error)
     {
         int n = numStreams();
 
-        progress.setLabelText("Deleting existing streams...");
+        progress.setLabelText("Удаление существующих потоков...");
         progress.setRange(0, n);
         for (int i = 0; i < n; i++)
         {
@@ -654,7 +654,7 @@ bool Port::openStreams(QString fileName, bool append, QString &error)
         }
     }
 
-    progress.setLabelText("Constructing new streams...");
+    progress.setLabelText("Создание новых потоков...");
     progress.setRange(0, streams.stream_size());
     for (int i = 0; i < streams.stream_size(); i++)
     {
@@ -681,7 +681,7 @@ _fail:
 bool Port::saveStreams(QString fileName, QString fileType, QString &error)
 {
     bool ret = false;
-    QProgressDialog progress("Saving Streams", "Cancel", 0, 0, mainWindow);
+    QProgressDialog progress("Сохранение потоков", "Отмена", 0, 0, mainWindow);
     StreamFileFormat *fmt = StreamFileFormat::fileFormatFromType(fileType);
     OstProto::StreamConfigList streams;
 
@@ -701,7 +701,7 @@ bool Port::saveStreams(QString fileName, QString fileType, QString &error)
     connect(fmt, SIGNAL(progress(int)), &progress, SLOT(setValue(int)));
     connect(&progress, SIGNAL(canceled()), fmt, SLOT(cancel()));
 
-    progress.setLabelText("Preparing Streams...");
+    progress.setLabelText("Подготовка потоков...");
     progress.setRange(0, mStreams.size());
     streams.mutable_port_id()->set_id(0);
     for (int i = 0; i < mStreams.size(); i++)
@@ -730,7 +730,7 @@ _user_cancel:
    goto _exit; 
 
 _fail:
-    error = QString("Unsupported File Type - %1").arg(fileType);
+    error = QString("Неподдерживаемый тип файла - %1").arg(fileType);
     goto _exit;
 
 _exit:

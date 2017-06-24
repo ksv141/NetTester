@@ -31,11 +31,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 enum { kVlanId, kVlanCount, kVlanStep, kVlanCfi, kVlanPrio, kVlanTpid,
     kVlanColumns };
 static QStringList vlanTableColumnHeaders = QStringList()
-    << "Vlan Id" << "Count" << "Step" << "CFI/DE" << "Prio" << "TPID";
+    << "Vlan Id" << "Кол-во" << "Шаг" << "CFI/DE" << "Приоритет" << "TPID";
 
 enum { kIpNone, kIp4, kIp6, kIpDual };
 static QStringList ipStackItems = QStringList()
-    << "None" << "IPv4" << "IPv6" << "Dual";
+    << "Нет" << "IPv4" << "IPv6" << "Двойной";
 
 inline UInt128 UINT128(OstEmul::Ip6Address x)
 {

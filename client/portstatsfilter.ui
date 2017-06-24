@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>PortStatsFilterDialog</class>
- <widget class="QDialog" name="PortStatsFilterDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="PortStatsFilterDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,42 +10,43 @@
     <height>193</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Select Ports</string>
+  <property name="windowTitle">
+   <string>Выберите порты</string>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="ostinato.qrc" >:/icons/portstats_filter.png</iconset>
+  <property name="windowIcon">
+   <iconset resource="ostinato.qrc">
+    <normaloff>:/icons/portstats_filter.png</normaloff>:/icons/portstats_filter.png</iconset>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QListView" name="lvUnselected" >
-       <property name="acceptDrops" >
+      <widget class="QListView" name="lvUnselected">
+       <property name="acceptDrops">
         <bool>false</bool>
        </property>
-       <property name="dragEnabled" >
+       <property name="dragEnabled">
         <bool>false</bool>
        </property>
-       <property name="dragDropMode" >
+       <property name="dragDropMode">
         <enum>QAbstractItemView::NoDragDrop</enum>
        </property>
-       <property name="selectionMode" >
+       <property name="selectionMode">
         <enum>QAbstractItemView::ExtendedSelection</enum>
        </property>
-       <property name="movement" >
+       <property name="movement">
         <enum>QListView::Static</enum>
        </property>
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
+      <layout class="QVBoxLayout">
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>40</height>
@@ -53,31 +55,33 @@
         </spacer>
        </item>
        <item>
-        <widget class="QToolButton" name="tbSelectIn" >
-         <property name="text" >
-          <string>></string>
+        <widget class="QToolButton" name="tbSelectIn">
+         <property name="text">
+          <string>&gt;</string>
          </property>
-         <property name="icon" >
-          <iconset resource="ostinato.qrc" >:/icons/arrow_right.png</iconset>
+         <property name="icon">
+          <iconset resource="ostinato.qrc">
+           <normaloff>:/icons/arrow_right.png</normaloff>:/icons/arrow_right.png</iconset>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="tbSelectOut" >
-         <property name="text" >
+        <widget class="QToolButton" name="tbSelectOut">
+         <property name="text">
           <string>&lt;</string>
          </property>
-         <property name="icon" >
-          <iconset resource="ostinato.qrc" >:/icons/arrow_left.png</iconset>
+         <property name="icon">
+          <iconset resource="ostinato.qrc">
+           <normaloff>:/icons/arrow_left.png</normaloff>:/icons/arrow_left.png</iconset>
          </property>
         </widget>
        </item>
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>40</height>
@@ -88,23 +92,23 @@
       </layout>
      </item>
      <item>
-      <widget class="QListView" name="lvSelected" >
-       <property name="acceptDrops" >
+      <widget class="QListView" name="lvSelected">
+       <property name="acceptDrops">
         <bool>true</bool>
        </property>
-       <property name="dragEnabled" >
+       <property name="dragEnabled">
         <bool>true</bool>
        </property>
-       <property name="dragDropOverwriteMode" >
+       <property name="dragDropOverwriteMode">
         <bool>false</bool>
        </property>
-       <property name="dragDropMode" >
+       <property name="dragDropMode">
         <enum>QAbstractItemView::InternalMove</enum>
        </property>
-       <property name="selectionMode" >
+       <property name="selectionMode">
         <enum>QAbstractItemView::ExtendedSelection</enum>
        </property>
-       <property name="movement" >
+       <property name="movement">
         <enum>QListView::Free</enum>
        </property>
       </widget>
@@ -112,12 +116,12 @@
     </layout>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox" >
-     <property name="orientation" >
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -131,7 +135,7 @@
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
-  <include location="ostinato.qrc" />
+  <include location="ostinato.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -140,11 +144,11 @@
    <receiver>PortStatsFilterDialog</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>248</x>
      <y>254</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>157</x>
      <y>274</y>
     </hint>
@@ -156,11 +160,11 @@
    <receiver>PortStatsFilterDialog</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>316</x>
      <y>260</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
     </hint>

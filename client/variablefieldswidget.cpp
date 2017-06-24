@@ -359,7 +359,7 @@ void VariableFieldsWidget::loadProtocolFields(
 
     field->clear();
 
-    field->addItem("Custom");
+    field->addItem("Настраиваемый");
     for (int i = 0; i < protocol->fieldCount(); i++) {
         if (!protocol->fieldFlags(i).testFlag(AbstractProtocol::FrameField))
             continue;
@@ -446,14 +446,14 @@ void VariableFieldsWidget::setVariableFieldItem(
         to = (vf.value() + (vf.count()-1)*vf.step()) & vf.mask();
 
     item->setData(Qt::UserRole, QVariant::fromValue(vf));
-    itemText = QString("%1 %2 %3 from %4 to %5")
+    itemText = QString("%1 %2 %3 от %4 до %5")
             .arg(protocol->shortName())
             .arg(fieldName)
             .arg(modeNames.at(vf.mode()))
             .arg(from)
             .arg(to);
     if (vf.step() != 1)
-        itemText.append(QString(" step %1").arg(vf.step()));
+        itemText.append(QString(" шаг %1").arg(vf.step()));
     item->setText(itemText);
 }
 

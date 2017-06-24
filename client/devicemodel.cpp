@@ -46,10 +46,10 @@ enum {
 static QStringList columns_ = QStringList()
     << "Mac"
     << "Vlans"
-    << "IPv4 Address"
-    << "IPv4 Gateway"
-    << "IPv6 Address"
-    << "IPv6 Gateway"
+    << "IPv4 адрес"
+    << "IPv4 шлюз"
+    << "IPv6 адрес"
+    << "IPv6 шлюз"
     << "ARP"
     << "NDP";
 
@@ -130,7 +130,7 @@ QVariant DeviceModel::data(const QModelIndex &index, int role) const
             switch (role) {
                 case Qt::DisplayRole:
                     if (!dev->vlan_size())
-                        return QString("None");
+                        return QString("Нет");
                     for (int i = 0; i < dev->vlan_size(); i++)
                         str.append(i == 0 ? "" : ", ")
                            .append(QString::number(dev->vlan(i) & 0xfff));
@@ -277,7 +277,7 @@ QVariant DeviceModel::drillableStyle(int role) const
     QFont f;
     switch (role) {
         case Qt::ToolTipRole:
-            return QString("Click for details ...");
+            return QString("Нажмите для детализации ...");
         case Qt::ForegroundRole:
             return QBrush(QColor(Qt::blue));
         case Qt::FontRole:

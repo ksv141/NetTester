@@ -202,13 +202,13 @@ QVariant StreamModel::headerData(int section, Qt::Orientation orientation, int r
             return QString("");
             break;
         case StreamName:
-            return QString("Name");
+            return QString("Имя");
             break;
         case StreamStatus:
             return QString("");
             break;
         case StreamNextWhat:
-            return QString("Goto");
+            return QString("Перейти");
             break;
         default:
             qDebug("-------------UNHANDLED STREAM FIELD----------------");

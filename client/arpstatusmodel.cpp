@@ -33,9 +33,9 @@ enum {
 };
 
 static QStringList columns_ = QStringList()
-    << "IPv4 Address"
-    << "Mac Address"
-    << "Status";
+    << "IPv4 адрес"
+    << "Mac адрес"
+    << "Статус";
 
 ArpStatusModel::ArpStatusModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -121,7 +121,7 @@ QVariant ArpStatusModel::data(const QModelIndex &index, int role) const
             switch (role) {
                 case Qt::DisplayRole:
                     return arp.mac() ?
-                        QString("Resolved") : QString("Failed");
+                        QString("Разрешен") : QString("Не разрешен");
                 default:
                     break;
             }

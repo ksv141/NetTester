@@ -37,12 +37,12 @@ enum {
 };
 
 static QStringList columns_ = QStringList()
-    << "Name"
+    << "Имя"
     << "Vlans"
-    << "Devices"
-    << "IP Stack"
-    << "IPv4 Address"
-    << "IPv6 Address";
+    << "Устройства"
+    << "IP стек"
+    << "IPv4 адрес"
+    << "IPv6 адрес";
 
 DeviceGroupModel::DeviceGroupModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -116,7 +116,7 @@ QVariant DeviceGroupModel::data(const QModelIndex &index, int role) const
                 case Qt::DisplayRole:
                     if (int v = vlanCount(devGrp))
                         return v;
-                    return QString("None");
+                    return QString("Нет");
                 case Qt::TextAlignmentRole:
                     return Qt::AlignRight;
                 default:
@@ -140,13 +140,13 @@ QVariant DeviceGroupModel::data(const QModelIndex &index, int role) const
                 case Qt::DisplayRole:
                     if (devGrp->HasExtension(OstEmul::ip4))
                         if (devGrp->HasExtension(OstEmul::ip6))
-                            return QString("Dual Stack");
+                            return QString("Двойной стек");
                         else
                             return QString("IPv4");
                     else if (devGrp->HasExtension(OstEmul::ip6))
                         return QString("IPv6");
                     else
-                        return QString("None");
+                        return QString("Нет");
                 default:
                     break;
             }

@@ -327,12 +327,12 @@ bool MainWindow::openSession(QString fileName, QString &error)
 {
     bool ret = false;
     QDialog *optDialog;
-    QProgressDialog progress("Opening Session", "Cancel", 0, 0, this);
+    QProgressDialog progress("Открытие сессии", "Отмена", 0, 0, this);
     OstProto::SessionContent session;
     SessionFileFormat *fmt = SessionFileFormat::fileFormatFromFile(fileName);
 
     if (fmt == NULL) {
-        error = tr("Unknown session file format");
+        error = tr("Неизвестный формат файл сессии");
         goto _fail;
     }
 
@@ -390,7 +390,7 @@ _fail:
 bool MainWindow::saveSession(QString fileName, QString fileType, QString &error)
 {
     bool ret = false;
-    QProgressDialog progress("Saving Session", "Cancel", 0, 0, this);
+    QProgressDialog progress("Сохранение сессии", "Отмена", 0, 0, this);
     SessionFileFormat *fmt = SessionFileFormat::fileFormatFromType(fileType);
     OstProto::SessionContent session;
 
@@ -429,7 +429,7 @@ _user_cancel:
    goto _exit;
 
 _fail:
-    error = QString("Unsupported File Type - %1").arg(fileType);
+    error = QString("Неподдерживаемый тип файла - %1").arg(fileType);
     goto _exit;
 
 _exit:

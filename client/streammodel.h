@@ -66,7 +66,7 @@ class StreamModel : public QAbstractTableModel
     };
 
     static QStringList    nextWhatOptionList()
-        { return QStringList() << "Stop" << "Next" << "Goto first"; }
+        { return QStringList() << "Стоп" << "Следующий" << "К первому"; }
 
     public slots:
         void setCurrentPortIndex(const QModelIndex &current);

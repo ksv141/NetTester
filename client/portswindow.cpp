@@ -194,7 +194,7 @@ bool PortsWindow::openSession(
         const OstProto::SessionContent *session,
         QString & /*error*/)
 {
-    QProgressDialog progress("Opening Session", NULL,
+    QProgressDialog progress("Открытие сессии", NULL,
                              0, session->port_groups_size(), mainWindow);
     progress.show();
     progress.setEnabled(true); // since parent (mainWindow) is disabled
@@ -230,7 +230,7 @@ bool PortsWindow::saveSession(
     QString myself;
 
     if (progress) {
-        progress->setLabelText("Preparing Ports and PortGroups ...");
+        progress->setLabelText("Подготовка портов и групп портов ...");
         progress->setRange(0, n);
     }
 
@@ -289,7 +289,7 @@ void PortsWindow::showMyReservedPortsOnly(bool enabled)
         return;
 
     if (enabled) {
-        QString rx = "Port Group|\\["
+        QString rx = "Группа портов|\\["
                     + QRegExp::escape(appSettings->value(kUserKey, 
                                             kUserDefaultValue).toString())
                     + "\\]";
@@ -591,8 +591,8 @@ void PortsWindow::on_pbApply_clicked()
 
     if (plm->port(curPort).getStats().state().is_transmit_on())
     {
-        QMessageBox::information(0, "Configuration Change",
-                "Please stop transmit on the port before applying any changes");
+        QMessageBox::information(0, "Конфигурация изменена",
+                "Остановить передачу через порт перед применением изменений");
         goto _exit;
     }
 
@@ -631,7 +631,7 @@ void PortsWindow::on_actionNew_Port_Group_triggered()
 {
     bool ok;
     QString text = QInputDialog::getText(this, 
-        "Add Port Group", "Port Group Address (HostName[:Port])",
+        "Добавить группу портов", "Адрес группы портов (Хост[:Порт])",
         QLineEdit::Normal, lastNewPortGroup, &ok);
     
     if (ok)
@@ -785,8 +785,8 @@ void PortsWindow::on_actionDuplicate_Stream_triggered()
     if (model->hasSelection())
     {
         bool isOk;
-        int count = QInputDialog::getInteger(this, "Duplicate Streams",
-                "Count", 1, 1, 9999, 1, &isOk);
+        int count = QInputDialog::getInteger(this, "Копирование потоков",
+                "Количество", 1, 1, 9999, 1, &isOk);
 
         if (!isOk)
             return;
@@ -842,7 +842,7 @@ void PortsWindow::on_actionOpen_Streams_triggered()
     if (fileTypes.size())
         fileType = fileTypes.at(0);
 
-    fileName = QFileDialog::getOpenFileName(this, tr("Open Streams"),
+    fileName = QFileDialog::getOpenFileName(this, tr("Открыть потоки"),
             dirName, fileTypes.join(";;"), &fileType);
     if (fileName.isEmpty())
         goto _exit;
@@ -850,11 +850,11 @@ void PortsWindow::on_actionOpen_Streams_triggered()
     if (tvStreamList->model()->rowCount())
     {
         QMessageBox msgBox(QMessageBox::Question, qApp->applicationName(),
-                tr("Append to existing streams? Or overwrite?"),
+                tr("Добавить к существующим потокам или переписать?"),
                 QMessageBox::NoButton, this);
-        QPushButton *appendBtn = msgBox.addButton(tr("Append"), 
+        QPushButton *appendBtn = msgBox.addButton(tr("Добавить"),
                 QMessageBox::ActionRole);
-        QPushButton *overwriteBtn = msgBox.addButton(tr("Overwrite"), 
+        QPushButton *overwriteBtn = msgBox.addButton(tr("Переписать"),
                 QMessageBox::ActionRole);
         QPushButton *cancelBtn = msgBox.addButton(QMessageBox::Cancel);
 
@@ -918,7 +918,7 @@ void PortsWindow::on_actionSave_Streams_triggered()
     Q_ASSERT(plm->isPort(current));
 
 _retry:
-    fileName = QFileDialog::getSaveFileName(this, tr("Save Streams"),
+    fileName = QFileDialog::getSaveFileName(this, tr("Сохранить потоки"),
             fileName, fileTypes.join(";;"), &fileType, options);
     if (fileName.isEmpty())
         goto _exit;
@@ -929,9 +929,9 @@ _retry:
                 qPrintable(fileExt), qPrintable(fileName));
         fileName.append(fileExt);
         if (QFileInfo(fileName).exists()) {
-            if (QMessageBox::warning(this, tr("Overwrite File?"), 
-                QString("The file \"%1\" already exists.\n\n"
-                    "Do you wish to overwrite it?")
+            if (QMessageBox::warning(this, tr("Переписать файл?"),
+                QString("Файл \"%1\" уже существует.\n\n"
+                    "Переписать?")
                     .arg(QFileInfo(fileName).fileName()),
                 QMessageBox::Yes|QMessageBox::No,
                 QMessageBox::No) != QMessageBox::Yes)
@@ -943,11 +943,11 @@ _retry:
     if (!fileType.startsWith("Ostinato") 
             && !fileType.startsWith("Python"))
     {
-        if (QMessageBox::warning(this, tr("Ostinato"), 
-            QString("You have chosen to save in %1 format. All stream "
-                "attributes may not be saved in this format.\n\n"
-                "It is recommended to save in native Ostinato format.\n\n"
-                "Continue to save in %2 format?").arg(fileType).arg(fileType),
+        if (QMessageBox::warning(this, tr("NetTester"),
+            QString("Вы выбрали сохранение в формате %1. Все атрибуты "
+                "потоков не могут быть сохранены в данном формате.\n\n"
+                "Рекомендуется сохранять в формате Ostinato.\n\n"
+                "Продолжить сохранение в формате %2 ?").arg(fileType).arg(fileType),
             QMessageBox::Yes|QMessageBox::No,
             QMessageBox::No) != QMessageBox::Yes)
             goto _retry;

@@ -1207,15 +1207,15 @@ void StreamConfigDialog::on_pbOk_clicked()
     if ((mPort.transmitMode() == OstProto::kInterleavedTransmit)
             && (mpStream->isFrameVariable()))
     {
-        log += "In 'Interleaved Streams' transmit mode, the count for "
-            "varying fields at transmit time may not be same as configured\n";
+        log += "В параллельном режиме передачи потоков количество значений "
+            "переменных полей может отличаться от указанного в конфигурации\n";
     }
 
     mpStream->preflightCheck(log);
 
     if (log.length())
     {
-        if (QMessageBox::warning(this, "Preflight Check", log + "\nContinue?",
+        if (QMessageBox::warning(this, "Проверка конфигурации", log + "\nПродолжить?",
                     QMessageBox::Yes | QMessageBox::No, QMessageBox::No) 
                 == QMessageBox::No)
             return;

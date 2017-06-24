@@ -121,7 +121,7 @@ QVariant PortModel::data(const QModelIndex &index, int role) const
         if ((role == Qt::DisplayRole))
         {
             DBG0("Exit PortModel data 1\n");
-            return QString("Port Group %1: %2 [%3]:%4 (%5)").
+            return QString("Группа портов %1: %2 [%3]:%4 (%5)").
                 arg(pgl->mPortGroups.at(index.row())->id()).
                 arg(pgl->mPortGroups.at(index.row())->userAlias()).
                 arg(pgl->mPortGroups.at(index.row())->serverName()).
@@ -177,7 +177,7 @@ QVariant PortModel::data(const QModelIndex &index, int role) const
             if (!port->userName().isEmpty())
                 rsvdBy = "["+port->userName()+"] ";
 
-            return QString("Port %1: %2 %3(%4)")
+            return QString("Порт %1: %2 %3(%4)")
                 .arg(port->id())
                 .arg(port->userAlias())
                 .arg(rsvdBy)
@@ -205,7 +205,7 @@ QVariant PortModel::headerData(int /*section*/, Qt::Orientation orientation, int
     if (orientation == Qt::Horizontal)
         return QVariant();
     else
-        return QString("Name");
+        return QString("Имя");
 }
 
 QModelIndex PortModel::index (int row, int col, 

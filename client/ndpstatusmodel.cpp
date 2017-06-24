@@ -34,9 +34,9 @@ enum {
 };
 
 static QStringList columns_ = QStringList()
-    << "IPv6 Address"
-    << "Mac Address"
-    << "Status";
+    << "IPv6 адрес"
+    << "Mac адрес"
+    << "Статус";
 
 NdpStatusModel::NdpStatusModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -125,7 +125,7 @@ QVariant NdpStatusModel::data(const QModelIndex &index, int role) const
             switch (role) {
                 case Qt::DisplayRole:
                     return ndp.mac() ?
-                        QString("Resolved") : QString("Failed");
+                        QString("Разрешен") : QString("Не разрешен");
                 default:
                     break;
             }
